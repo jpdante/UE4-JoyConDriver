@@ -1,0 +1,14 @@
+{
+	"Targets": [
+		{
+			"Name": "JoyConSample",
+			"Path": "C:\\Users\\jpdante\\Documents\\Unreal Projects\\JoyConSample\\Source\\JoyConSample.Target.cs",
+			"Type": "Game"
+		},
+		{
+			"Name": "JoyConSampleEditor",
+			"Path": "C:\\Users\\jpdante\\Documents\\Unreal Projects\\JoyConSample\\Source\\JoyConSampleEditor.Target.cs",
+			"Type": "Editor"
+		}
+	]
+}

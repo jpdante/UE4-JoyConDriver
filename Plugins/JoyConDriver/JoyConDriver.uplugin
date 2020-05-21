@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Nintendo Switch JoyCon Driver",
+	"Description": "Support for the Nintendo Switch controllers",
+	"Category": "Input Devices",
+	"CreatedBy": "Joao Pedro Dante",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "JoyConDriver",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}

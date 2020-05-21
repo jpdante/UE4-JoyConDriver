@@ -1,0 +1,9 @@
+{
+	"RemapUnityFiles": 
+	{
+		"Module.JoyConDriver.cpp.obj": [
+			"JoyConDriverModule.cpp.obj",
+			"JoyConInput.cpp.obj"
+		]
+	}
+}

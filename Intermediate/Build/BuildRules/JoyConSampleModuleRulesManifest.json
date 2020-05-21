@@ -1,0 +1,9 @@
+{
+	"SourceFiles": [
+		"C:\\Users\\jpdante\\Documents\\Unreal Projects\\JoyConSample\\Source\\JoyConSample\\JoyConSample.Build.cs",
+		"C:\\Users\\jpdante\\Documents\\Unreal Projects\\JoyConSample\\Plugins\\JoyConDriver\\Source\\JoyConDriver\\JoyConDriver.Build.cs",
+		"C:\\Users\\jpdante\\Documents\\Unreal Projects\\JoyConSample\\Source\\JoyConSample.Target.cs",
+		"C:\\Users\\jpdante\\Documents\\Unreal Projects\\JoyConSample\\Source\\JoyConSampleEditor.Target.cs"
+	],
+	"EngineVersion": "4.24.3"
+}

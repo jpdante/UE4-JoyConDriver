@@ -1,0 +1,16 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UE4Editor-JoyConSample.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\JoyConSampleEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.h.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\JoyConSample.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\JoyConSampleGameModeBase.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\JoyConSample.init.gen.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\JoyConSampleGameModeBase.gen.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\Default.rc2.res"
+/OUT:"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\UE4Editor-JoyConSample.lib"
+/INCLUDE:IMPLEMENT_MODULE_JoyConSample
