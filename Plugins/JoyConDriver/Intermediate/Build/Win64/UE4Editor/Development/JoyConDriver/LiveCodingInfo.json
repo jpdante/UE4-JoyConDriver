@@ -2,8 +2,14 @@
 	"RemapUnityFiles": 
 	{
 		"Module.JoyConDriver.cpp.obj": [
+			"JoyConController.cpp.obj",
+			"JoyConDriverFunctionLibrary.cpp.obj",
 			"JoyConDriverModule.cpp.obj",
 			"JoyConInput.cpp.obj"
+		],
+		"Module.JoyConDriver.gen.cpp.obj": [
+			"JoyConDriver.init.gen.cpp.obj",
+			"JoyConDriverFunctionLibrary.gen.cpp.obj"
 		]
 	}
 }

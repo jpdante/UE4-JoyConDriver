@@ -231,6 +231,7 @@
 /I ..\Intermediate\Build\Win64\UE4Editor\Inc\AugmentedReality
 /I Runtime\AugmentedReality\Public
 /I Runtime\InputDevice\Public
+/I "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver"
 /I "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source"
 /I "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public"
 /I ThirdParty\PhysX3\PxShared\include
