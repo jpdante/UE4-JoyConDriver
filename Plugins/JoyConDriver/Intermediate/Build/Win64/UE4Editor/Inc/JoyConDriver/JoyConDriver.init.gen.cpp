@@ -21,8 +21,8 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriver_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0x09D78CB1,
-				0x2F8CDEC7,
+				0x77688F4B,
+				0x982F70EA,
 				METADATA_PARAMS(nullptr, 0)
 			};
 			UE4CodeGen_Private::ConstructUPackage(ReturnPackage, PackageParams);

@@ -22,7 +22,8 @@ void UJoyConDriverFunctionLibrary::ConnectJoyCons(bool &Success) {
 		Success = false;
 	} else {
 		try	{
-			Success = JoyConInputApi->ConnectJoyCons();
+			//Success = JoyConInputApi->ConnectJoyCons();
+			Success = true;
 		} catch (...) {
 			Success = false;
 		}
@@ -35,7 +36,8 @@ void UJoyConDriverFunctionLibrary::SearchForJoyCons(bool& Success, int& Count) {
 		Success = false;
 	} else {
 		try {
-			Count = JoyConInputApi->GetNumberOfControllers();
+			//Count = JoyConInputApi->GetNumberOfControllers();
+			Count = 0;
 			Success = true;
 		}
 		catch (...) {
@@ -50,7 +52,8 @@ void UJoyConDriverFunctionLibrary::DisconnectJoyCons(bool& Success) {
 		Success = false;
 	} else {
 		try {
-			Success = JoyConInputApi->DisconnectJoyCons();
+			//Success = JoyConInputApi->DisconnectJoyCons();
+			Success = true;
 		}
 		catch (...) {
 			Success = false;

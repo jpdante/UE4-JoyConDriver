@@ -5,6 +5,11 @@
 #include "Modules/ModuleManager.h"
 #include "IInputDeviceModule.h"
 
+
+/**
+ * The public interface to this module.  In most cases, this interface is only public to sibling modules
+ * within this plugin.
+ */
 class IJoyConDriverModule : public IInputDeviceModule {
 
 public:
@@ -33,7 +38,4 @@ public:
 	 *
 	 * @return The number of Touch controllers that are active (but not necessarily tracked)
 	 */
-	virtual uint32 GetNumberOfControllers() const = 0;
-	virtual bool ConnectJoyCons() const = 0;
-	virtual bool DisconnectJoyCons() const = 0;
 };

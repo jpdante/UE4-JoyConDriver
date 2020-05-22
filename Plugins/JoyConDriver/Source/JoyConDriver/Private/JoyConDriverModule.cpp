@@ -9,27 +9,13 @@
 
 void FJoyConDriverModule::StartupModule() {
 	IInputDeviceModule::StartupModule();
-	FJoyConInput::PreInit();
+	JoyConDriver::FJoyConInput::PreInit();
 }
 
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
-	TSharedPtr<FJoyConInput > InputDevice(new FJoyConInput(InMessageHandler));
+	TSharedPtr<JoyConDriver::FJoyConInput> InputDevice(new JoyConDriver::FJoyConInput(InMessageHandler));
 	JoyConInputDevice = InputDevice;
 	return InputDevice;
-}
-
-uint32 FJoyConDriverModule::GetNumberOfControllers() const {
-	const uint32 Count = JoyConInputDevice.Pin()->SearchForJoyCons();
-	UE_LOG(LogTemp, Log, TEXT("JoyConDriver found some controllers"), Count);
-	return Count;
-}
-
-bool FJoyConDriverModule::ConnectJoyCons() const {
-	return JoyConInputDevice.Pin()->ConnectJoyCons();
-}
-
-bool FJoyConDriverModule::DisconnectJoyCons() const {
-	return JoyConInputDevice.Pin()->DisconnectJoyCons();
 }
 
 IMPLEMENT_MODULE(FJoyConDriverModule, JoyConDriver)

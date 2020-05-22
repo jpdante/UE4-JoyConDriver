@@ -51,13 +51,11 @@ void FJoyConController::Attach(uint8 Leds) {
 
 void FJoyConController::Update() {
 	if (bStopPolling || State <= EJoyConState::No_JoyCons) return;
-	auto ReportBuf = new uint8[ReportLen];
+	const auto ReportBuf = new uint8[ReportLen];
 	while (!Reports.IsEmpty()) {
-		FReport rep;
-		//M_Mutex.Lock();
-		Reports.Dequeue(rep);
-		rep.CopyBuffer(ReportBuf);
-		//M_Mutex.Unlock();
+		FReport Rep;
+		Reports.Dequeue(Rep);
+		Rep.CopyBuffer(ReportBuf);
 		if (bImuEnabled) {
 			if (bDoLocalize) {
 				ProcessImu(ReportBuf);
@@ -70,9 +68,9 @@ void FJoyConController::Update() {
 			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString("Duplicate timestamp dequeued."));
 		}
 		TsDequeue = ReportBuf[1];
-		TsPrevious = rep.GetTime();
-		/*ProcessButtonsAndStick(reportBuf);
-		if (!_rumbleObj.timedRumble) return;
+		TsPrevious = Rep.GetTime();
+		ProcessButtonsAndStick(ReportBuf);
+		/*if (!_rumbleObj.timedRumble) return;
 		if (_rumbleObj.time < 0) {
 			_rumbleObj.SetVals(160, 320, 0, 0);
 		} else {
@@ -117,6 +115,38 @@ void FJoyConController::Detach() {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString("JoyCon detached!"));
 }
 
+bool FJoyConController::GetButtonDown(const EButton Button) {
+	return ButtonsDown[Button];
+}
+
+bool FJoyConController::GetButton(const EButton Button) {
+	return Buttons[Button];
+}
+
+bool FJoyConController::GetButtonUp(const EButton Button) {
+	return ButtonsUp[Button];
+}
+
+FVector2D FJoyConController::GetStick() {
+	return FVector2D(Stick[0], Stick[1]);
+}
+
+FVector FJoyConController::GetGyroscope() const {
+	return GyrG;
+}
+
+FVector FJoyConController::GetAccelerometer() const {
+	return AccG;
+}
+
+void FJoyConController::ReCenter() {
+	FirstImuPacket = true;
+}
+
+void FJoyConController::SetFilterCoefficient(const float Coefficient) {
+	FilterWeight = Coefficient;
+}
+
 void FJoyConController::DumpCalibrationData() {
 	auto Buf = ReadSpi(0x80, (bIsLeft ? static_cast<uint8>(0x12) : static_cast<uint8>(0x1d)), 9);
 	auto Found = false;
@@ -130,12 +160,12 @@ void FJoyConController::DumpCalibrationData() {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString("Using factory stick calibration data."));
 		Buf = ReadSpi(0x60, (bIsLeft ? static_cast<uint8>(0x3d) : static_cast<uint8>(0x46)), 9);
 	}
-	StickCal[bIsLeft ? 0 : 2] = static_cast<uint16>((Buf[1] << 8) & 0xF00 | Buf[0]); // X Axis Max above center
-	StickCal[bIsLeft ? 1 : 3] = static_cast<uint16>((Buf[2] << 4) | (Buf[1] >> 4));  // Y Axis Max above center
-	StickCal[bIsLeft ? 2 : 4] = static_cast<uint16>((Buf[4] << 8) & 0xF00 | Buf[3]); // X Axis Center
-	StickCal[bIsLeft ? 3 : 5] = static_cast<uint16>((Buf[5] << 4) | (Buf[4] >> 4));  // Y Axis Center
-	StickCal[bIsLeft ? 4 : 0] = static_cast<uint16>((Buf[7] << 8) & 0xF00 | Buf[6]); // X Axis Min below center
-	StickCal[bIsLeft ? 5 : 1] = static_cast<uint16>((Buf[8] << 4) | (Buf[7] >> 4));  // Y Axis Min below center
+	StickCalibration[bIsLeft ? 0 : 2] = static_cast<uint16>((Buf[1] << 8) & 0xF00 | Buf[0]); // X Axis Max above center
+	StickCalibration[bIsLeft ? 1 : 3] = static_cast<uint16>((Buf[2] << 4) | (Buf[1] >> 4));  // Y Axis Max above center
+	StickCalibration[bIsLeft ? 2 : 4] = static_cast<uint16>((Buf[4] << 8) & 0xF00 | Buf[3]); // X Axis Center
+	StickCalibration[bIsLeft ? 3 : 5] = static_cast<uint16>((Buf[5] << 4) | (Buf[4] >> 4));  // Y Axis Center
+	StickCalibration[bIsLeft ? 4 : 0] = static_cast<uint16>((Buf[7] << 8) & 0xF00 | Buf[6]); // X Axis Min below center
+	StickCalibration[bIsLeft ? 5 : 1] = static_cast<uint16>((Buf[8] << 4) | (Buf[7] >> 4));  // Y Axis Min below center
 
 	Buf = ReadSpi(0x60, (bIsLeft ? static_cast<uint8>(0x86) : static_cast<uint8>(0x98)), 16);
 	DeadZone = static_cast<uint16>((Buf[4] << 8) & 0xF00 | Buf[3]);
@@ -160,13 +190,10 @@ int FJoyConController::ReceiveRaw() {
 	if (bStopPolling) return 0;
 	const auto Ret = hid_read(HidHandle, RawBuf, ReportLen);
 	if (Ret <= 0) return Ret;
-	//M_Mutex.Lock();
-	//Reports.Enqueue(*new FReport(RawBuf, FDateTime::Now()));
 	FReport Report;
 	Report.ReportData = RawBuf;
 	Report.Time = FDateTime::Now();
 	Reports.Enqueue(Report);
-	//M_Mutex.Unlock();
 	if (TsEnqueue == RawBuf[1]) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString("Duplicate timestamp enqueued."));
 	}
@@ -208,30 +235,74 @@ int32 FJoyConController::ProcessImu(uint8 ReportBuf[]) {
 			GyrG.Z *= -1;
 		}
 		if (FirstImuPacket) {
-			I_B = new FVector(1, 0, 0);
-			J_B = new FVector(0, 1, 0);
-			K_B = new FVector(0, 0, 1);
+			I_B.Set(1, 0, 0);
+			J_B.Set(0, 1, 0);
+			K_B.Set(0, 0, 1);
 			FirstImuPacket = false;
 		}
 		else {
-			/*k_acc = -Vector3.Normalize(_accG);
-			_wA = Vector3.Cross(k_b, k_acc);
-			_wG = -_gyrG * dt_sec;
-			_dTheta = (_filterweight * _wA + _wG) / (1f + _filterweight);
-			k_b += Vector3.Cross(_dTheta, k_b);
-			i_b += Vector3.Cross(_dTheta, i_b);
-			j_b += Vector3.Cross(_dTheta, j_b);
+			K_Acc = -AccG.GetSafeNormal();
+			Wa = FVector::CrossProduct(K_B, K_Acc);
+			Wg = -GyrG * DT_Sec;
+			DTheta = (FilterWeight * Wa + Wg) / (1.f + FilterWeight);
+			K_B += FVector::CrossProduct(DTheta, K_B);
+			I_B += FVector::CrossProduct(DTheta, I_B);
+			J_B += FVector::CrossProduct(DTheta, J_B);
 			//Correction, ensure new axes are orthogonal
-			_err = Vector3.Dot(i_b, j_b) * 0.5f;
-			_iB = Vector3.Normalize(i_b - _err * j_b);
-			j_b = Vector3.Normalize(j_b - _err * i_b);
-			i_b = _iB;
-			k_b = Vector3.Cross(i_b, j_b);*/
+			Err = FVector::DotProduct(I_B, J_B) * 0.5f;
+			IB2 = (I_B - Err * J_B).GetSafeNormal();
+			J_B = (J_B - Err * I_B).GetSafeNormal();
+			I_B = IB2;
+			K_B = FVector::CrossProduct(I_B, J_B);
 		}
 		DT = 1;
 	}
 	Timestamp = ReportBuf[1] + 2;
 	return 0;
+}
+
+int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
+	if (ReportBuf[0] == 0x00) return -1;
+	
+	StickRaw[0] = ReportBuf[6 + (bIsLeft ? 0 : 3)];
+	StickRaw[1] = ReportBuf[7 + (bIsLeft ? 0 : 3)];
+	StickRaw[2] = ReportBuf[8 + (bIsLeft ? 0 : 3)];
+
+	StickPreCalibration[0] = static_cast<uint16>(StickRaw[0] | ((StickRaw[1] & 0xf) << 8));
+	StickPreCalibration[1] = static_cast<uint16>((StickRaw[1] >> 4) | (StickRaw[2] << 4));
+	CenterSticks(StickPreCalibration);
+	for (int i = 0; i < sizeof(Buttons); ++i) {
+		Down[i] = Buttons[i];
+	}
+	Buttons[EButton::DPad_Down] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x01 : 0x04)) != 0;
+	Buttons[EButton::DPad_Right] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x04 : 0x08)) != 0;
+	Buttons[EButton::DPad_Up] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x02 : 0x02)) != 0;
+	Buttons[EButton::DPad_Left] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x08 : 0x01)) != 0;
+	Buttons[EButton::Home] = ((ReportBuf[4] & 0x10) != 0);
+	Buttons[EButton::Minus] = ((ReportBuf[4] & 0x01) != 0);
+	Buttons[EButton::Plus] = ((ReportBuf[4] & 0x02) != 0);
+	Buttons[EButton::Stick] = ((ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0);
+	Buttons[EButton::Shoulder_1] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0;
+	Buttons[EButton::Shoulder_2] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0;
+	Buttons[EButton::Sr] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0;
+	Buttons[EButton::Sl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0;
+	for (int i = 0; i < sizeof(Buttons); ++i) {
+		ButtonsUp[i] = (Down[i] & !Buttons[i]);
+		ButtonsDown[i] = (!Down[i] & Buttons[i]);
+	}
+	return 0;
+}
+
+void FJoyConController::CenterSticks(uint16 Values[]) {
+	for (uint32 i = 0; i < 2; ++i) {
+		const float Diff = Values[i] - StickCalibration[2 + i];
+		if (FGenericPlatformMath::Abs(Diff) < DeadZone) Values[i] = 0;
+		else if (Diff > 0) {
+			Stick[i] = Diff / StickCalibration[i];
+		} else {
+			Stick[i] = Diff / StickCalibration[4 + i];
+		}
+	}
 }
 
 uint8* FJoyConController::SendCommand(const uint8 Sc, uint8 TempBuf[], const uint8 Len) {

@@ -1,6 +1,15 @@
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\Definitions.JoyConDriver.h
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConButtons.cpp
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtons.h
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\CoreUObject\Public\UObject/NoExportTypes.h
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Math/UnitConversion.h
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Math/UnitConversion.inl
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Internationalization/PolyglotTextData.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConButtons.generated.h
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConButtonState.cpp
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtonState.h
 C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConController.cpp
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConController.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConController.h
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Private\hidapi.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Windows/AllowWindowsPlatformTypes.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Windows/WindowsHWrapper.h
@@ -119,15 +128,18 @@ C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.2
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.26.28801\INCLUDE\xatomic.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Windows/HideWindowsPlatformTypes.h
 C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConDriverFunctionLibrary.cpp
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConDriverFunctionLibrary.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConDriverFunctionLibrary.h
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConDriverFunctionLibrary.generated.h
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConDriverModule.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConDriverModule.h
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\IJoyConDriverModule.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\InputDevice\Public\IInputDeviceModule.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\InputDevice\Public\IInputDevice.h
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConInput.h
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConDriverModule.cpp
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConInput.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\HeadMountedDisplay\Public\XRMotionControllerBase.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\HeadMountedDisplay\Public\IMotionController.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\InputDevice\Public\IHapticDevice.h
-C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConDriverModule.cpp
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConInformation.cpp
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConInformation.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConInformation.generated.h
 C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConInput.cpp

@@ -1,7 +1,13 @@
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\Definitions.JoyConDriver.h
-C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Intermediate/Build/Win64/UE4Editor/Inc/JoyConDriver/JoyConDriver.init.gen.cpp
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Intermediate/Build/Win64/UE4Editor/Inc/JoyConDriver/JoyConButtons.gen.cpp
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
 C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h
-C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Intermediate/Build/Win64/UE4Editor/Inc/JoyConDriver/JoyConDriverFunctionLibrary.gen.cpp
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver/Public/JoyConDriverFunctionLibrary.h
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConDriverFunctionLibrary.generated.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver/Public/JoyConButtons.h
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\CoreUObject\Public\UObject/NoExportTypes.h
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Math/UnitConversion.h
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Math/UnitConversion.inl
+C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Internationalization/PolyglotTextData.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConButtons.generated.h
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Intermediate/Build/Win64/UE4Editor/Inc/JoyConDriver/JoyConInformation.gen.cpp
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver/Public/JoyConInformation.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConInformation.generated.h

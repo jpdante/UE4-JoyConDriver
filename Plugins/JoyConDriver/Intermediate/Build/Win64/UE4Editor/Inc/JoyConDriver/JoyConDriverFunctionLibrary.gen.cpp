@@ -5,7 +5,7 @@
 ===========================================================================*/
 
 #include "UObject/GeneratedCppIncludes.h"
-#include "JoyConDriver/Public/JoyConDriverFunctionLibrary.h"
+#include "JoyConDriver/Private/JoyConDriverFunctionLibrary.h"
 #ifdef _MSC_VER
 #pragma warning (push)
 #pragma warning (disable : 4883)
@@ -57,7 +57,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons_Statics::Function_MetaDataParams[] = {
 		{ "Category", "JoyCon" },
 		{ "Keywords", "Nintendo Switch Joy Con Cons JoyCon JoyCons Connect" },
-		{ "ModuleRelativePath", "Public/JoyConDriverFunctionLibrary.h" },
+		{ "ModuleRelativePath", "Private/JoyConDriverFunctionLibrary.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UJoyConDriverFunctionLibrary, nullptr, "ConnectJoyCons", nullptr, nullptr, sizeof(JoyConDriverFunctionLibrary_eventConnectJoyCons_Parms), Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x14422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons_Statics::Function_MetaDataParams)) };
@@ -96,7 +96,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons_Statics::Function_MetaDataParams[] = {
 		{ "Category", "JoyCon" },
 		{ "Keywords", "Nintendo Switch Joy Con Cons JoyCon JoyCons Disconnect" },
-		{ "ModuleRelativePath", "Public/JoyConDriverFunctionLibrary.h" },
+		{ "ModuleRelativePath", "Private/JoyConDriverFunctionLibrary.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UJoyConDriverFunctionLibrary, nullptr, "DisconnectJoyCons", nullptr, nullptr, sizeof(JoyConDriverFunctionLibrary_eventDisconnectJoyCons_Parms), Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x14422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons_Statics::Function_MetaDataParams)) };
@@ -139,7 +139,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::Function_MetaDataParams[] = {
 		{ "Category", "JoyCon" },
 		{ "Keywords", "Nintendo Switch Joy Con Cons JoyCon JoyCons Search" },
-		{ "ModuleRelativePath", "Public/JoyConDriverFunctionLibrary.h" },
+		{ "ModuleRelativePath", "Private/JoyConDriverFunctionLibrary.h" },
 	};
 #endif
 	const UE4CodeGen_Private::FFunctionParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::FuncParams = { (UObject*(*)())Z_Construct_UClass_UJoyConDriverFunctionLibrary, nullptr, "SearchForJoyCons", nullptr, nullptr, sizeof(JoyConDriverFunctionLibrary_eventSearchForJoyCons_Parms), Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::PropPointers, UE_ARRAY_COUNT(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::PropPointers), RF_Public|RF_Transient|RF_MarkAsNative, (EFunctionFlags)0x14422401, 0, 0, METADATA_PARAMS(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::Function_MetaDataParams, UE_ARRAY_COUNT(Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::Function_MetaDataParams)) };
@@ -171,15 +171,15 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_JoyConDriver,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons, "ConnectJoyCons" }, // 657321755
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons, "DisconnectJoyCons" }, // 3524861338
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons, "SearchForJoyCons" }, // 1859532632
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_ConnectJoyCons, "ConnectJoyCons" }, // 626976651
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DisconnectJoyCons, "DisconnectJoyCons" }, // 589337811
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons, "SearchForJoyCons" }, // 4077868539
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics::Class_MetaDataParams[] = {
 		{ "Comment", "/**\n * \n */" },
 		{ "IncludePath", "JoyConDriverFunctionLibrary.h" },
-		{ "ModuleRelativePath", "Public/JoyConDriverFunctionLibrary.h" },
+		{ "ModuleRelativePath", "Private/JoyConDriverFunctionLibrary.h" },
 	};
 #endif
 	const FCppClassTypeInfoStatic Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics::StaticCppClassTypeInfo = {
@@ -209,7 +209,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UJoyConDriverFunctionLibrary, 3317494450);
+	IMPLEMENT_CLASS(UJoyConDriverFunctionLibrary, 1273881381);
 	template<> JOYCONDRIVER_API UClass* StaticClass<UJoyConDriverFunctionLibrary>()
 	{
 		return UJoyConDriverFunctionLibrary::StaticClass();
