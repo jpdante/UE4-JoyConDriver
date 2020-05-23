@@ -26,6 +26,8 @@ public:
 
 	// IJoyConDriverModule overrides
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const override;
+	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation) const override;
+	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const override;
 };
 
 #undef LOCTEXT_NAMESPACE

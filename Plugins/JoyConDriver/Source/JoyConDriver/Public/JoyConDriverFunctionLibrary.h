@@ -15,12 +15,12 @@ class JOYCONDRIVER_API UJoyConDriverFunctionLibrary : public UBlueprintFunctionL
 	GENERATED_BODY()
 
 public:
-	/*UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Connect"))
-	static void ConnectJoyCons(bool& Success);*/
+	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Attach"))
+	static void AttachJoyCon(FJoyConInformation JoyConInformation, bool& Success);
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Search"))
-	static TArray<FJoyConInformation> SearchForJoyCons();
+	static void SearchForJoyCons(TArray<FJoyConInformation>& JoyCons);
 
-	/*UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Disconnect"))
-	static void DisconnectJoyCons(bool& Success);*/
+	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Detach"))
+	static void DetachJoyCon(FJoyConInformation JoyConInformation, bool& Success);
 };

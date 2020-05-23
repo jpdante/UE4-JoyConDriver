@@ -40,4 +40,6 @@ public:
 	 * @return The number of Touch controllers that are active (but not necessarily tracked)
 	 */
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
+	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation) const = 0;
+	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const = 0;
 };

@@ -59,7 +59,7 @@ struct FReport {
 class FJoyConController {
 
 public:
-	FJoyConController(hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft);
+	FJoyConController(hid_device* Device, FString TempSerialNumber, FString TempBluetoothPath, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft);
 	~FJoyConController();
 
 	void Attach(uint8 Leds);
@@ -144,4 +144,9 @@ private:
 	FVector Wg;
     FVector DTheta;
 	FVector IB2;
+
+public:
+	FString SerialNumber;
+	FString BluetoothPath;
+	
 };

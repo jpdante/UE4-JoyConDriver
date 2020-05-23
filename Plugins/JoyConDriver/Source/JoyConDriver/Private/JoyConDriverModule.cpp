@@ -16,6 +16,14 @@ TArray<FJoyConInformation>* FJoyConDriverModule::SearchForJoyCons() const {
 	return JoyConInputDevice.Pin()->SearchJoyCons();
 }
 
+bool FJoyConDriverModule::AttachJoyCon(const FJoyConInformation JoyConInformation) const {
+	return JoyConInputDevice.Pin()->AttachJoyCon(JoyConInformation);
+}
+
+bool FJoyConDriverModule::DetachJoyCon(const FJoyConInformation JoyConInformation) const {
+	return JoyConInputDevice.Pin()->DetachJoyCon(JoyConInformation);
+}
+
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
 	TSharedPtr<JoyConDriver::FJoyConInput> InputDevice(new JoyConDriver::FJoyConInput(InMessageHandler));
 	JoyConInputDevice = InputDevice;

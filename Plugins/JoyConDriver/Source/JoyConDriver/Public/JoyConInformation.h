@@ -12,7 +12,8 @@ struct FJoyConInformation {
 public:
 	FJoyConInformation();
 	FJoyConInformation(int TempProductId, int TempVendorId, int TempInterfaceNumber, int TempReleaseNumber, FString TempManufacturerString,
-		FString TempBluetoothPath, FString TempProductString, FString TempSerialNumber, int TempProbableControllerIndex, int TempUsage, int TempUsagePage, bool TempIsLeft);
+		FString TempBluetoothPath, FString TempProductString, FString TempSerialNumber, int TempProbableControllerIndex, int TempUsage,
+		int TempUsagePage, bool TempIsLeft, bool TempIsConnected);
 
 	/*
 	 * Device Info
@@ -53,4 +54,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool IsLeft;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		bool IsConnected;
 };

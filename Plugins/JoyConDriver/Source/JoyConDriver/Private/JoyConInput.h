@@ -27,7 +27,9 @@ namespace JoyConDriver {
 		static void LoadConfig();
 
 		/** Commands */
-		TArray<FJoyConInformation>* SearchJoyCons() const;
+		TArray<FJoyConInformation>* SearchJoyCons();
+		bool AttachJoyCon(FJoyConInformation JoyConInformation);
+		bool DetachJoyCon(FJoyConInformation JoyConInformation);
 
 		// IInputDevice overrides
 		virtual void Tick(float DeltaTime) override;
@@ -54,7 +56,7 @@ namespace JoyConDriver {
 		TSharedPtr< FGenericApplicationMessageHandler > MessageHandler;
 
 		bool HidInitialized;
-		TArray<FJoyConController> Controllers;
+		TArray<FJoyConController*> Controllers;
 	};
 
 } // namespace JoyConDriver

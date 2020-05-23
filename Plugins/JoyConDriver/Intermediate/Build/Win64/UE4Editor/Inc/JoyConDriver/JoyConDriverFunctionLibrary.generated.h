@@ -17,22 +17,64 @@ struct FJoyConInformation;
 #define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_SPARSE_DATA
 #define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_RPC_WRAPPERS \
  \
-	DECLARE_FUNCTION(execSearchForJoyCons) \
+	DECLARE_FUNCTION(execDetachJoyCon) \
 	{ \
+		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(TArray<FJoyConInformation>*)Z_Param__Result=UJoyConDriverFunctionLibrary::SearchForJoyCons(); \
+		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execSearchForJoyCons) \
+	{ \
+		P_GET_TARRAY_REF(FJoyConInformation,Z_Param_Out_JoyCons); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		UJoyConDriverFunctionLibrary::SearchForJoyCons(Z_Param_Out_JoyCons); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execAttachJoyCon) \
+	{ \
+		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_UBOOL_REF(Z_Param_Out_Success); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
 		P_NATIVE_END; \
 	}
 
 
 #define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
  \
-	DECLARE_FUNCTION(execSearchForJoyCons) \
+	DECLARE_FUNCTION(execDetachJoyCon) \
 	{ \
+		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		*(TArray<FJoyConInformation>*)Z_Param__Result=UJoyConDriverFunctionLibrary::SearchForJoyCons(); \
+		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execSearchForJoyCons) \
+	{ \
+		P_GET_TARRAY_REF(FJoyConInformation,Z_Param_Out_JoyCons); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		UJoyConDriverFunctionLibrary::SearchForJoyCons(Z_Param_Out_JoyCons); \
+		P_NATIVE_END; \
+	} \
+ \
+	DECLARE_FUNCTION(execAttachJoyCon) \
+	{ \
+		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_UBOOL_REF(Z_Param_Out_Success); \
+		P_FINISH; \
+		P_NATIVE_BEGIN; \
+		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
 		P_NATIVE_END; \
 	}
 

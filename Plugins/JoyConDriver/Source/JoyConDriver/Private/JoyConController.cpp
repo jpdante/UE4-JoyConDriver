@@ -7,8 +7,22 @@
 #include <map>
 #include "Windows/HideWindowsPlatformTypes.h"
 
-FJoyConController::FJoyConController(hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) {
+FJoyConController::FJoyConController(hid_device* Device, FString TempSerialNumber, FString TempBluetoothPath, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft):
+	GlobalCount(0),
+	ButtonsDown{},
+	ButtonsUp{},
+	Buttons{},
+	Down{},
+	DeadZone(0),
+	Timestamp(0),
+	TsDequeue(0),
+	TsEnqueue(0),
+	FilterWeight(0),
+	Err(0)
+{
 	HidHandle = Device;
+	SerialNumber = TempSerialNumber;
+	BluetoothPath = TempBluetoothPath;
 	bIsLeft = IsLeft;
 	bImuEnabled = UseImu;
 	bDoLocalize = UseLocalize;
@@ -22,7 +36,7 @@ FJoyConController::~FJoyConController() {
 	}
 }
 
-void FJoyConController::Attach(uint8 Leds) {
+void FJoyConController::Attach(const uint8 Leds) {
 	State = EJoyConState::Attached;
 	uint8 a[] = { 0x0 };
 	// Input report mode
@@ -213,7 +227,6 @@ void FJoyConController::ExtractImuValues(uint8 ReportBuf[], int32 N) {
 		GyrG[i] = (GyrR[i] - GyrNeutral[i]) * 0.00122187695f;
 		if (FGenericPlatformMath::Abs(AccG[i]) > FGenericPlatformMath::Abs(Max[i])) Max[i] = AccG[i];
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Update Gyroscope: %d %d %d"), GyrR[0], GyrR[1], GyrR[2]));
 }
 
 int32 FJoyConController::ProcessImu(uint8 ReportBuf[]) {

@@ -2,8 +2,8 @@
 
 #include "JoyConInput.h"
 
-
 #include "hidapi.h"
+#include "Engine/Engine.h"
 #include "Misc/CoreDelegates.h"
 #include "Misc/ConfigCacheIni.h"
 
@@ -36,7 +36,7 @@ void JoyConDriver::FJoyConInput::LoadConfig() {
 	
 }
 
-TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() const {
+TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
 	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
 	if (!HidInitialized) return Data;
 	hid_device_info* Devices = hid_enumerate(0x57e, 0x0);
@@ -58,8 +58,17 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() const {
 				IsLeft = false;
 			}
 			int NextControllerId = 0;
+			bool IsConnected = false;
+			FString SerialNumber(Device->serial_number);
+			FString BluetoothPath(Device->path);
 			if(Controllers.Num() > 0) {
 				NextControllerId = Controllers.Num() - 1;
+				for (FJoyConController* Controller : Controllers) {
+					if(Controller->SerialNumber.Equals(SerialNumber) && Controller->BluetoothPath.Equals(BluetoothPath)) {
+						IsConnected = true;
+						break;
+					}
+				}
 			}
 			const FJoyConInformation JoyConInformation(
 				Device->product_id, 
@@ -73,7 +82,8 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() const {
 				NextControllerId,
 				Device->usage,
 				Device->usage_page,
-				IsLeft
+				IsLeft,
+				IsConnected
 			);
 			Data->Add(JoyConInformation);
 		}
@@ -83,15 +93,46 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() const {
 	return Data;
 }
 
+bool JoyConDriver::FJoyConInput::AttachJoyCon(FJoyConInformation JoyConInformation) {
+	if (!HidInitialized) return false;
+	if (JoyConInformation.IsConnected) return false;
+	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
+	hid_device* Handle = hid_open_path(Path);
+	hid_set_nonblocking(Handle, 1);
+	FJoyConController* Controller = new FJoyConController(Handle, JoyConInformation.SerialNumber, JoyConInformation.BluetoothPath, true, true, 0.05f, JoyConInformation.IsLeft);
+	Controllers.Add(Controller);
+	uint8 Leds = 0x0;
+	Leds |= static_cast<uint8>(0x1 << 0);
+	Controller->Attach(Leds);
+	return true;
+}
+
+bool JoyConDriver::FJoyConInput::DetachJoyCon(const FJoyConInformation JoyConInformation) {
+	if (!HidInitialized) return false;
+	FJoyConController* TempController = nullptr;
+	for (FJoyConController* Controller : Controllers) {
+		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
+			TempController = Controller;
+			break;
+		}
+	}
+	if (TempController == nullptr) return false;
+	TempController->Detach();
+	Controllers.Remove(TempController);
+	return true;
+}
+
 void JoyConDriver::FJoyConInput::Tick(float DeltaTime) {
-	for (FJoyConController& Controller : Controllers) {
-		Controller.Update();
+	for (FJoyConController* Controller : Controllers) {
+		Controller->Update();
+		const FVector Gyroscope = Controller->GetGyroscope();
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Update Gyroscope: %f %f %f"), Gyroscope.X, Gyroscope.Y, Gyroscope.Z));
 	}
 }
 
 void JoyConDriver::FJoyConInput::SendControllerEvents() {
-	for(FJoyConController& Controller : Controllers) {
-		Controller.Pool();
+	for(FJoyConController* Controller : Controllers) {
+		Controller->Pool();
 	}
 }
 
