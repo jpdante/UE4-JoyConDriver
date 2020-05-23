@@ -24,6 +24,18 @@ bool FJoyConDriverModule::DetachJoyCon(const FJoyConInformation JoyConInformatio
 	return JoyConInputDevice.Pin()->DetachJoyCon(JoyConInformation);
 }
 
+bool FJoyConDriverModule::GetJoyConAccelerometer(const FJoyConInformation JoyConInformation, FVector& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConAccelerometer(JoyConInformation, Out);
+}
+
+bool FJoyConDriverModule::GetJoyConGyroscope(const FJoyConInformation JoyConInformation, FVector& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConGyroscope(JoyConInformation, Out);
+}
+
+bool FJoyConDriverModule::GerJoyConVector(const FJoyConInformation JoyConInformation, FRotator& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConVector(JoyConInformation, Out);
+}
+
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
 	TSharedPtr<JoyConDriver::FJoyConInput> InputDevice(new JoyConDriver::FJoyConInput(InMessageHandler));
 	JoyConInputDevice = InputDevice;

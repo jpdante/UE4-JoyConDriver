@@ -122,6 +122,57 @@ bool JoyConDriver::FJoyConInput::DetachJoyCon(const FJoyConInformation JoyConInf
 	return true;
 }
 
+bool JoyConDriver::FJoyConInput::GetJoyConAccelerometer(const FJoyConInformation JoyConInformation, FVector& Out) {
+	if (!HidInitialized) return false;
+	FJoyConController* TempController = nullptr;
+	for (FJoyConController* Controller : Controllers) {
+		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
+			TempController = Controller;
+			break;
+		}
+	}
+	if (TempController == nullptr) {
+		Out = FVector::ZeroVector;
+		return false;
+	}
+	Out = TempController->GetAccelerometer();
+	return true;
+}
+
+bool JoyConDriver::FJoyConInput::GetJoyConGyroscope(const FJoyConInformation JoyConInformation, FVector& Out) {
+	if (!HidInitialized) return false;
+	FJoyConController* TempController = nullptr;
+	for (FJoyConController* Controller : Controllers) {
+		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
+			TempController = Controller;
+			break;
+		}
+	}
+	if (TempController == nullptr) {
+		Out = FVector::ZeroVector;
+		return false;
+	}
+	Out = TempController->GetGyroscope();
+	return true;
+}
+
+bool JoyConDriver::FJoyConInput::GetJoyConVector(const FJoyConInformation JoyConInformation, FRotator& Out) {
+	if (!HidInitialized) return false;
+	FJoyConController* TempController = nullptr;
+	for (FJoyConController* Controller : Controllers) {
+		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
+			TempController = Controller;
+			break;
+		}
+	}
+	if (TempController == nullptr) {
+		Out = FRotator::ZeroRotator;
+		return false;
+	}
+	Out = TempController->GetVector();
+	return true;
+}
+
 void JoyConDriver::FJoyConInput::Tick(float DeltaTime) {
 	for (FJoyConController* Controller : Controllers) {
 		Controller->Update();

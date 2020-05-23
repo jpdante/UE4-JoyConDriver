@@ -30,6 +30,9 @@ namespace JoyConDriver {
 		TArray<FJoyConInformation>* SearchJoyCons();
 		bool AttachJoyCon(FJoyConInformation JoyConInformation);
 		bool DetachJoyCon(FJoyConInformation JoyConInformation);
+		bool GetJoyConAccelerometer(FJoyConInformation JoyConInformation, FVector& Out);
+		bool GetJoyConGyroscope(FJoyConInformation JoyConInformation, FVector& Out);
+		bool GetJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out);
 
 		// IInputDevice overrides
 		virtual void Tick(float DeltaTime) override;

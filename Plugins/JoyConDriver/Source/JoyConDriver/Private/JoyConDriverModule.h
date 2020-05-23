@@ -28,6 +28,9 @@ public:
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const override;
 	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation) const override;
 	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const override;
+	virtual bool GetJoyConAccelerometer(FJoyConInformation JoyConInformation, FVector& Out) const override;
+	virtual bool GetJoyConGyroscope(FJoyConInformation JoyConInformation, FVector& Out) const override;
+	virtual bool GerJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out) const override;
 };
 
 #undef LOCTEXT_NAMESPACE

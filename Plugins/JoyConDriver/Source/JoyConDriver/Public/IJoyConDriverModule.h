@@ -42,4 +42,7 @@ public:
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
 	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation) const = 0;
 	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const = 0;
+	virtual bool GetJoyConAccelerometer(FJoyConInformation JoyConInformation, FVector& Out) const = 0;
+	virtual bool GetJoyConGyroscope(FJoyConInformation JoyConInformation, FVector& Out) const = 0;
+	virtual bool GerJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out) const = 0;
 };

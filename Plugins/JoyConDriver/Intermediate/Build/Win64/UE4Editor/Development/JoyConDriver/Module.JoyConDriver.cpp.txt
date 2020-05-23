@@ -8,3 +8,7 @@ C:\Program Files\Epic Games\UE_4.24\Engine\Source\Runtime\Core\Public\Internatio
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConButtons.generated.h
 C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConButtonState.cpp
 C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtonState.h
+C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConInformation.cpp
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConInformation.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Inc\JoyConDriver\JoyConInformation.generated.h
+C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Source\JoyConDriver\Private\hidapi.h

@@ -4,10 +4,10 @@
 		"Module.JoyConDriver.cpp.obj": [
 			"JoyConButtons.cpp.obj",
 			"JoyConButtonState.cpp.obj",
+			"JoyConInformation.cpp.obj",
 			"JoyConController.cpp.obj",
 			"JoyConDriverFunctionLibrary.cpp.obj",
 			"JoyConDriverModule.cpp.obj",
-			"JoyConInformation.cpp.obj",
 			"JoyConInput.cpp.obj"
 		],
 		"Module.JoyConDriver.gen.cpp.obj": [

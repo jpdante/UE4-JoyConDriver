@@ -73,6 +73,7 @@ public:
 	FVector2D GetStick();
 	FVector GetGyroscope() const;
 	FVector GetAccelerometer() const;
+	FRotator GetVector() const;
 	void ReCenter();
 	
 	void SetFilterCoefficient(float Coefficient);
