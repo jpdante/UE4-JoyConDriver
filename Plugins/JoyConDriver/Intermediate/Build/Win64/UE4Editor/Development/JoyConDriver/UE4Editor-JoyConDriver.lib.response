@@ -7,6 +7,10 @@
 /IGNORE:4221
 /NODEFAULTLIB
 "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\JoyConSampleEditor\Development\Engine\SharedPCH.Engine.ShadowErrors.NoUndef.h.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\JoyConDriverFunctionLibrary.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\JoyConDriverModule.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\JoyConInformation.cpp.obj"
+"C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\JoyConInput.cpp.obj"
 "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\Module.JoyConDriver.cpp.obj"
 "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\JoyConDriver.init.gen.cpp.obj"
 "C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Plugins\JoyConDriver\Intermediate\Build\Win64\UE4Editor\Development\JoyConDriver\JoyConDriverFunctionLibrary.gen.cpp.obj"

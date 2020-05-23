@@ -6,6 +6,8 @@
 #include "GenericPlatform/IInputInterface.h"
 #include "XRMotionControllerBase.h"
 #include "IHapticDevice.h"
+#include "JoyConController.h"
+#include "JoyConInformation.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogJoyConDriver, Log, All);
 
@@ -23,6 +25,9 @@ namespace JoyConDriver {
 
 		/** Loads any settings from the config folder that we need */
 		static void LoadConfig();
+
+		/** Commands */
+		TArray<FJoyConInformation>* SearchJoyCons() const;
 
 		// IInputDevice overrides
 		virtual void Tick(float DeltaTime) override;
@@ -47,6 +52,9 @@ namespace JoyConDriver {
 	private:
 		/** The recipient of motion controller input events */
 		TSharedPtr< FGenericApplicationMessageHandler > MessageHandler;
+
+		bool HidInitialized;
+		TArray<FJoyConController> Controllers;
 	};
 
 } // namespace JoyConDriver

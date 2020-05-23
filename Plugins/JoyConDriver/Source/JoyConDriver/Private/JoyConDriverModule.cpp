@@ -12,6 +12,10 @@ void FJoyConDriverModule::StartupModule() {
 	JoyConDriver::FJoyConInput::PreInit();
 }
 
+TArray<FJoyConInformation>* FJoyConDriverModule::SearchForJoyCons() const {
+	return JoyConInputDevice.Pin()->SearchJoyCons();
+}
+
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
 	TSharedPtr<JoyConDriver::FJoyConInput> InputDevice(new JoyConDriver::FJoyConInput(InMessageHandler));
 	JoyConInputDevice = InputDevice;

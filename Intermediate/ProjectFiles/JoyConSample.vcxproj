@@ -281,7 +281,6 @@
     <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConController.cpp"/>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConController.h"/>
     <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConDriverFunctionLibrary.cpp"/>
-    <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConDriverFunctionLibrary.h"/>
     <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConDriverModule.cpp"/>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConDriverModule.h"/>
     <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConInformation.cpp"/>
@@ -290,6 +289,7 @@
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\IJoyConDriverModule.h"/>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtons.h"/>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtonState.h"/>
+    <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConDriverFunctionLibrary.h"/>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConInformation.h"/>
     <None Include="..\..\Plugins\JoyConDriver\JoyConDriver.uplugin"/>
     <None Include="..\..\Plugins\JoyConDriver\Resources\Icon128.png"/>

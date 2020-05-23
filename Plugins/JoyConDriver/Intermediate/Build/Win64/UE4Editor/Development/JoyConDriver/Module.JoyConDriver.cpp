@@ -2,7 +2,3 @@
 #include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConButtons.cpp"
 #include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConButtonState.cpp"
 #include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConController.cpp"
-#include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConDriverFunctionLibrary.cpp"
-#include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConDriverModule.cpp"
-#include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConInformation.cpp"
-#include "C:/Users/jpdante/Documents/Unreal Projects/JoyConSample/Plugins/JoyConDriver/Source/JoyConDriver/Private/JoyConInput.cpp"

@@ -4,6 +4,7 @@
 
 #include "Modules/ModuleManager.h"
 #include "IInputDeviceModule.h"
+#include "JoyConInformation.h"
 
 
 /**
@@ -38,4 +39,5 @@ public:
 	 *
 	 * @return The number of Touch controllers that are active (but not necessarily tracked)
 	 */
+	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
 };

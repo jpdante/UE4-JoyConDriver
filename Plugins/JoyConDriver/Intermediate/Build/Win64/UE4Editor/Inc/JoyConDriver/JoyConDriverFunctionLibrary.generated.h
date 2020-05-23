@@ -8,75 +8,36 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
+struct FJoyConInformation;
 #ifdef JOYCONDRIVER_JoyConDriverFunctionLibrary_generated_h
 #error "JoyConDriverFunctionLibrary.generated.h already included, missing '#pragma once' in JoyConDriverFunctionLibrary.h"
 #endif
 #define JOYCONDRIVER_JoyConDriverFunctionLibrary_generated_h
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_SPARSE_DATA
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_RPC_WRAPPERS \
- \
-	DECLARE_FUNCTION(execDisconnectJoyCons) \
-	{ \
-		P_GET_UBOOL_REF(Z_Param_Out_Success); \
-		P_FINISH; \
-		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::DisconnectJoyCons(Z_Param_Out_Success); \
-		P_NATIVE_END; \
-	} \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_SPARSE_DATA
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_RPC_WRAPPERS \
  \
 	DECLARE_FUNCTION(execSearchForJoyCons) \
 	{ \
-		P_GET_UBOOL_REF(Z_Param_Out_Success); \
-		P_GET_PROPERTY_REF(UIntProperty,Z_Param_Out_Count); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::SearchForJoyCons(Z_Param_Out_Success,Z_Param_Out_Count); \
-		P_NATIVE_END; \
-	} \
- \
-	DECLARE_FUNCTION(execConnectJoyCons) \
-	{ \
-		P_GET_UBOOL_REF(Z_Param_Out_Success); \
-		P_FINISH; \
-		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::ConnectJoyCons(Z_Param_Out_Success); \
+		*(TArray<FJoyConInformation>*)Z_Param__Result=UJoyConDriverFunctionLibrary::SearchForJoyCons(); \
 		P_NATIVE_END; \
 	}
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
- \
-	DECLARE_FUNCTION(execDisconnectJoyCons) \
-	{ \
-		P_GET_UBOOL_REF(Z_Param_Out_Success); \
-		P_FINISH; \
-		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::DisconnectJoyCons(Z_Param_Out_Success); \
-		P_NATIVE_END; \
-	} \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
  \
 	DECLARE_FUNCTION(execSearchForJoyCons) \
 	{ \
-		P_GET_UBOOL_REF(Z_Param_Out_Success); \
-		P_GET_PROPERTY_REF(UIntProperty,Z_Param_Out_Count); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::SearchForJoyCons(Z_Param_Out_Success,Z_Param_Out_Count); \
-		P_NATIVE_END; \
-	} \
- \
-	DECLARE_FUNCTION(execConnectJoyCons) \
-	{ \
-		P_GET_UBOOL_REF(Z_Param_Out_Success); \
-		P_FINISH; \
-		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::ConnectJoyCons(Z_Param_Out_Success); \
+		*(TArray<FJoyConInformation>*)Z_Param__Result=UJoyConDriverFunctionLibrary::SearchForJoyCons(); \
 		P_NATIVE_END; \
 	}
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_INCLASS_NO_PURE_DECLS \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_INCLASS_NO_PURE_DECLS \
 private: \
 	static void StaticRegisterNativesUJoyConDriverFunctionLibrary(); \
 	friend struct Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics; \
@@ -85,7 +46,7 @@ public: \
 	DECLARE_SERIALIZER(UJoyConDriverFunctionLibrary)
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_INCLASS \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_INCLASS \
 private: \
 	static void StaticRegisterNativesUJoyConDriverFunctionLibrary(); \
 	friend struct Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics; \
@@ -94,7 +55,7 @@ public: \
 	DECLARE_SERIALIZER(UJoyConDriverFunctionLibrary)
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_STANDARD_CONSTRUCTORS \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_STANDARD_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UJoyConDriverFunctionLibrary(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UJoyConDriverFunctionLibrary) \
@@ -107,7 +68,7 @@ private: \
 public:
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_ENHANCED_CONSTRUCTORS \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_ENHANCED_CONSTRUCTORS \
 	/** Standard constructor, called after all reflected properties have been initialized */ \
 	NO_API UJoyConDriverFunctionLibrary(const FObjectInitializer& ObjectInitializer = FObjectInitializer::Get()) : Super(ObjectInitializer) { }; \
 private: \
@@ -120,28 +81,28 @@ DEFINE_VTABLE_PTR_HELPER_CTOR_CALLER(UJoyConDriverFunctionLibrary); \
 	DEFINE_DEFAULT_OBJECT_INITIALIZER_CONSTRUCTOR_CALL(UJoyConDriverFunctionLibrary)
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_PRIVATE_PROPERTY_OFFSET
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_12_PROLOG
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_GENERATED_BODY_LEGACY \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_PRIVATE_PROPERTY_OFFSET
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_13_PROLOG
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_GENERATED_BODY_LEGACY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_PRIVATE_PROPERTY_OFFSET \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_SPARSE_DATA \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_RPC_WRAPPERS \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_INCLASS \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_STANDARD_CONSTRUCTORS \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_PRIVATE_PROPERTY_OFFSET \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_SPARSE_DATA \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_RPC_WRAPPERS \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_INCLASS \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_STANDARD_CONSTRUCTORS \
 public: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
 
-#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_GENERATED_BODY \
+#define JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_GENERATED_BODY \
 PRAGMA_DISABLE_DEPRECATION_WARNINGS \
 public: \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_PRIVATE_PROPERTY_OFFSET \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_SPARSE_DATA \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_RPC_WRAPPERS_NO_PURE_DECLS \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_INCLASS_NO_PURE_DECLS \
-	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h_14_ENHANCED_CONSTRUCTORS \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_PRIVATE_PROPERTY_OFFSET \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_SPARSE_DATA \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_RPC_WRAPPERS_NO_PURE_DECLS \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_INCLASS_NO_PURE_DECLS \
+	JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h_15_ENHANCED_CONSTRUCTORS \
 private: \
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
 
@@ -149,7 +110,7 @@ PRAGMA_ENABLE_DEPRECATION_WARNINGS
 template<> JOYCONDRIVER_API UClass* StaticClass<class UJoyConDriverFunctionLibrary>();
 
 #undef CURRENT_FILE_ID
-#define CURRENT_FILE_ID JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Private_JoyConDriverFunctionLibrary_h
+#define CURRENT_FILE_ID JoyConSample_Plugins_JoyConDriver_Source_JoyConDriver_Public_JoyConDriverFunctionLibrary_h
 
 
 PRAGMA_ENABLE_DEPRECATION_WARNINGS

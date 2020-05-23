@@ -25,7 +25,7 @@ public:
 	virtual TSharedPtr< class IInputDevice > CreateInputDevice( const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler ) override;
 
 	// IJoyConDriverModule overrides
-
+	virtual TArray<FJoyConInformation>* SearchForJoyCons() const override;
 };
 
 #undef LOCTEXT_NAMESPACE

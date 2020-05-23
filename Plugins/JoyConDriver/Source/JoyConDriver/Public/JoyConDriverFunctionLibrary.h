@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "JoyConInformation.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "JoyConDriverFunctionLibrary.generated.h"
 
@@ -14,12 +15,12 @@ class JOYCONDRIVER_API UJoyConDriverFunctionLibrary : public UBlueprintFunctionL
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Connect"))
-	static void ConnectJoyCons(bool& Success);
+	/*UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Connect"))
+	static void ConnectJoyCons(bool& Success);*/
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Search"))
-	static void SearchForJoyCons(bool& Success, int &Count);
+	static TArray<FJoyConInformation> SearchForJoyCons();
 
-	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Disconnect"))
-	static void DisconnectJoyCons(bool& Success);
+	/*UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Disconnect"))
+	static void DisconnectJoyCons(bool& Success);*/
 };

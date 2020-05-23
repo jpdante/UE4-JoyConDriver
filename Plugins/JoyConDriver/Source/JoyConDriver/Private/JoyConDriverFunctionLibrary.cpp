@@ -8,7 +8,7 @@
 
 FJoyConDriverModule* GetJoyConControllerAPI() {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
-	for (auto JoyConInputApi : JoyConInputApis) {
+	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi != nullptr) {
 			return JoyConInputApi;
 		}
@@ -16,6 +16,7 @@ FJoyConDriverModule* GetJoyConControllerAPI() {
 	return nullptr;
 }
 
+/*
 void UJoyConDriverFunctionLibrary::ConnectJoyCons(bool &Success) {
 	const auto JoyConInputApi = GetJoyConControllerAPI();
 	if(JoyConInputApi == nullptr) {
@@ -29,24 +30,23 @@ void UJoyConDriverFunctionLibrary::ConnectJoyCons(bool &Success) {
 		}
 	}
 }
+*/
 
-void UJoyConDriverFunctionLibrary::SearchForJoyCons(bool& Success, int& Count) {
-	const auto JoyConInputApi = GetJoyConControllerAPI();
+TArray<FJoyConInformation> UJoyConDriverFunctionLibrary::SearchForJoyCons() {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
-		Success = false;
+		return TArray<FJoyConInformation>();
 	} else {
-		try {
-			//Count = JoyConInputApi->GetNumberOfControllers();
-			Count = 0;
-			Success = true;
+		TArray<FJoyConInformation>* Data = JoyConInputApi->SearchForJoyCons();
+		if(Data == nullptr) {
+			return TArray<FJoyConInformation>();
 		}
-		catch (...) {
-			Success = false;
-		}
+		TArray<FJoyConInformation> ArrayFrom = *Data;
+		return ArrayFrom;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::DisconnectJoyCons(bool& Success) {
+/*void UJoyConDriverFunctionLibrary::DisconnectJoyCons(bool& Success) {
 	const auto JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
@@ -59,4 +59,4 @@ void UJoyConDriverFunctionLibrary::DisconnectJoyCons(bool& Success) {
 			Success = false;
 		}
 	}
-}
+}*/
