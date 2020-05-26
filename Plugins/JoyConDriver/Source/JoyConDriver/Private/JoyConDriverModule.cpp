@@ -32,7 +32,7 @@ bool FJoyConDriverModule::GetJoyConGyroscope(const FJoyConInformation JoyConInfo
 	return JoyConInputDevice.Pin()->GetJoyConGyroscope(JoyConInformation, Out);
 }
 
-bool FJoyConDriverModule::GerJoyConVector(const FJoyConInformation JoyConInformation, FRotator& Out) const {
+bool FJoyConDriverModule::GetJoyConVector(const FJoyConInformation JoyConInformation, FRotator& Out) const {
 	return JoyConInputDevice.Pin()->GetJoyConVector(JoyConInformation, Out);
 }
 

@@ -93,7 +93,7 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
 	return Data;
 }
 
-bool JoyConDriver::FJoyConInput::AttachJoyCon(FJoyConInformation JoyConInformation) {
+bool JoyConDriver::FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
 	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
@@ -150,8 +150,10 @@ bool JoyConDriver::FJoyConInput::GetJoyConGyroscope(const FJoyConInformation Joy
 	}
 	if (TempController == nullptr) {
 		Out = FVector::ZeroVector;
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString("Failed to get Gyro!"));
 		return false;
 	}
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString("Gyro Gottem!"));
 	Out = TempController->GetGyroscope();
 	return true;
 }
@@ -174,16 +176,17 @@ bool JoyConDriver::FJoyConInput::GetJoyConVector(const FJoyConInformation JoyCon
 }
 
 void JoyConDriver::FJoyConInput::Tick(float DeltaTime) {
-	for (FJoyConController* Controller : Controllers) {
+	/*for (FJoyConController* Controller : Controllers) {
 		Controller->Update();
 		const FVector Gyroscope = Controller->GetGyroscope();
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Update Gyroscope: %f %f %f"), Gyroscope.X, Gyroscope.Y, Gyroscope.Z));
-	}
+	}*/
 }
 
 void JoyConDriver::FJoyConInput::SendControllerEvents() {
 	for(FJoyConController* Controller : Controllers) {
 		Controller->Pool();
+		Controller->Update();
 	}
 }
 

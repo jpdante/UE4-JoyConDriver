@@ -30,7 +30,7 @@ public:
 	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const override;
 	virtual bool GetJoyConAccelerometer(FJoyConInformation JoyConInformation, FVector& Out) const override;
 	virtual bool GetJoyConGyroscope(FJoyConInformation JoyConInformation, FVector& Out) const override;
-	virtual bool GerJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out) const override;
+	virtual bool GetJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out) const override;
 };
 
 #undef LOCTEXT_NAMESPACE

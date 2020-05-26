@@ -20,8 +20,7 @@ void UJoyConDriverFunctionLibrary::AttachJoyCon(const FJoyConInformation JoyConI
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
-	}
-	else {
+	} else {
 		Success = JoyConInputApi->AttachJoyCon(JoyConInformation);
 	}
 }
@@ -30,8 +29,7 @@ void UJoyConDriverFunctionLibrary::SearchForJoyCons(TArray<FJoyConInformation>& 
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		JoyCons = TArray<FJoyConInformation>();
-	}
-	else {
+	} else {
 		TArray<FJoyConInformation>* Data = JoyConInputApi->SearchForJoyCons();
 		if (Data == nullptr) {
 			JoyCons = TArray<FJoyConInformation>();
@@ -45,8 +43,7 @@ void UJoyConDriverFunctionLibrary::DetachJoyCon(const FJoyConInformation JoyConI
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
-	}
-	else {
+	} else {
 		Success = JoyConInputApi->DetachJoyCon(JoyConInformation);
 	}
 }
@@ -56,14 +53,27 @@ void UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(const FJoyConInformati
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 		Accelerometer = FVector::ZeroVector;
-	}
-	else {
-		Success = JoyConInputApi->DetachJoyCon(JoyConInformation);
+	} else {
+		Success = JoyConInputApi->GetJoyConAccelerometer(JoyConInformation, Accelerometer);
 	}
 }
 
 void UJoyConDriverFunctionLibrary::GetJoyConGyroscope(FJoyConInformation JoyConInformation, bool& Success, FVector& Gyroscope) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+		Gyroscope = FVector::ZeroVector;
+	} else {
+		Success = JoyConInputApi->GetJoyConGyroscope(JoyConInformation, Gyroscope);
+	}
 }
 
 void UJoyConDriverFunctionLibrary::GetJoyConVector(FJoyConInformation JoyConInformation, bool& Success, FRotator& Vector) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+		Vector = FRotator::ZeroRotator;
+	} else {
+		Success = JoyConInputApi->GetJoyConVector(JoyConInformation, Vector);
+	}
 }
