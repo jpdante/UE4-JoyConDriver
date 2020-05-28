@@ -4,6 +4,7 @@
 
 #include "hidapi.h"
 #include "Engine/Engine.h"
+#include "HAL/RunnableThread.h"
 #include "Misc/CoreDelegates.h"
 #include "Misc/ConfigCacheIni.h"
 
@@ -57,15 +58,15 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
 			} else if (Device->product_id == 0x2007) {
 				IsLeft = false;
 			}
-			int NextControllerId = 0;
+			int ControllerIndex = -1;
 			bool IsConnected = false;
 			FString SerialNumber(Device->serial_number);
 			FString BluetoothPath(Device->path);
 			if(Controllers.Num() > 0) {
-				NextControllerId = Controllers.Num() - 1;
 				for (FJoyConController* Controller : Controllers) {
-					if(Controller->SerialNumber.Equals(SerialNumber) && Controller->BluetoothPath.Equals(BluetoothPath)) {
+					if(Controller->JoyConInformation.SerialNumber.Equals(SerialNumber) && Controller->JoyConInformation.BluetoothPath.Equals(BluetoothPath)) {
 						IsConnected = true;
+						ControllerIndex = Controllers.IndexOfByKey(Controller);
 						break;
 					}
 				}
@@ -79,7 +80,7 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
 				FString(Device->path),
 				FString(Device->product_string),
 				FString(Device->serial_number),
-				NextControllerId,
+				ControllerIndex,
 				Device->usage,
 				Device->usage_page,
 				IsLeft,
@@ -93,99 +94,76 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
 	return Data;
 }
 
-bool JoyConDriver::FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation) {
+bool JoyConDriver::FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
 	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
 	hid_device* Handle = hid_open_path(Path);
 	hid_set_nonblocking(Handle, 1);
-	FJoyConController* Controller = new FJoyConController(Handle, JoyConInformation.SerialNumber, JoyConInformation.BluetoothPath, true, true, 0.05f, JoyConInformation.IsLeft);
+	FJoyConController* Controller = new FJoyConController(JoyConInformation, Handle, true, true, 0.05f, JoyConInformation.IsLeft);
 	Controllers.Add(Controller);
+	ControllerIndex = Controllers.IndexOfByKey(Controller);
+	Controller->JoyConInformation.ProbableControllerIndex = ControllerIndex;
 	uint8 Leds = 0x0;
 	Leds |= static_cast<uint8>(0x1 << 0);
 	Controller->Attach(Leds);
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::DetachJoyCon(const FJoyConInformation JoyConInformation) {
+bool JoyConDriver::FJoyConInput::DetachJoyCon(const int ControllerIndex) {
 	if (!HidInitialized) return false;
-	FJoyConController* TempController = nullptr;
-	for (FJoyConController* Controller : Controllers) {
-		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
-			TempController = Controller;
-			break;
-		}
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex] == nullptr) {
+		Controllers.RemoveAt(ControllerIndex);
+		return false;
 	}
-	if (TempController == nullptr) return false;
-	TempController->Detach();
-	Controllers.Remove(TempController);
+	Controllers[ControllerIndex]->Detach();
+	Controllers.RemoveAt(ControllerIndex);
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::GetJoyConAccelerometer(const FJoyConInformation JoyConInformation, FVector& Out) {
+bool JoyConDriver::FJoyConInput::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) {
 	if (!HidInitialized) return false;
-	FJoyConController* TempController = nullptr;
-	for (FJoyConController* Controller : Controllers) {
-		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
-			TempController = Controller;
-			break;
-		}
-	}
-	if (TempController == nullptr) {
-		Out = FVector::ZeroVector;
+	Out = FVector::ZeroVector;
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex] == nullptr) {
+		Controllers.RemoveAt(ControllerIndex);
 		return false;
 	}
-	Out = TempController->GetAccelerometer();
+	Out = Controllers[ControllerIndex]->GetAccelerometer();
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::GetJoyConGyroscope(const FJoyConInformation JoyConInformation, FVector& Out) {
+bool JoyConDriver::FJoyConInput::GetJoyConGyroscope(const int ControllerIndex, FVector& Out) {
 	if (!HidInitialized) return false;
-	FJoyConController* TempController = nullptr;
-	for (FJoyConController* Controller : Controllers) {
-		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
-			TempController = Controller;
-			break;
-		}
-	}
-	if (TempController == nullptr) {
-		Out = FVector::ZeroVector;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString("Failed to get Gyro!"));
+	Out = FVector::ZeroVector;
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex] == nullptr) {
+		Controllers.RemoveAt(ControllerIndex);
 		return false;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, FString("Gyro Gottem!"));
-	Out = TempController->GetGyroscope();
+	Out = Controllers[ControllerIndex]->GetGyroscope();
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::GetJoyConVector(const FJoyConInformation JoyConInformation, FRotator& Out) {
+bool JoyConDriver::FJoyConInput::GetJoyConVector(const int ControllerIndex, FRotator& Out) {
 	if (!HidInitialized) return false;
-	FJoyConController* TempController = nullptr;
-	for (FJoyConController* Controller : Controllers) {
-		if (Controller->SerialNumber.Equals(JoyConInformation.SerialNumber) && Controller->BluetoothPath.Equals(JoyConInformation.BluetoothPath)) {
-			TempController = Controller;
-			break;
-		}
-	}
-	if (TempController == nullptr) {
-		Out = FRotator::ZeroRotator;
+	Out = FRotator::ZeroRotator;
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex] == nullptr) {
+		Controllers.RemoveAt(ControllerIndex);
 		return false;
 	}
-	Out = TempController->GetVector();
+	Out = Controllers[ControllerIndex]->GetVector();
 	return true;
 }
 
 void JoyConDriver::FJoyConInput::Tick(float DeltaTime) {
-	/*for (FJoyConController* Controller : Controllers) {
-		Controller->Update();
-		const FVector Gyroscope = Controller->GetGyroscope();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString::Printf(TEXT("Update Gyroscope: %f %f %f"), Gyroscope.X, Gyroscope.Y, Gyroscope.Z));
-	}*/
+
 }
 
 void JoyConDriver::FJoyConInput::SendControllerEvents() {
 	for(FJoyConController* Controller : Controllers) {
-		Controller->Pool();
 		Controller->Update();
 	}
 }

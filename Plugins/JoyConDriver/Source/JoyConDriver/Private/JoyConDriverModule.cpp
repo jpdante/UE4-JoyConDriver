@@ -16,24 +16,24 @@ TArray<FJoyConInformation>* FJoyConDriverModule::SearchForJoyCons() const {
 	return JoyConInputDevice.Pin()->SearchJoyCons();
 }
 
-bool FJoyConDriverModule::AttachJoyCon(const FJoyConInformation JoyConInformation) const {
-	return JoyConInputDevice.Pin()->AttachJoyCon(JoyConInformation);
+bool FJoyConDriverModule::AttachJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) const {
+	return JoyConInputDevice.Pin()->AttachJoyCon(JoyConInformation, ControllerIndex);
 }
 
-bool FJoyConDriverModule::DetachJoyCon(const FJoyConInformation JoyConInformation) const {
-	return JoyConInputDevice.Pin()->DetachJoyCon(JoyConInformation);
+bool FJoyConDriverModule::DetachJoyCon(const int ControllerIndex) const {
+	return JoyConInputDevice.Pin()->DetachJoyCon(ControllerIndex);
 }
 
-bool FJoyConDriverModule::GetJoyConAccelerometer(const FJoyConInformation JoyConInformation, FVector& Out) const {
-	return JoyConInputDevice.Pin()->GetJoyConAccelerometer(JoyConInformation, Out);
+bool FJoyConDriverModule::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConAccelerometer(ControllerIndex, Out);
 }
 
-bool FJoyConDriverModule::GetJoyConGyroscope(const FJoyConInformation JoyConInformation, FVector& Out) const {
-	return JoyConInputDevice.Pin()->GetJoyConGyroscope(JoyConInformation, Out);
+bool FJoyConDriverModule::GetJoyConGyroscope(const int ControllerIndex, FVector& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConGyroscope(ControllerIndex, Out);
 }
 
-bool FJoyConDriverModule::GetJoyConVector(const FJoyConInformation JoyConInformation, FRotator& Out) const {
-	return JoyConInputDevice.Pin()->GetJoyConVector(JoyConInformation, Out);
+bool FJoyConDriverModule::GetJoyConVector(const int ControllerIndex, FRotator& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConVector(ControllerIndex, Out);
 }
 
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {

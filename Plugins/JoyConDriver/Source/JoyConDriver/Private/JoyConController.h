@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "hidapi.h"
+#include "JoyConInformation.h"
 #include "Containers/Queue.h"
+#include "HAL/Runnable.h"
 
 
 enum EJoyConState {
@@ -56,10 +58,10 @@ struct FReport {
 	}
 };
 
-class FJoyConController {
+class FJoyConController : public FRunnable {
 
 public:
-	FJoyConController(hid_device* Device, FString TempSerialNumber, FString TempBluetoothPath, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft);
+	FJoyConController(FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft);
 	~FJoyConController();
 
 	void Attach(uint8 Leds);
@@ -146,8 +148,15 @@ private:
     FVector DTheta;
 	FVector IB2;
 
+	FRunnableThread* Thread;
+	FCriticalSection Mutex;
+
 public:
-	FString SerialNumber;
-	FString BluetoothPath;
+	FJoyConInformation JoyConInformation;
+
+	// FRunnable interface overrides
+	virtual bool Init() override;
+	virtual uint32 Run() override;
+	virtual void Stop() override;
 	
 };

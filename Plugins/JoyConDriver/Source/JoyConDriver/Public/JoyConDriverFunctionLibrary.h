@@ -16,20 +16,20 @@ class JOYCONDRIVER_API UJoyConDriverFunctionLibrary : public UBlueprintFunctionL
 
 public:
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Attach"))
-		static void AttachJoyCon(FJoyConInformation JoyConInformation, bool& Success);
+		static void AttachJoyCon(FJoyConInformation JoyConInformation, bool& Success, int& ControllerIndex);
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Search"))
 		static void SearchForJoyCons(TArray<FJoyConInformation>& JoyCons);
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Detach"))
-		static void DetachJoyCon(FJoyConInformation JoyConInformation, bool& Success);
+		static void DetachJoyCon(int ControllerIndex, bool& Success);
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Accelerometer"))
-		static void GetJoyConAccelerometer(FJoyConInformation JoyConInformation, bool& Success, FVector& Accelerometer);
+		static void GetJoyConAccelerometer(int ControllerIndex, bool& Success, FVector& Accelerometer);
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Gyroscope"))
-		static void GetJoyConGyroscope(FJoyConInformation JoyConInformation, bool& Success, FVector& Gyroscope);
+		static void GetJoyConGyroscope(int ControllerIndex, bool& Success, FVector& Gyroscope);
 
 	UFUNCTION(BlueprintPure, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Gyroscope"))
-		static void GetJoyConVector(FJoyConInformation JoyConInformation, bool& Success, FRotator& Vector);
+		static void GetJoyConVector(int ControllerIndex, bool& Success, FRotator& Vector);
 };

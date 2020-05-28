@@ -8,9 +8,9 @@
 #include "UObject/ScriptMacros.h"
 
 PRAGMA_DISABLE_DEPRECATION_WARNINGS
-struct FJoyConInformation;
 struct FRotator;
 struct FVector;
+struct FJoyConInformation;
 #ifdef JOYCONDRIVER_JoyConDriverFunctionLibrary_generated_h
 #error "JoyConDriverFunctionLibrary.generated.h already included, missing '#pragma once' in JoyConDriverFunctionLibrary.h"
 #endif
@@ -21,44 +21,44 @@ struct FVector;
  \
 	DECLARE_FUNCTION(execGetJoyConVector) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_GET_STRUCT_REF(FRotator,Z_Param_Out_Vector); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::GetJoyConVector(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_Vector); \
+		UJoyConDriverFunctionLibrary::GetJoyConVector(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Vector); \
 		P_NATIVE_END; \
 	} \
  \
 	DECLARE_FUNCTION(execGetJoyConGyroscope) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_Gyroscope); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::GetJoyConGyroscope(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_Gyroscope); \
+		UJoyConDriverFunctionLibrary::GetJoyConGyroscope(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Gyroscope); \
 		P_NATIVE_END; \
 	} \
  \
 	DECLARE_FUNCTION(execGetJoyConAccelerometer) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_Accelerometer); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_Accelerometer); \
+		UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Accelerometer); \
 		P_NATIVE_END; \
 	} \
  \
 	DECLARE_FUNCTION(execDetachJoyCon) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
+		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_ControllerIndex,Z_Param_Out_Success); \
 		P_NATIVE_END; \
 	} \
  \
@@ -75,9 +75,10 @@ struct FVector;
 	{ \
 		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
+		P_GET_PROPERTY_REF(UIntProperty,Z_Param_Out_ControllerIndex); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
+		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_ControllerIndex); \
 		P_NATIVE_END; \
 	}
 
@@ -86,44 +87,44 @@ struct FVector;
  \
 	DECLARE_FUNCTION(execGetJoyConVector) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_GET_STRUCT_REF(FRotator,Z_Param_Out_Vector); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::GetJoyConVector(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_Vector); \
+		UJoyConDriverFunctionLibrary::GetJoyConVector(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Vector); \
 		P_NATIVE_END; \
 	} \
  \
 	DECLARE_FUNCTION(execGetJoyConGyroscope) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_Gyroscope); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::GetJoyConGyroscope(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_Gyroscope); \
+		UJoyConDriverFunctionLibrary::GetJoyConGyroscope(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Gyroscope); \
 		P_NATIVE_END; \
 	} \
  \
 	DECLARE_FUNCTION(execGetJoyConAccelerometer) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_GET_STRUCT_REF(FVector,Z_Param_Out_Accelerometer); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_Accelerometer); \
+		UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Accelerometer); \
 		P_NATIVE_END; \
 	} \
  \
 	DECLARE_FUNCTION(execDetachJoyCon) \
 	{ \
-		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
+		P_GET_PROPERTY(UIntProperty,Z_Param_ControllerIndex); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
+		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_ControllerIndex,Z_Param_Out_Success); \
 		P_NATIVE_END; \
 	} \
  \
@@ -140,9 +141,10 @@ struct FVector;
 	{ \
 		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation); \
 		P_GET_UBOOL_REF(Z_Param_Out_Success); \
+		P_GET_PROPERTY_REF(UIntProperty,Z_Param_Out_ControllerIndex); \
 		P_FINISH; \
 		P_NATIVE_BEGIN; \
-		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success); \
+		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_ControllerIndex); \
 		P_NATIVE_END; \
 	}
 

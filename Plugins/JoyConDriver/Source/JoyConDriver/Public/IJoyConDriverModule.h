@@ -40,9 +40,9 @@ public:
 	 * @return The number of Touch controllers that are active (but not necessarily tracked)
 	 */
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
-	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation) const = 0;
-	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const = 0;
-	virtual bool GetJoyConAccelerometer(FJoyConInformation JoyConInformation, FVector& Out) const = 0;
-	virtual bool GetJoyConGyroscope(FJoyConInformation JoyConInformation, FVector& Out) const = 0;
-	virtual bool GetJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out) const = 0;
+	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex) const = 0;
+	virtual bool DetachJoyCon(int ControllerIndex) const = 0;
+	virtual bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out) const = 0;
+	virtual bool GetJoyConGyroscope(int ControllerIndex, FVector& Out) const = 0;
+	virtual bool GetJoyConVector(int ControllerIndex, FRotator& Out) const = 0;
 };

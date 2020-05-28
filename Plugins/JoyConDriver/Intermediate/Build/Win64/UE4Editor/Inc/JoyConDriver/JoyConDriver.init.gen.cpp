@@ -21,7 +21,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriver_init() {}
 				nullptr,
 				0,
 				PKG_CompiledIn | 0x00000000,
-				0xDBBA614E,
+				0xC0226C7F,
 				0x30911EDF,
 				METADATA_PARAMS(nullptr, 0)
 			};

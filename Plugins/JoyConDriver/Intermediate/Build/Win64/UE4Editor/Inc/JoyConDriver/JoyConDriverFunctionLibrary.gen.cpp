@@ -46,7 +46,9 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		{
 			FJoyConInformation JoyConInformation;
 			bool Success;
+			int32 ControllerIndex;
 		};
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_ControllerIndex;
 		static void NewProp_Success_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_Success;
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_JoyConInformation;
@@ -56,6 +58,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 #endif
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_ControllerIndex = { "ControllerIndex", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventAttachJoyCon_Parms, ControllerIndex), METADATA_PARAMS(nullptr, 0) };
 	void Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_Success_SetBit(void* Obj)
 	{
 		((JoyConDriverFunctionLibrary_eventAttachJoyCon_Parms*)Obj)->Success = 1;
@@ -63,6 +66,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_Success = { "Success", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(JoyConDriverFunctionLibrary_eventAttachJoyCon_Parms), &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_Success_SetBit, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_JoyConInformation = { "JoyConInformation", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventAttachJoyCon_Parms, JoyConInformation), Z_Construct_UScriptStruct_FJoyConInformation, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::PropPointers[] = {
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_ControllerIndex,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_Success,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon_Statics::NewProp_JoyConInformation,
 	};
@@ -87,12 +91,12 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	{
 		struct JoyConDriverFunctionLibrary_eventDetachJoyCon_Parms
 		{
-			FJoyConInformation JoyConInformation;
+			int32 ControllerIndex;
 			bool Success;
 		};
 		static void NewProp_Success_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_Success;
-		static const UE4CodeGen_Private::FStructPropertyParams NewProp_JoyConInformation;
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_ControllerIndex;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -104,10 +108,10 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		((JoyConDriverFunctionLibrary_eventDetachJoyCon_Parms*)Obj)->Success = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_Success = { "Success", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(JoyConDriverFunctionLibrary_eventDetachJoyCon_Parms), &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_Success_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_JoyConInformation = { "JoyConInformation", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventDetachJoyCon_Parms, JoyConInformation), Z_Construct_UScriptStruct_FJoyConInformation, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_ControllerIndex = { "ControllerIndex", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventDetachJoyCon_Parms, ControllerIndex), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_Success,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_JoyConInformation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::NewProp_ControllerIndex,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon_Statics::Function_MetaDataParams[] = {
@@ -130,14 +134,14 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	{
 		struct JoyConDriverFunctionLibrary_eventGetJoyConAccelerometer_Parms
 		{
-			FJoyConInformation JoyConInformation;
+			int32 ControllerIndex;
 			bool Success;
 			FVector Accelerometer;
 		};
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_Accelerometer;
 		static void NewProp_Success_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_Success;
-		static const UE4CodeGen_Private::FStructPropertyParams NewProp_JoyConInformation;
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_ControllerIndex;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -150,11 +154,11 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		((JoyConDriverFunctionLibrary_eventGetJoyConAccelerometer_Parms*)Obj)->Success = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_Success = { "Success", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(JoyConDriverFunctionLibrary_eventGetJoyConAccelerometer_Parms), &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_Success_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_JoyConInformation = { "JoyConInformation", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventGetJoyConAccelerometer_Parms, JoyConInformation), Z_Construct_UScriptStruct_FJoyConInformation, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_ControllerIndex = { "ControllerIndex", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventGetJoyConAccelerometer_Parms, ControllerIndex), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_Accelerometer,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_Success,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_JoyConInformation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::NewProp_ControllerIndex,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer_Statics::Function_MetaDataParams[] = {
@@ -177,14 +181,14 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	{
 		struct JoyConDriverFunctionLibrary_eventGetJoyConGyroscope_Parms
 		{
-			FJoyConInformation JoyConInformation;
+			int32 ControllerIndex;
 			bool Success;
 			FVector Gyroscope;
 		};
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_Gyroscope;
 		static void NewProp_Success_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_Success;
-		static const UE4CodeGen_Private::FStructPropertyParams NewProp_JoyConInformation;
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_ControllerIndex;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -197,11 +201,11 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		((JoyConDriverFunctionLibrary_eventGetJoyConGyroscope_Parms*)Obj)->Success = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_Success = { "Success", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(JoyConDriverFunctionLibrary_eventGetJoyConGyroscope_Parms), &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_Success_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_JoyConInformation = { "JoyConInformation", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventGetJoyConGyroscope_Parms, JoyConInformation), Z_Construct_UScriptStruct_FJoyConInformation, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_ControllerIndex = { "ControllerIndex", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventGetJoyConGyroscope_Parms, ControllerIndex), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_Gyroscope,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_Success,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_JoyConInformation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::NewProp_ControllerIndex,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope_Statics::Function_MetaDataParams[] = {
@@ -224,14 +228,14 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	{
 		struct JoyConDriverFunctionLibrary_eventGetJoyConVector_Parms
 		{
-			FJoyConInformation JoyConInformation;
+			int32 ControllerIndex;
 			bool Success;
 			FRotator Vector;
 		};
 		static const UE4CodeGen_Private::FStructPropertyParams NewProp_Vector;
 		static void NewProp_Success_SetBit(void* Obj);
 		static const UE4CodeGen_Private::FBoolPropertyParams NewProp_Success;
-		static const UE4CodeGen_Private::FStructPropertyParams NewProp_JoyConInformation;
+		static const UE4CodeGen_Private::FUnsizedIntPropertyParams NewProp_ControllerIndex;
 		static const UE4CodeGen_Private::FPropertyParamsBase* const PropPointers[];
 #if WITH_METADATA
 		static const UE4CodeGen_Private::FMetaDataPairParam Function_MetaDataParams[];
@@ -244,11 +248,11 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		((JoyConDriverFunctionLibrary_eventGetJoyConVector_Parms*)Obj)->Success = 1;
 	}
 	const UE4CodeGen_Private::FBoolPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_Success = { "Success", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Bool | UE4CodeGen_Private::EPropertyGenFlags::NativeBool, RF_Public|RF_Transient|RF_MarkAsNative, 1, sizeof(bool), sizeof(JoyConDriverFunctionLibrary_eventGetJoyConVector_Parms), &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_Success_SetBit, METADATA_PARAMS(nullptr, 0) };
-	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_JoyConInformation = { "JoyConInformation", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventGetJoyConVector_Parms, JoyConInformation), Z_Construct_UScriptStruct_FJoyConInformation, METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FUnsizedIntPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_ControllerIndex = { "ControllerIndex", nullptr, (EPropertyFlags)0x0010000000000080, UE4CodeGen_Private::EPropertyGenFlags::Int, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventGetJoyConVector_Parms, ControllerIndex), METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_Vector,
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_Success,
-		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_JoyConInformation,
+		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::NewProp_ControllerIndex,
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector_Statics::Function_MetaDataParams[] = {
@@ -323,11 +327,11 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		(UObject* (*)())Z_Construct_UPackage__Script_JoyConDriver,
 	};
 	const FClassFunctionLinkInfo Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics::FuncInfo[] = {
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon, "AttachJoyCon" }, // 1076459820
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon, "DetachJoyCon" }, // 1308248839
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer, "GetJoyConAccelerometer" }, // 911972203
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope, "GetJoyConGyroscope" }, // 3377337345
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector, "GetJoyConVector" }, // 1589240686
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon, "AttachJoyCon" }, // 3764357400
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon, "DetachJoyCon" }, // 4280147407
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer, "GetJoyConAccelerometer" }, // 3672024749
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope, "GetJoyConGyroscope" }, // 2644063629
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector, "GetJoyConVector" }, // 3831142025
 		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons, "SearchForJoyCons" }, // 102983304
 	};
 #if WITH_METADATA
@@ -364,7 +368,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UJoyConDriverFunctionLibrary, 2580392086);
+	IMPLEMENT_CLASS(UJoyConDriverFunctionLibrary, 2439205426);
 	template<> JOYCONDRIVER_API UClass* StaticClass<UJoyConDriverFunctionLibrary>()
 	{
 		return UJoyConDriverFunctionLibrary::StaticClass();

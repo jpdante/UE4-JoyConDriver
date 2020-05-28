@@ -26,11 +26,11 @@ public:
 
 	// IJoyConDriverModule overrides
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const override;
-	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation) const override;
-	virtual bool DetachJoyCon(FJoyConInformation JoyConInformation) const override;
-	virtual bool GetJoyConAccelerometer(FJoyConInformation JoyConInformation, FVector& Out) const override;
-	virtual bool GetJoyConGyroscope(FJoyConInformation JoyConInformation, FVector& Out) const override;
-	virtual bool GetJoyConVector(FJoyConInformation JoyConInformation, FRotator& Out) const override;
+	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex) const override;
+	virtual bool DetachJoyCon(int ControllerIndex) const override;
+	virtual bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out) const override;
+	virtual bool GetJoyConGyroscope(int ControllerIndex, FVector& Out) const override;
+	virtual bool GetJoyConVector(int ControllerIndex, FRotator& Out) const override;
 };
 
 #undef LOCTEXT_NAMESPACE

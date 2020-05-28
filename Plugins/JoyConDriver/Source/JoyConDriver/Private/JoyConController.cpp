@@ -5,9 +5,11 @@
 #include "Engine/Engine.h"
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include <map>
+
+#include "HAL/RunnableThread.h"
 #include "Windows/HideWindowsPlatformTypes.h"
 
-FJoyConController::FJoyConController(hid_device* Device, FString TempSerialNumber, FString TempBluetoothPath, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
+FJoyConController::FJoyConController(FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft):
 	GlobalCount(0),
 	ButtonsDown{},
 	ButtonsUp{},
@@ -18,11 +20,11 @@ FJoyConController::FJoyConController(hid_device* Device, FString TempSerialNumbe
 	TsDequeue(0),
 	TsEnqueue(0),
 	FilterWeight(0),
-	Err(0)
-{
+	Err(0),
+	Thread(nullptr) {
 	HidHandle = Device;
-	SerialNumber = TempSerialNumber;
-	BluetoothPath = TempBluetoothPath;
+	JoyConInformation = TempJoyConInformation;
+	JoyConInformation.ProbableControllerIndex = 0;
 	bIsLeft = IsLeft;
 	bImuEnabled = UseImu;
 	bDoLocalize = UseLocalize;
@@ -31,6 +33,8 @@ FJoyConController::FJoyConController(hid_device* Device, FString TempSerialNumbe
 }
 
 FJoyConController::~FJoyConController() {
+	delete Thread;
+	Thread = nullptr;
 	if (HidHandle != nullptr) {
 		hid_close(HidHandle);
 	}
@@ -54,27 +58,30 @@ void FJoyConController::Attach(const uint8 Leds) {
 	SendCommand(0x30, a, 1);
 	if (bImuEnabled) {
 		SendCommand(0x40, new uint8[1]{ 0x1 }, 1);
-	}
-	else {
+	} else {
 		SendCommand(0x40, new uint8[1]{ 0x0 }, 1);
 	}
 	SendCommand(0x3, new uint8[1]{ 0x30 }, 1);
 	SendCommand(0x48, new uint8[1]{ 0x1 }, 1);
 	bStopPolling = false;
+	if (!Thread && FPlatformProcess::SupportsMultithreading()) {
+		Thread = FRunnableThread::Create(this, TEXT("FJoyConInput"), 0, EThreadPriority::TPri_Normal);
+	}
 }
 
 void FJoyConController::Update() {
 	if (bStopPolling || State <= EJoyConState::No_JoyCons) return;
 	const auto ReportBuf = new uint8[ReportLen];
 	while (!Reports.IsEmpty()) {
+		Mutex.Lock();
 		FReport Rep;
 		Reports.Dequeue(Rep);
 		Rep.CopyBuffer(ReportBuf);
+		Mutex.Unlock();
 		if (bImuEnabled) {
 			if (bDoLocalize) {
 				ProcessImu(ReportBuf);
-			}
-			else {
+			} else {
 				ExtractImuValues(ReportBuf, 0);
 			}
 		}
@@ -94,23 +101,19 @@ void FJoyConController::Update() {
 }
 
 void FJoyConController::Pool() {
-	if (!bStopPolling && State > EJoyConState::No_JoyCons) {
+	while (!bStopPolling && State > EJoyConState::No_JoyCons) {
 		//SendRumble(_rumbleObj.GetData());
-		auto a = ReceiveRaw();
+		int32 a = ReceiveRaw();
 		a = ReceiveRaw();
 		if (a > 0) {
 			State = EJoyConState::Imu_Data_OK;
 			ReadAttempts = 0;
-		}
-		else if (ReadAttempts > 1000) {
+		} else if (ReadAttempts > 1000) {
 			State = EJoyConState::Dropped;
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString("Connection lost. Is the Joy-Con connected?"));
 			return;
-		}
-		/* else {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Cyan, FString("Pause 5ms"));
+		} else {
 			FPlatformProcess::Sleep(0.05);
-		}*/
+		}
 		ReadAttempts++;
 	}
 }
@@ -269,10 +272,12 @@ int FJoyConController::ReceiveRaw() {
 	if (bStopPolling) return 0;
 	const auto Ret = hid_read(HidHandle, RawBuf, ReportLen);
 	if (Ret <= 0) return Ret;
+	Mutex.Lock();
 	FReport Report;
 	Report.ReportData = RawBuf;
 	Report.Time = FDateTime::Now();
 	Reports.Enqueue(Report);
+	Mutex.Unlock();
 	if (TsEnqueue == RawBuf[1]) {
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString("Duplicate timestamp enqueued."));
 	}
@@ -317,8 +322,7 @@ int32 FJoyConController::ProcessImu(uint8 ReportBuf[]) {
 			J_B.Set(0, 1, 0);
 			K_B.Set(0, 0, 1);
 			FirstImuPacket = false;
-		}
-		else {
+		} else {
 			K_Acc = -AccG.GetSafeNormal();
 			Wa = FVector::CrossProduct(K_B, K_Acc);
 			Wg = -GyrG * DT_Sec;
@@ -377,8 +381,7 @@ void FJoyConController::CenterSticks(uint16 Values[]) {
 		if (FGenericPlatformMath::Abs(Diff) < DeadZone) Values[i] = 0;
 		else if (Diff > 0) {
 			Stick[i] = Diff / StickCalibration[i];
-		}
-		else {
+		} else {
 			Stick[i] = Diff / StickCalibration[4 + i];
 		}
 	}
@@ -420,4 +423,17 @@ void FJoyConController::ArrayCopy(uint8* SourceArray, const int SourceIndex, uin
 
 void FJoyConController::ArrayCopy(const uint8* SourceArray, const int SourceIndex, uint8* DestinationArray, const int DestinationIndex, const int Length) {
 	std::copy(SourceArray + SourceIndex, SourceArray + SourceIndex + Length, DestinationArray + DestinationIndex);
+}
+
+bool FJoyConController::Init() {
+	return true;
+}
+
+uint32 FJoyConController::Run() {
+	Pool();
+	return 0;
+}
+
+void FJoyConController::Stop() {
+	bStopPolling = true;
 }

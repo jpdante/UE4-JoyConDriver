@@ -16,12 +16,12 @@ FJoyConDriverModule* GetJoyConControllerAPI() {
 	return nullptr;
 }
 
-void UJoyConDriverFunctionLibrary::AttachJoyCon(const FJoyConInformation JoyConInformation, bool& Success) {
+void UJoyConDriverFunctionLibrary::AttachJoyCon(const FJoyConInformation JoyConInformation, bool& Success, int& ControllerIndex) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 	} else {
-		Success = JoyConInputApi->AttachJoyCon(JoyConInformation);
+		Success = JoyConInputApi->AttachJoyCon(JoyConInformation, ControllerIndex);
 	}
 }
 
@@ -39,41 +39,41 @@ void UJoyConDriverFunctionLibrary::SearchForJoyCons(TArray<FJoyConInformation>& 
 	}
 }
 
-void UJoyConDriverFunctionLibrary::DetachJoyCon(const FJoyConInformation JoyConInformation, bool& Success) {
+void UJoyConDriverFunctionLibrary::DetachJoyCon(const int ControllerIndex, bool& Success) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 	} else {
-		Success = JoyConInputApi->DetachJoyCon(JoyConInformation);
+		Success = JoyConInputApi->DetachJoyCon(ControllerIndex);
 	}
 }
 
-void UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(const FJoyConInformation JoyConInformation, bool& Success, FVector& Accelerometer) {
+void UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(const int ControllerIndex, bool& Success, FVector& Accelerometer) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 		Accelerometer = FVector::ZeroVector;
 	} else {
-		Success = JoyConInputApi->GetJoyConAccelerometer(JoyConInformation, Accelerometer);
+		Success = JoyConInputApi->GetJoyConAccelerometer(ControllerIndex, Accelerometer);
 	}
 }
 
-void UJoyConDriverFunctionLibrary::GetJoyConGyroscope(FJoyConInformation JoyConInformation, bool& Success, FVector& Gyroscope) {
+void UJoyConDriverFunctionLibrary::GetJoyConGyroscope(const int ControllerIndex, bool& Success, FVector& Gyroscope) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 		Gyroscope = FVector::ZeroVector;
 	} else {
-		Success = JoyConInputApi->GetJoyConGyroscope(JoyConInformation, Gyroscope);
+		Success = JoyConInputApi->GetJoyConGyroscope(ControllerIndex, Gyroscope);
 	}
 }
 
-void UJoyConDriverFunctionLibrary::GetJoyConVector(FJoyConInformation JoyConInformation, bool& Success, FRotator& Vector) {
+void UJoyConDriverFunctionLibrary::GetJoyConVector(const int ControllerIndex, bool& Success, FRotator& Vector) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 		Vector = FRotator::ZeroRotator;
 	} else {
-		Success = JoyConInputApi->GetJoyConVector(JoyConInformation, Vector);
+		Success = JoyConInputApi->GetJoyConVector(ControllerIndex, Vector);
 	}
 }
