@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "hidapi.h"
+#include "InputCoreTypes.h"
 #include "JoyConInformation.h"
 #include "Containers/Queue.h"
+#include "GenericPlatform/GenericApplicationMessageHandler.h"
 #include "HAL/Runnable.h"
 
 
@@ -19,19 +21,67 @@ enum EJoyConState {
 };
 
 enum EButton : int {
-	DPad_Down = 0,
-	DPad_Right = 1,
-	DPad_Left = 2,
-	DPad_Up = 3,
-	Sl = 4,
-	Sr = 5,
-	Minus = 6,
-	Home = 7,
-	Plus = 8,
-	Capture = 9,
-	Stick = 10,
-	Shoulder_1 = 11,
-	Shoulder_2 = 12
+	JoyCon_DPad_Up = 0,
+	JoyCon_DPad_Left = 1,
+	JoyCon_DPad_Right = 2,
+	JoyCon_DPad_Down = 3,
+	
+	JoyCon_Minus = 4,
+	JoyCon_Plus = 5,
+	JoyCon_Home = 6,
+	JoyCon_Capture = 7,
+	
+	JoyCon_Analog_Click = 8,
+	
+	JoyCon_Sr = 9,
+	JoyCon_Sl = 10,
+	
+	JoyCon_Shoulder_1 = 11,
+	JoyCon_Shoulder_2 = 12,
+};
+
+struct FJoyConKey {
+	static const FKey JoyCon_DPad_Up;
+	static const FKey JoyCon_DPad_Left;
+	static const FKey JoyCon_DPad_Right;
+	static const FKey JoyCon_DPad_Down;
+
+	static const FKey JoyCon_Minus;
+	static const FKey JoyCon_Plus;
+	static const FKey JoyCon_Home;
+	static const FKey JoyCon_Capture;
+
+	static const FKey JoyCon_Analog_Click;
+
+	static const FKey JoyCon_Sr;
+	static const FKey JoyCon_Sl;
+
+	static const FKey JoyCon_Shoulder_1;
+	static const FKey JoyCon_Shoulder_2;
+};
+
+class FJoyConButtonState {	
+public:
+	FGamepadKeyNames::Type KeyName;
+	bool Pressed;
+	bool Updated;
+	bool Repeat;
+
+	explicit FJoyConButtonState(const FName TempKeyName) {
+		KeyName = TempKeyName;
+		Pressed = false;
+		Updated = false;
+		Repeat = false;
+	}
+
+	void Update(const bool Result) {
+		Updated = true;
+		Pressed = Result;
+	}
+
+	void Reset() {
+		Updated = false;
+	}
 };
 
 struct FReport {
@@ -69,9 +119,9 @@ public:
 	void Pool();
 	void Detach();
 
-	bool GetButtonDown(EButton Button);
+	/*bool GetButtonDown(EButton Button);
 	bool GetButton(EButton Button);
-	bool GetButtonUp(EButton Button);
+	bool GetButtonUp(EButton Button);*/
 	FVector2D GetStick();
 	FVector GetGyroscope() const;
 	FVector GetAccelerometer() const;
@@ -110,10 +160,11 @@ private:
 	const uint8 DefaultBuf[8] = { 0x0, 0x1, 0x40, 0x40, 0x0, 0x1, 0x40, 0x40 };
 
 	// Buttons
-	bool ButtonsDown[13];
+	FJoyConButtonState* Buttons;
+	/*bool ButtonsDown[13];
 	bool ButtonsUp[13];
 	bool Buttons[13];
-	bool Down[13];
+	bool Down[13];*/
 
 	// Analog Stick Variables
 	float Stick[2] = { 0, 0 };

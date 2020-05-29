@@ -9,12 +9,8 @@
 #include "HAL/RunnableThread.h"
 #include "Windows/HideWindowsPlatformTypes.h"
 
-FJoyConController::FJoyConController(FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft):
+FJoyConController::FJoyConController(FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
 	GlobalCount(0),
-	ButtonsDown{},
-	ButtonsUp{},
-	Buttons{},
-	Down{},
 	DeadZone(0),
 	Timestamp(0),
 	TsDequeue(0),
@@ -22,6 +18,25 @@ FJoyConController::FJoyConController(FJoyConInformation TempJoyConInformation, h
 	FilterWeight(0),
 	Err(0),
 	Thread(nullptr) {
+	Buttons = new FJoyConButtonState[13] {
+		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Up.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Left.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Right.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Down.GetFName()),
+		
+		FJoyConButtonState(FJoyConKey::JoyCon_Minus.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_Plus.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_Home.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_Capture.GetFName()),
+		
+		FJoyConButtonState(FJoyConKey::JoyCon_Analog_Click.GetFName()),
+		
+		FJoyConButtonState(FJoyConKey::JoyCon_Sr.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_Sl.GetFName()),
+		
+		FJoyConButtonState(FJoyConKey::JoyCon_Shoulder_1.GetFName()),
+		FJoyConButtonState(FJoyConKey::JoyCon_Shoulder_2.GetFName()),
+	};
 	HidHandle = Device;
 	JoyConInformation = TempJoyConInformation;
 	JoyConInformation.ProbableControllerIndex = 0;
@@ -133,7 +148,7 @@ void FJoyConController::Detach() {
 	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString("JoyCon detached!"));
 }
 
-bool FJoyConController::GetButtonDown(const EButton Button) {
+/*bool FJoyConController::GetButtonDown(const EButton Button) {
 	return ButtonsDown[Button];
 }
 
@@ -143,7 +158,7 @@ bool FJoyConController::GetButton(const EButton Button) {
 
 bool FJoyConController::GetButtonUp(const EButton Button) {
 	return ButtonsUp[Button];
-}
+}*/
 
 FVector2D FJoyConController::GetStick() {
 	return FVector2D(Stick[0], Stick[1]);
@@ -353,25 +368,30 @@ int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
 	StickPreCalibration[0] = static_cast<uint16>(StickRaw[0] | ((StickRaw[1] & 0xf) << 8));
 	StickPreCalibration[1] = static_cast<uint16>((StickRaw[1] >> 4) | (StickRaw[2] << 4));
 	CenterSticks(StickPreCalibration);
-	for (int i = 0; i < sizeof(Buttons); ++i) {
+	/*for (int i = 0; i < sizeof(Buttons); ++i) {
 		Down[i] = Buttons[i];
-	}
-	Buttons[EButton::DPad_Down] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x01 : 0x04)) != 0;
-	Buttons[EButton::DPad_Right] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x04 : 0x08)) != 0;
-	Buttons[EButton::DPad_Up] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x02 : 0x02)) != 0;
-	Buttons[EButton::DPad_Left] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x08 : 0x01)) != 0;
-	Buttons[EButton::Home] = ((ReportBuf[4] & 0x10) != 0);
-	Buttons[EButton::Minus] = ((ReportBuf[4] & 0x01) != 0);
-	Buttons[EButton::Plus] = ((ReportBuf[4] & 0x02) != 0);
-	Buttons[EButton::Stick] = ((ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0);
-	Buttons[EButton::Shoulder_1] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0;
-	Buttons[EButton::Shoulder_2] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0;
-	Buttons[EButton::Sr] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0;
-	Buttons[EButton::Sl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0;
-	for (int i = 0; i < sizeof(Buttons); ++i) {
+	}*/
+	Buttons[EButton::JoyCon_DPad_Up].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x02 : 0x02)) != 0);
+	Buttons[EButton::JoyCon_DPad_Left].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x08 : 0x01)) != 0);
+	Buttons[EButton::JoyCon_DPad_Right].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x04 : 0x08)) != 0);
+	Buttons[EButton::JoyCon_DPad_Down].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x01 : 0x04)) != 0);
+
+	Buttons[EButton::JoyCon_Minus].Update((ReportBuf[4] & 0x01) != 0);
+	Buttons[EButton::JoyCon_Plus].Update((ReportBuf[4] & 0x02) != 0);
+	Buttons[EButton::JoyCon_Home].Update((ReportBuf[4] & 0x10) != 0);
+	//Buttons[EButton::JoyCon_Capture].Update((ReportBuf[4] & 0x02) != 0);
+	
+	Buttons[EButton::JoyCon_Analog_Click].Update((ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0);
+	
+	Buttons[EButton::JoyCon_Sr].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0);
+	Buttons[EButton::JoyCon_Sl].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0);
+
+	Buttons[EButton::JoyCon_Shoulder_1].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0);
+	Buttons[EButton::JoyCon_Shoulder_2].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0);
+	/*for (int i = 0; i < sizeof(Buttons); ++i) {
 		ButtonsUp[i] = (Down[i] & !Buttons[i]);
 		ButtonsDown[i] = (!Down[i] & Buttons[i]);
-	}
+	}*/
 	return 0;
 }
 
