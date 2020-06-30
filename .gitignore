@@ -72,3 +72,7 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
+
+# Plugin
+Plugins/JoyConDriver/Intermediate/*
+Plugins/JoyConDriver/Binaries/*
