@@ -3,12 +3,57 @@
 #include "JoyConInput.h"
 
 #include "hidapi.h"
+#include "JoyConState.h"
 #include "Engine/Engine.h"
 #include "HAL/RunnableThread.h"
 #include "Misc/CoreDelegates.h"
 #include "Misc/ConfigCacheIni.h"
 
-JoyConDriver::FJoyConInput::FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler) : MessageHandler(InMessageHandler) {
+#define LOCTEXT_NAMESPACE "JoyConInput"
+
+// Setup Keys
+const FKey FJoyConKey::JoyCon_DPad_Up("JoyCon_DPad_Up");
+const FKey FJoyConKey::JoyCon_DPad_Left("JoyCon_DPad_Left");
+const FKey FJoyConKey::JoyCon_DPad_Right("JoyCon_DPad_Right");
+const FKey FJoyConKey::JoyCon_DPad_Down("JoyCon_DPad_Down");
+
+const FKey FJoyConKey::JoyCon_Minus("JoyCon_Minus");
+const FKey FJoyConKey::JoyCon_Plus("JoyCon_Plus");
+const FKey FJoyConKey::JoyCon_Home("JoyCon_Home");
+const FKey FJoyConKey::JoyCon_Capture("JoyCon_Capture");
+
+const FKey FJoyConKey::JoyCon_Analog_Click("JoyCon_Analog_Click");
+
+const FKey FJoyConKey::JoyCon_Sr("JoyCon_Sr");
+const FKey FJoyConKey::JoyCon_Sl("JoyCon_Sl");
+
+const FKey FJoyConKey::JoyCon_Shoulder_1("JoyCon_Shoulder_1");
+const FKey FJoyConKey::JoyCon_Shoulder_2("JoyCon_Shoulder_2");
+
+// Setup Keys Names
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Up("JoyCon_DPad_Up");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Left("JoyCon_DPad_Left");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Right("JoyCon_DPad_Right");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Down("JoyCon_DPad_Down");
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Minus("JoyCon_Minus");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Plus("JoyCon_Plus");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Home("JoyCon_Home");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Capture("JoyCon_Capture");
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Analog_Click("JoyCon_Analog_Click");
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Sr("JoyCon_Sr");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Sl("JoyCon_Sl");
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Shoulder_1("JoyCon_Shoulder_1");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Shoulder_2("JoyCon_Shoulder_2");
+
+float FJoyConInput::InitialButtonRepeatDelay = 0.2f;
+float FJoyConInput::ButtonRepeatDelay = 0.1f;
+
+FJoyConInput::FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler) : MessageHandler(InMessageHandler) {
 	IModularFeatures::Get().RegisterModularFeature(GetModularFeatureName(), this);
 	if (hid_init() == 0) HidInitialized = true;
 	else {
@@ -18,7 +63,7 @@ JoyConDriver::FJoyConInput::FJoyConInput(const TSharedRef< FGenericApplicationMe
 	UE_LOG(LogTemp, Log, TEXT("JoyConDriver is initialized"));
 }
 
-JoyConDriver::FJoyConInput::~FJoyConInput() {
+FJoyConInput::~FJoyConInput() {
 	IModularFeatures::Get().UnregisterModularFeature(GetModularFeatureName(), this);
 	if (hid_exit() == 0) HidInitialized = false;
 	else {
@@ -28,16 +73,40 @@ JoyConDriver::FJoyConInput::~FJoyConInput() {
 	UE_LOG(LogTemp, Log, TEXT("JoyConDriver is uninitialized"));
 }
 
-void JoyConDriver::FJoyConInput::PreInit() {
+void FJoyConInput::PreInit() {
 	// Load the config, even if we failed to initialize a controller
 	LoadConfig();
-}
 
-void JoyConDriver::FJoyConInput::LoadConfig() {
+	// Register the FKeys
+	EKeys::AddMenuCategoryDisplayInfo("JoyCon", LOCTEXT("JoyConSubCategory", "JoyCon"), TEXT("GraphEditor.PadEvent_16x"));
 	
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Up, LOCTEXT("JoyCon_DPad_Up", "JoyCon D-pad Up"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Left, LOCTEXT("JoyCon_DPad_Left", "JoyCon D-pad Left"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Right, LOCTEXT("JoyCon_DPad_Right", "JoyCon D-pad Right"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Down, LOCTEXT("JoyCon_DPad_Down", "JoyCon D-pad Down"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Minus, LOCTEXT("JoyCon_Minus", "JoyCon Minus"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Plus, LOCTEXT("JoyCon_Plus", "JoyCon Plus"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Home, LOCTEXT("JoyCon_Home", "JoyCon Home"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Capture, LOCTEXT("JoyCon_Capture", "JoyCon Capture"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Analog_Click, LOCTEXT("JoyCon_Analog_Click", "JoyCon Analog Click"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sr, LOCTEXT("JoyCon_Sr", "JoyCon Sr"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sl, LOCTEXT("JoyCon_Sl", "JoyCon Sl"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Shoulder_1, LOCTEXT("JoyCon_Shoulder_1", "JoyCon S1"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Shoulder_2, LOCTEXT("JoyCon_Shoulder_2", "JoyCon S2"), FKeyDetails::GamepadKey, "JoyCon"));
+	
+	UE_LOG(LogTemp, Log, TEXT("JoyConInput pre-init called"));
 }
 
-TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
+void FJoyConInput::LoadConfig() {
+	GConfig->GetFloat(TEXT("/Script/Engine.InputSettings"), TEXT("InitialButtonRepeatDelay"), InitialButtonRepeatDelay, GInputIni);
+	GConfig->GetFloat(TEXT("/Script/Engine.InputSettings"), TEXT("ButtonRepeatDelay"), ButtonRepeatDelay, GInputIni);
+}
+
+TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
 	if (!HidInitialized) return Data;
 	hid_device_info* Devices = hid_enumerate(0x57e, 0x0);
@@ -94,7 +163,7 @@ TArray<FJoyConInformation>* JoyConDriver::FJoyConInput::SearchJoyCons() {
 	return Data;
 }
 
-bool JoyConDriver::FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) {
+bool FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
 	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
@@ -110,7 +179,7 @@ bool JoyConDriver::FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInf
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::DetachJoyCon(const int ControllerIndex) {
+bool FJoyConInput::DetachJoyCon(const int ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
 	if (Controllers[ControllerIndex] == nullptr) {
@@ -122,7 +191,7 @@ bool JoyConDriver::FJoyConInput::DetachJoyCon(const int ControllerIndex) {
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) {
+bool FJoyConInput::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) {
 	if (!HidInitialized) return false;
 	Out = FVector::ZeroVector;
 	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
@@ -134,7 +203,7 @@ bool JoyConDriver::FJoyConInput::GetJoyConAccelerometer(const int ControllerInde
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::GetJoyConGyroscope(const int ControllerIndex, FVector& Out) {
+bool FJoyConInput::GetJoyConGyroscope(const int ControllerIndex, FVector& Out) {
 	if (!HidInitialized) return false;
 	Out = FVector::ZeroVector;
 	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
@@ -146,7 +215,7 @@ bool JoyConDriver::FJoyConInput::GetJoyConGyroscope(const int ControllerIndex, F
 	return true;
 }
 
-bool JoyConDriver::FJoyConInput::GetJoyConVector(const int ControllerIndex, FRotator& Out) {
+bool FJoyConInput::GetJoyConVector(const int ControllerIndex, FRotator& Out) {
 	if (!HidInitialized) return false;
 	Out = FRotator::ZeroRotator;
 	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
@@ -158,51 +227,81 @@ bool JoyConDriver::FJoyConInput::GetJoyConVector(const int ControllerIndex, FRot
 	return true;
 }
 
-void JoyConDriver::FJoyConInput::Tick(float DeltaTime) {
+void FJoyConInput::Tick(float DeltaTime) {
 
 }
 
-void JoyConDriver::FJoyConInput::SendControllerEvents() {
+void FJoyConInput::SendControllerEvents() {
+	const double CurrentTime = FPlatformTime::Seconds();
+	
 	for(FJoyConController* Controller : Controllers) {
 		Controller->Update();
+		for (int32 ButtonIndex = 0; ButtonIndex < static_cast<int32>(EJoyConControllerButton::TotalButtonCount); ++ButtonIndex) {
+			FJoyConButtonState& ButtonState = Controller->ControllerState.Buttons[ButtonIndex];
+			check(!ButtonState.Key.IsNone()); // is button's name initialized?
+
+			// Determine if the button is pressed down
+			const bool bButtonPressed = Controller->Buttons[ButtonIndex];
+
+			// Update button state
+			if (bButtonPressed != ButtonState.bIsPressed) {
+				ButtonState.bIsPressed = bButtonPressed;
+				if (ButtonState.bIsPressed) {
+					MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
+					
+					// Set the timer for the first repeat
+					ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+				} else {
+					MessageHandler->OnControllerButtonReleased(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
+				}
+			}
+
+			// Apply key repeat, if its time for that
+			if (ButtonState.bIsPressed && ButtonState.NextRepeatTime <= CurrentTime) {
+				MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, true);
+
+				// Set the timer for the next repeat
+				ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+			}
+		}
 	}
 }
 
-void JoyConDriver::FJoyConInput::SetMessageHandler(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
+void FJoyConInput::SetMessageHandler(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
 	MessageHandler = InMessageHandler;
 }
 
-bool JoyConDriver::FJoyConInput::Exec(UWorld* InWorld, const TCHAR* Cmd, FOutputDevice& Ar) {
+bool FJoyConInput::Exec(UWorld* InWorld, const TCHAR* Cmd, FOutputDevice& Ar) {
 	return false;
 }
 
-void JoyConDriver::FJoyConInput::SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value) {
+void FJoyConInput::SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value) {
 }
 
-void JoyConDriver::FJoyConInput::SetChannelValues(int32 ControllerId, const FForceFeedbackValues& Values) {
+void FJoyConInput::SetChannelValues(int32 ControllerId, const FForceFeedbackValues& Values) {
 }
 
-FName JoyConDriver::FJoyConInput::GetMotionControllerDeviceTypeName() const {
+FName FJoyConInput::GetMotionControllerDeviceTypeName() const {
 	const static FName DefaultName(TEXT("JoyConInputDevice"));
 	return DefaultName;
 }
 
-bool JoyConDriver::FJoyConInput::GetControllerOrientationAndPosition(const int32 ControllerIndex, const EControllerHand DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const {
+bool FJoyConInput::GetControllerOrientationAndPosition(const int32 ControllerIndex, const EControllerHand DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const {
 	return false;
 }
 
-ETrackingStatus JoyConDriver::FJoyConInput::GetControllerTrackingStatus(const int32 ControllerIndex, const EControllerHand DeviceHand) const {
+ETrackingStatus FJoyConInput::GetControllerTrackingStatus(const int32 ControllerIndex, const EControllerHand DeviceHand) const {
 	return ETrackingStatus::NotTracked;
 }
 
-void JoyConDriver::FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {
+void FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {
 }
 
-void JoyConDriver::FJoyConInput::GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const {
+void FJoyConInput::GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const {
 	MinFrequency = 0.f;
 	MaxFrequency = 1.f;
 }
 
-float JoyConDriver::FJoyConInput::GetHapticAmplitudeScale() const {
+float FJoyConInput::GetHapticAmplitudeScale() const {
 	return 1.f;
 }

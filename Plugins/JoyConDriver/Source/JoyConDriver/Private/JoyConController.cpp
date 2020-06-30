@@ -6,10 +6,11 @@
 #include "Windows/AllowWindowsPlatformTypes.h"
 #include <map>
 
+#include "JoyConState.h"
 #include "HAL/RunnableThread.h"
 #include "Windows/HideWindowsPlatformTypes.h"
 
-FJoyConController::FJoyConController(FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
+FJoyConController::FJoyConController(const FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
 	GlobalCount(0),
 	DeadZone(0),
 	Timestamp(0),
@@ -17,26 +18,8 @@ FJoyConController::FJoyConController(FJoyConInformation TempJoyConInformation, h
 	TsEnqueue(0),
 	FilterWeight(0),
 	Err(0),
-	Thread(nullptr) {
-	Buttons = new FJoyConButtonState[13] {
-		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Up.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Left.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Right.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_DPad_Down.GetFName()),
-		
-		FJoyConButtonState(FJoyConKey::JoyCon_Minus.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_Plus.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_Home.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_Capture.GetFName()),
-		
-		FJoyConButtonState(FJoyConKey::JoyCon_Analog_Click.GetFName()),
-		
-		FJoyConButtonState(FJoyConKey::JoyCon_Sr.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_Sl.GetFName()),
-		
-		FJoyConButtonState(FJoyConKey::JoyCon_Shoulder_1.GetFName()),
-		FJoyConButtonState(FJoyConKey::JoyCon_Shoulder_2.GetFName()),
-	};
+	Thread(nullptr),
+    Buttons{} {
 	HidHandle = Device;
 	JoyConInformation = TempJoyConInformation;
 	JoyConInformation.ProbableControllerIndex = 0;
@@ -371,23 +354,25 @@ int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
 	/*for (int i = 0; i < sizeof(Buttons); ++i) {
 		Down[i] = Buttons[i];
 	}*/
-	Buttons[EButton::JoyCon_DPad_Up].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x02 : 0x02)) != 0);
-	Buttons[EButton::JoyCon_DPad_Left].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x08 : 0x01)) != 0);
-	Buttons[EButton::JoyCon_DPad_Right].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x04 : 0x08)) != 0);
-	Buttons[EButton::JoyCon_DPad_Down].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x01 : 0x04)) != 0);
 
-	Buttons[EButton::JoyCon_Minus].Update((ReportBuf[4] & 0x01) != 0);
-	Buttons[EButton::JoyCon_Plus].Update((ReportBuf[4] & 0x02) != 0);
-	Buttons[EButton::JoyCon_Home].Update((ReportBuf[4] & 0x10) != 0);
+	Buttons[EJoyConControllerButton::DPad_Up] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x02 : 0x02)) != 0;
+	Buttons[EJoyConControllerButton::DPad_Left] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x08 : 0x01)) != 0;
+	Buttons[EJoyConControllerButton::DPad_Right] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x04 : 0x08)) != 0;
+	Buttons[EJoyConControllerButton::DPad_Down] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x01 : 0x04)) != 0;
+
+	Buttons[EJoyConControllerButton::Minus] = (ReportBuf[4] & 0x01) != 0;
+	Buttons[EJoyConControllerButton::Plus] = (ReportBuf[4] & 0x02) != 0;
+	Buttons[EJoyConControllerButton::Home] = (ReportBuf[4] & 0x10) != 0;
 	//Buttons[EButton::JoyCon_Capture].Update((ReportBuf[4] & 0x02) != 0);
 	
-	Buttons[EButton::JoyCon_Analog_Click].Update((ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0);
+    Buttons[EJoyConControllerButton::Analog_Click] = (ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0;
 	
-	Buttons[EButton::JoyCon_Sr].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0);
-	Buttons[EButton::JoyCon_Sl].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0);
+	Buttons[EJoyConControllerButton::Sr] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0;
+	Buttons[EJoyConControllerButton::Sl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0;
 
-	Buttons[EButton::JoyCon_Shoulder_1].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0);
-	Buttons[EButton::JoyCon_Shoulder_2].Update((ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0);
+	Buttons[EJoyConControllerButton::Shoulder_1] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0;
+	Buttons[EJoyConControllerButton::Shoulder_2] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0;
+
 	/*for (int i = 0; i < sizeof(Buttons); ++i) {
 		ButtonsUp[i] = (Down[i] & !Buttons[i]);
 		ButtonsDown[i] = (!Down[i] & Buttons[i]);

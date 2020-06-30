@@ -7,9 +7,9 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "JoyConDriverFunctionLibrary.generated.h"
 
-/**
- *
- */
+	/**
+	 *
+	 */
 UCLASS()
 class JOYCONDRIVER_API UJoyConDriverFunctionLibrary : public UBlueprintFunctionLibrary {
 	GENERATED_BODY()

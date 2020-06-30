@@ -9,7 +9,7 @@
 
 void FJoyConDriverModule::StartupModule() {
 	IInputDeviceModule::StartupModule();
-	JoyConDriver::FJoyConInput::PreInit();
+	FJoyConInput::PreInit();
 }
 
 TArray<FJoyConInformation>* FJoyConDriverModule::SearchForJoyCons() const {
@@ -37,7 +37,7 @@ bool FJoyConDriverModule::GetJoyConVector(const int ControllerIndex, FRotator& O
 }
 
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
-	TSharedPtr<JoyConDriver::FJoyConInput> InputDevice(new JoyConDriver::FJoyConInput(InMessageHandler));
+	TSharedPtr<FJoyConInput> InputDevice(new FJoyConInput(InMessageHandler));
 	JoyConInputDevice = InputDevice;
 	return InputDevice;
 }

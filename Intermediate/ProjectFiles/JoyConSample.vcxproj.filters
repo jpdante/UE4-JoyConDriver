@@ -3,7 +3,7 @@
   <ItemGroup>
     <None Include="..\..\JoyConSample.uproject" />
     <Filter Include="Source">
-      <UniqueIdentifier>{C5002517-C9B7-4477-ACD7-A77D57BE669D}</UniqueIdentifier>
+      <UniqueIdentifier>{8D12FA67-F5EA-4C50-983F-E29F9711ACD9}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\JoyConSample.Target.cs">
       <Filter>Source</Filter>
@@ -14,7 +14,7 @@
     <None Include="..\..\.gitattributes" />
     <None Include="..\..\.gitignore" />
     <Filter Include="Config">
-      <UniqueIdentifier>{481EC7D1-ED0B-4D39-870A-7215BBCF186E}</UniqueIdentifier>
+      <UniqueIdentifier>{EBE66C50-D29C-46D0-B88B-88B05AE3144B}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Config\DefaultEditor.ini">
       <Filter>Config</Filter>
@@ -26,22 +26,22 @@
       <Filter>Config</Filter>
     </None>
     <Filter Include="Plugins">
-      <UniqueIdentifier>{3E9A2B29-2E73-423C-A9E7-3A7DB2C6D9FD}</UniqueIdentifier>
+      <UniqueIdentifier>{34149278-CD98-4748-A1DD-01A35E5C2C26}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\JoyConDriver">
-      <UniqueIdentifier>{DBA82931-5A63-4C99-9DA5-C3FF651DD8DD}</UniqueIdentifier>
+      <UniqueIdentifier>{E31962DE-E7CE-433E-8BE0-29393767BD25}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\JoyConDriver\Source">
-      <UniqueIdentifier>{05F59BD6-4BBA-4132-8210-4BCD2CB8C278}</UniqueIdentifier>
+      <UniqueIdentifier>{DDAD958E-EA43-4B25-B76F-1D3D0E71BA50}</UniqueIdentifier>
     </Filter>
     <Filter Include="Plugins\JoyConDriver\Source\JoyConDriver">
-      <UniqueIdentifier>{3C0E914D-5BD6-4369-B62E-A5E2F8C3591A}</UniqueIdentifier>
+      <UniqueIdentifier>{C2CCCBE2-3BC7-4BD4-A81B-E7BEB3F69763}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\JoyConDriver.Build.cs">
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver</Filter>
     </None>
     <Filter Include="Plugins\JoyConDriver\Source\JoyConDriver\Private">
-      <UniqueIdentifier>{1FAB5E16-DC5E-4546-AB2C-5D2D945CA1D0}</UniqueIdentifier>
+      <UniqueIdentifier>{B54EAD42-91D5-4F71-8507-31DABD499663}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\hid.c">
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Private</Filter>
@@ -49,12 +49,6 @@
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\hidapi.h">
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Private</Filter>
     </ClInclude>
-    <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConButtons.cpp">
-      <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Private</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConButtonState.cpp">
-      <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Private</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Private\JoyConController.cpp">
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Private</Filter>
     </ClCompile>
@@ -80,15 +74,9 @@
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Private</Filter>
     </ClInclude>
     <Filter Include="Plugins\JoyConDriver\Source\JoyConDriver\Public">
-      <UniqueIdentifier>{6D41F539-310C-4A3F-AD4C-DD8210B4910D}</UniqueIdentifier>
+      <UniqueIdentifier>{8B3588AD-0287-4A7A-BE4F-FB84B246FB36}</UniqueIdentifier>
     </Filter>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\IJoyConDriverModule.h">
-      <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtons.h">
-      <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Public</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConButtonState.h">
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Public</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConDriverFunctionLibrary.h">
@@ -97,17 +85,20 @@
     <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConInformation.h">
       <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Public</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Plugins\JoyConDriver\Source\JoyConDriver\Public\JoyConState.h">
+      <Filter>Plugins\JoyConDriver\Source\JoyConDriver\Public</Filter>
+    </ClInclude>
     <None Include="..\..\Plugins\JoyConDriver\JoyConDriver.uplugin">
       <Filter>Plugins\JoyConDriver</Filter>
     </None>
     <Filter Include="Plugins\JoyConDriver\Resources">
-      <UniqueIdentifier>{7C191CFF-232C-49EC-8DF2-F2E7612D99EE}</UniqueIdentifier>
+      <UniqueIdentifier>{524AD48B-87E6-44F0-89A8-A4F86B1F513D}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Plugins\JoyConDriver\Resources\Icon128.png">
       <Filter>Plugins\JoyConDriver\Resources</Filter>
     </None>
     <Filter Include="Source\JoyConSample">
-      <UniqueIdentifier>{C8207307-076E-412C-B70F-B7DD9A7DD7BF}</UniqueIdentifier>
+      <UniqueIdentifier>{85614CC9-6B83-4A99-A40D-77321715E6D4}</UniqueIdentifier>
     </Filter>
     <None Include="..\..\Source\JoyConSample\JoyConSample.Build.cs">
       <Filter>Source\JoyConSample</Filter>

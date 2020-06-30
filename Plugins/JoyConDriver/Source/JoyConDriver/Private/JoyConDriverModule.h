@@ -11,18 +11,16 @@
 // FJoyConDriverInputModule
 //-------------------------------------------------------------------------------------------------
 
-namespace JoyConDriver {
-	class FJoyConInput;
-}
+class FJoyConInput;
 
 class FJoyConDriverModule : public IJoyConDriverModule {
-	
+
 public:
-	TWeakPtr<JoyConDriver::FJoyConInput> JoyConInputDevice;
+	TWeakPtr<FJoyConInput> JoyConInputDevice;
 
 	// IInputDeviceModule overrides
 	virtual void StartupModule() override;
-	virtual TSharedPtr< class IInputDevice > CreateInputDevice( const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler ) override;
+	virtual TSharedPtr< class IInputDevice > CreateInputDevice(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler) override;
 
 	// IJoyConDriverModule overrides
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const override;

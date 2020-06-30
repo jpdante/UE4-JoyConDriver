@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 /*===========================================================================
 	Generated code exported from UnrealHeaderTool.
 	DO NOT modify this manually! Edit the corresponding .h files instead!
@@ -74,7 +74,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConSampleGameModeBase() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(AJoyConSampleGameModeBase, 455611522);
+	IMPLEMENT_CLASS(AJoyConSampleGameModeBase, 1629861161);
 	template<> JOYCONSAMPLE_API UClass* StaticClass<AJoyConSampleGameModeBase>()
 	{
 		return AJoyConSampleGameModeBase::StaticClass();

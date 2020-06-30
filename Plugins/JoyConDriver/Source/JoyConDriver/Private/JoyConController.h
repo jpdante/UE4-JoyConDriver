@@ -6,10 +6,10 @@
 #include "hidapi.h"
 #include "InputCoreTypes.h"
 #include "JoyConInformation.h"
+#include "JoyConState.h"
 #include "Containers/Queue.h"
 #include "GenericPlatform/GenericApplicationMessageHandler.h"
 #include "HAL/Runnable.h"
-
 
 enum EJoyConState {
 	Not_Attached,
@@ -20,47 +20,7 @@ enum EJoyConState {
 	Imu_Data_OK,
 };
 
-enum EButton : int {
-	JoyCon_DPad_Up = 0,
-	JoyCon_DPad_Left = 1,
-	JoyCon_DPad_Right = 2,
-	JoyCon_DPad_Down = 3,
-	
-	JoyCon_Minus = 4,
-	JoyCon_Plus = 5,
-	JoyCon_Home = 6,
-	JoyCon_Capture = 7,
-	
-	JoyCon_Analog_Click = 8,
-	
-	JoyCon_Sr = 9,
-	JoyCon_Sl = 10,
-	
-	JoyCon_Shoulder_1 = 11,
-	JoyCon_Shoulder_2 = 12,
-};
-
-struct FJoyConKey {
-	static const FKey JoyCon_DPad_Up;
-	static const FKey JoyCon_DPad_Left;
-	static const FKey JoyCon_DPad_Right;
-	static const FKey JoyCon_DPad_Down;
-
-	static const FKey JoyCon_Minus;
-	static const FKey JoyCon_Plus;
-	static const FKey JoyCon_Home;
-	static const FKey JoyCon_Capture;
-
-	static const FKey JoyCon_Analog_Click;
-
-	static const FKey JoyCon_Sr;
-	static const FKey JoyCon_Sl;
-
-	static const FKey JoyCon_Shoulder_1;
-	static const FKey JoyCon_Shoulder_2;
-};
-
-class FJoyConButtonState {	
+/*class FJoyConButtonState {
 public:
 	FGamepadKeyNames::Type KeyName;
 	bool Pressed;
@@ -82,7 +42,7 @@ public:
 	void Reset() {
 		Updated = false;
 	}
-};
+};*/
 
 struct FReport {
 	uint8* ReportData;
@@ -127,7 +87,7 @@ public:
 	FVector GetAccelerometer() const;
 	FRotator GetVector() const;
 	void ReCenter();
-	
+
 	void SetFilterCoefficient(float Coefficient);
 
 private:
@@ -160,7 +120,6 @@ private:
 	const uint8 DefaultBuf[8] = { 0x0, 0x1, 0x40, 0x40, 0x0, 0x1, 0x40, 0x40 };
 
 	// Buttons
-	FJoyConButtonState* Buttons;
 	/*bool ButtonsDown[13];
 	bool ButtonsUp[13];
 	bool Buttons[13];
@@ -196,7 +155,7 @@ private:
 	FVector K_Acc;
 	FVector Wa;
 	FVector Wg;
-    FVector DTheta;
+	FVector DTheta;
 	FVector IB2;
 
 	FRunnableThread* Thread;
@@ -204,10 +163,14 @@ private:
 
 public:
 	FJoyConInformation JoyConInformation;
+	FJoyConControllerState ControllerState;
+
+	// Buttons
+	bool Buttons[static_cast<int32>(EJoyConControllerButton::TotalButtonCount)];
 
 	// FRunnable interface overrides
 	virtual bool Init() override;
 	virtual uint32 Run() override;
 	virtual void Stop() override;
-	
+
 };

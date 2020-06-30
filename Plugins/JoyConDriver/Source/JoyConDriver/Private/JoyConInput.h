@@ -11,60 +11,60 @@
 
 DEFINE_LOG_CATEGORY_STATIC(LogJoyConDriver, Log, All);
 
-namespace JoyConDriver {
+class FJoyConInput : public IInputDevice, public FXRMotionControllerBase, public IHapticDevice {
+public:
+	/** Constructor that takes an initial message handler that will receive motion controller events */
+	FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler);
 
-	class FJoyConInput : public IInputDevice, public FXRMotionControllerBase, public IHapticDevice {
-	public:
-		/** Constructor that takes an initial message handler that will receive motion controller events */
-		FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler);
+	/** Clean everything up */
+	virtual ~FJoyConInput();
 
-		/** Clean everything up */
-		virtual ~FJoyConInput();
+	static void PreInit();
 
-		static void PreInit();
+	/** Loads any settings from the config folder that we need */
+	static void LoadConfig();
 
-		/** Loads any settings from the config folder that we need */
-		static void LoadConfig();
+	/** Commands */
+	TArray<FJoyConInformation>* SearchJoyCons();
 
-		/** Commands */
-		TArray<FJoyConInformation>* SearchJoyCons();
-		
-		bool AttachJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex);
-		
-		bool DetachJoyCon(int ControllerIndex);
-		
-		bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out);
-		
-		bool GetJoyConGyroscope(int ControllerIndex, FVector& Out);
-		
-		bool GetJoyConVector(int ControllerIndex, FRotator& Out);
+	bool AttachJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex);
 
-		// IInputDevice overrides
-		virtual void Tick(float DeltaTime) override;
-		virtual void SendControllerEvents() override;
-		virtual void SetMessageHandler(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler) override;
-		virtual bool Exec(UWorld* InWorld, const TCHAR* Cmd, FOutputDevice& Ar) override;
-		virtual void SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value) override;
-		virtual void SetChannelValues(int32 ControllerId, const FForceFeedbackValues& Values) override;
+	bool DetachJoyCon(int ControllerIndex);
 
-		// IMotionController overrides
-		virtual FName GetMotionControllerDeviceTypeName() const override;
-		virtual bool GetControllerOrientationAndPosition(const int32 ControllerIndex, const EControllerHand DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const override;
-		virtual ETrackingStatus GetControllerTrackingStatus(const int32 ControllerIndex, const EControllerHand DeviceHand) const override;
+	bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out);
 
-		// IHapticDevice overrides
-		IHapticDevice* GetHapticDevice() override { return static_cast<IHapticDevice*>(this); }
-		virtual void SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) override;
+	bool GetJoyConGyroscope(int ControllerIndex, FVector& Out);
 
-		virtual void GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const override;
-		virtual float GetHapticAmplitudeScale() const override;
+	bool GetJoyConVector(int ControllerIndex, FRotator& Out);
 
-	private:
-		/** The recipient of motion controller input events */
-		TSharedPtr< FGenericApplicationMessageHandler > MessageHandler;
+	// IInputDevice overrides
+	virtual void Tick(float DeltaTime) override;
+	virtual void SendControllerEvents() override;
+	virtual void SetMessageHandler(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler) override;
+	virtual bool Exec(UWorld* InWorld, const TCHAR* Cmd, FOutputDevice& Ar) override;
+	virtual void SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value) override;
+	virtual void SetChannelValues(int32 ControllerId, const FForceFeedbackValues& Values) override;
 
-		bool HidInitialized;
-		TArray<FJoyConController*> Controllers;
-	};
+	// IMotionController overrides
+	virtual FName GetMotionControllerDeviceTypeName() const override;
+	virtual bool GetControllerOrientationAndPosition(const int32 ControllerIndex, const EControllerHand DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const override;
+	virtual ETrackingStatus GetControllerTrackingStatus(const int32 ControllerIndex, const EControllerHand DeviceHand) const override;
 
-} // namespace JoyConDriver
+	// IHapticDevice overrides
+	IHapticDevice* GetHapticDevice() override { return static_cast<IHapticDevice*>(this); }
+	virtual void SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) override;
+
+	virtual void GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const override;
+	virtual float GetHapticAmplitudeScale() const override;
+	
+private:
+	/** The recipient of motion controller input events */
+	TSharedPtr< FGenericApplicationMessageHandler > MessageHandler;
+
+	/** Repeat key delays, loaded from config */
+	static float InitialButtonRepeatDelay;
+	static float ButtonRepeatDelay;
+	
+	bool HidInitialized;
+	TArray<FJoyConController*> Controllers;
+};

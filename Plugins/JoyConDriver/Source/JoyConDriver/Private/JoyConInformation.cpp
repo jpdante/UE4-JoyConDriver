@@ -10,9 +10,7 @@ ProbableControllerIndex(0),
 Usage(0),
 UsagePage(0),
 IsLeft(false),
-IsConnected(false)
-{
-}
+IsConnected(false) {}
 
 FJoyConInformation::FJoyConInformation(
 	const int TempProductId,
@@ -27,8 +25,7 @@ FJoyConInformation::FJoyConInformation(
 	const int TempUsage,
 	const int TempUsagePage,
 	const bool TempIsLeft,
-	const bool TempIsConnected)
-{
+	const bool TempIsConnected) {
 	ProductId = TempProductId;
 	VendorId = TempVendorId;
 	InterfaceNumber = TempInterfaceNumber;

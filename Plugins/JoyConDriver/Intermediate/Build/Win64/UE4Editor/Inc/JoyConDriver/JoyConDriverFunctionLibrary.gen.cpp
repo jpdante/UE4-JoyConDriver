@@ -1,4 +1,4 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 /*===========================================================================
 	Generated code exported from UnrealHeaderTool.
 	DO NOT modify this manually! Edit the corresponding .h files instead!
@@ -17,16 +17,67 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 	JOYCONDRIVER_API UClass* Z_Construct_UClass_UJoyConDriverFunctionLibrary();
 	ENGINE_API UClass* Z_Construct_UClass_UBlueprintFunctionLibrary();
 	UPackage* Z_Construct_UPackage__Script_JoyConDriver();
-	JOYCONDRIVER_API UFunction* Z_Construct_UFunction_UJoyConDriverFunctionLibrary_AttachJoyCon();
 	JOYCONDRIVER_API UScriptStruct* Z_Construct_UScriptStruct_FJoyConInformation();
-	JOYCONDRIVER_API UFunction* Z_Construct_UFunction_UJoyConDriverFunctionLibrary_DetachJoyCon();
-	JOYCONDRIVER_API UFunction* Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer();
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FVector();
-	JOYCONDRIVER_API UFunction* Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope();
-	JOYCONDRIVER_API UFunction* Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector();
 	COREUOBJECT_API UScriptStruct* Z_Construct_UScriptStruct_FRotator();
-	JOYCONDRIVER_API UFunction* Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons();
 // End Cross Module References
+	DEFINE_FUNCTION(UJoyConDriverFunctionLibrary::execGetJoyConVector)
+	{
+		P_GET_PROPERTY(FIntProperty,Z_Param_ControllerIndex);
+		P_GET_UBOOL_REF(Z_Param_Out_Success);
+		P_GET_STRUCT_REF(FRotator,Z_Param_Out_Vector);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UJoyConDriverFunctionLibrary::GetJoyConVector(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Vector);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UJoyConDriverFunctionLibrary::execGetJoyConGyroscope)
+	{
+		P_GET_PROPERTY(FIntProperty,Z_Param_ControllerIndex);
+		P_GET_UBOOL_REF(Z_Param_Out_Success);
+		P_GET_STRUCT_REF(FVector,Z_Param_Out_Gyroscope);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UJoyConDriverFunctionLibrary::GetJoyConGyroscope(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Gyroscope);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UJoyConDriverFunctionLibrary::execGetJoyConAccelerometer)
+	{
+		P_GET_PROPERTY(FIntProperty,Z_Param_ControllerIndex);
+		P_GET_UBOOL_REF(Z_Param_Out_Success);
+		P_GET_STRUCT_REF(FVector,Z_Param_Out_Accelerometer);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(Z_Param_ControllerIndex,Z_Param_Out_Success,Z_Param_Out_Accelerometer);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UJoyConDriverFunctionLibrary::execDetachJoyCon)
+	{
+		P_GET_PROPERTY(FIntProperty,Z_Param_ControllerIndex);
+		P_GET_UBOOL_REF(Z_Param_Out_Success);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UJoyConDriverFunctionLibrary::DetachJoyCon(Z_Param_ControllerIndex,Z_Param_Out_Success);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UJoyConDriverFunctionLibrary::execSearchForJoyCons)
+	{
+		P_GET_TARRAY_REF(FJoyConInformation,Z_Param_Out_JoyCons);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UJoyConDriverFunctionLibrary::SearchForJoyCons(Z_Param_Out_JoyCons);
+		P_NATIVE_END;
+	}
+	DEFINE_FUNCTION(UJoyConDriverFunctionLibrary::execAttachJoyCon)
+	{
+		P_GET_STRUCT(FJoyConInformation,Z_Param_JoyConInformation);
+		P_GET_UBOOL_REF(Z_Param_Out_Success);
+		P_GET_PROPERTY_REF(FIntProperty,Z_Param_Out_ControllerIndex);
+		P_FINISH;
+		P_NATIVE_BEGIN;
+		UJoyConDriverFunctionLibrary::AttachJoyCon(Z_Param_JoyConInformation,Z_Param_Out_Success,Z_Param_Out_ControllerIndex);
+		P_NATIVE_END;
+	}
 	void UJoyConDriverFunctionLibrary::StaticRegisterNativesUJoyConDriverFunctionLibrary()
 	{
 		UClass* Class = UJoyConDriverFunctionLibrary::StaticClass();
@@ -285,7 +336,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 #endif
 		static const UE4CodeGen_Private::FFunctionParams FuncParams;
 	};
-	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::NewProp_JoyCons = { "JoyCons", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventSearchForJoyCons_Parms, JoyCons), METADATA_PARAMS(nullptr, 0) };
+	const UE4CodeGen_Private::FArrayPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::NewProp_JoyCons = { "JoyCons", nullptr, (EPropertyFlags)0x0010000000000180, UE4CodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, 1, STRUCT_OFFSET(JoyConDriverFunctionLibrary_eventSearchForJoyCons_Parms, JoyCons), EArrayPropertyFlags::None, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FStructPropertyParams Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::NewProp_JoyCons_Inner = { "JoyCons", nullptr, (EPropertyFlags)0x0000000000000000, UE4CodeGen_Private::EPropertyGenFlags::Struct, RF_Public|RF_Transient|RF_MarkAsNative, 1, 0, Z_Construct_UScriptStruct_FJoyConInformation, METADATA_PARAMS(nullptr, 0) };
 	const UE4CodeGen_Private::FPropertyParamsBase* const Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::PropPointers[] = {
 		(const UE4CodeGen_Private::FPropertyParamsBase*)&Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons_Statics::NewProp_JoyCons,
@@ -332,11 +383,11 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConAccelerometer, "GetJoyConAccelerometer" }, // 3672024749
 		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConGyroscope, "GetJoyConGyroscope" }, // 2644063629
 		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_GetJoyConVector, "GetJoyConVector" }, // 3831142025
-		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons, "SearchForJoyCons" }, // 102983304
+		{ &Z_Construct_UFunction_UJoyConDriverFunctionLibrary_SearchForJoyCons, "SearchForJoyCons" }, // 2694507225
 	};
 #if WITH_METADATA
 	const UE4CodeGen_Private::FMetaDataPairParam Z_Construct_UClass_UJoyConDriverFunctionLibrary_Statics::Class_MetaDataParams[] = {
-		{ "Comment", "/**\n *\n */" },
+		{ "Comment", "/**\n\x09 *\n\x09 */" },
 		{ "IncludePath", "JoyConDriverFunctionLibrary.h" },
 		{ "ModuleRelativePath", "Public/JoyConDriverFunctionLibrary.h" },
 	};
@@ -368,7 +419,7 @@ void EmptyLinkFunctionForGeneratedCodeJoyConDriverFunctionLibrary() {}
 		}
 		return OuterClass;
 	}
-	IMPLEMENT_CLASS(UJoyConDriverFunctionLibrary, 2439205426);
+	IMPLEMENT_CLASS(UJoyConDriverFunctionLibrary, 2667547347);
 	template<> JOYCONDRIVER_API UClass* StaticClass<UJoyConDriverFunctionLibrary>()
 	{
 		return UJoyConDriverFunctionLibrary::StaticClass();
