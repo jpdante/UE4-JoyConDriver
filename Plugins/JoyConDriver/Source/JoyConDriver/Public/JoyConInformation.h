@@ -12,7 +12,7 @@ struct FJoyConInformation {
 public:
 	FJoyConInformation();
 	FJoyConInformation(int TempProductId, int TempVendorId, int TempInterfaceNumber, int TempReleaseNumber, FString TempManufacturerString,
-		FString TempBluetoothPath, FString TempProductString, FString TempSerialNumber, int TempProbableControllerIndex, int TempUsage,
+		FString TempBluetoothPath, FString TempProductString, FString TempSerialNumber, int TempControllerId, int TempUsage,
 		int TempUsagePage, bool TempIsLeft, bool TempIsConnected);
 
 	/*
@@ -44,7 +44,7 @@ public:
 		FString SerialNumber;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int ProbableControllerIndex;
+		int ControllerId;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		int Usage;
@@ -57,4 +57,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 		bool IsConnected;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+		bool IsAttached;
 };

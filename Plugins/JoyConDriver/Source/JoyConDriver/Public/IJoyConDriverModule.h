@@ -6,7 +6,6 @@
 #include "IInputDeviceModule.h"
 #include "JoyConInformation.h"
 
-
 /**
  * The public interface to this module.  In most cases, this interface is only public to sibling modules
  * within this plugin.
@@ -40,9 +39,16 @@ public:
 	 * @return The number of Touch controllers that are active (but not necessarily tracked)
 	 */
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
-	virtual bool AttachJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex) const = 0;
+	virtual TArray<FJoyConInformation>* GetAttachedJoyCons() const = 0;
+	virtual TArray<FJoyConInformation>* GetConnectedJoyCons() const = 0;
+	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex) const = 0;
+	virtual bool AttachJoyCon(int ControllerIndex, int GripIndex) const = 0;
+	virtual bool DisconnectJoyCon(int ControllerIndex) const = 0;
 	virtual bool DetachJoyCon(int ControllerIndex) const = 0;
 	virtual bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out) const = 0;
 	virtual bool GetJoyConGyroscope(int ControllerIndex, FVector& Out) const = 0;
 	virtual bool GetJoyConVector(int ControllerIndex, FRotator& Out) const = 0;
+	virtual bool ReCenterJoyCon(int ControllerIndex) const = 0;
+	virtual bool SetJoyConFilterCoefficient(int ControllerIndex, float Coefficient) const = 0;
+	virtual bool SetJoyConGripMode(int GripIndex, uint8 GripMode) const = 0;
 };

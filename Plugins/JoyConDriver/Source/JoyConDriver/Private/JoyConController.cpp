@@ -22,7 +22,6 @@ FJoyConController::FJoyConController(const FJoyConInformation TempJoyConInformat
     Buttons{} {
 	HidHandle = Device;
 	JoyConInformation = TempJoyConInformation;
-	JoyConInformation.ProbableControllerIndex = 0;
 	bIsLeft = IsLeft;
 	bImuEnabled = UseImu;
 	bDoLocalize = UseLocalize;

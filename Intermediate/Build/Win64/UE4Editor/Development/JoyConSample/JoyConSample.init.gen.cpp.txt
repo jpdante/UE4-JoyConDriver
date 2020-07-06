@@ -1,3 +1,0 @@
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\Definitions.JoyConSample.h
-C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\CoreUObject\Public\UObject/GeneratedCppIncludes.h
-C:\Program Files\Epic Games\UE_4.25\Engine\Source\Runtime\CoreUObject\Public\UObject/MetaData.h

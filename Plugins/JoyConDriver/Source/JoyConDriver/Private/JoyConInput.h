@@ -7,6 +7,7 @@
 #include "XRMotionControllerBase.h"
 #include "IHapticDevice.h"
 #include "JoyConController.h"
+#include "JoyConGrip.h"
 #include "JoyConInformation.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogJoyConDriver, Log, All);
@@ -27,7 +28,15 @@ public:
 	/** Commands */
 	TArray<FJoyConInformation>* SearchJoyCons();
 
-	bool AttachJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex);
+	TArray<FJoyConInformation>* GetConnectedJoyCons();
+
+	TArray<FJoyConInformation>* GetAttachedJoyCons();
+
+	bool ConnectJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex);
+
+	bool AttachJoyCon(int ControllerIndex, int GripIndex);
+
+	bool DisconnectJoyCon(int ControllerIndex);
 
 	bool DetachJoyCon(int ControllerIndex);
 
@@ -36,6 +45,12 @@ public:
 	bool GetJoyConGyroscope(int ControllerIndex, FVector& Out);
 
 	bool GetJoyConVector(int ControllerIndex, FRotator& Out);
+
+	bool ReCenterJoyCon(int ControllerIndex);
+	
+	bool SetJoyConFilterCoefficient(int ControllerIndex, float Coefficient);
+
+	bool SetJoyConGripMode(int GripIndex, EGripMode GripMode);
 
 	// IInputDevice overrides
 	virtual void Tick(float DeltaTime) override;
@@ -56,6 +71,9 @@ public:
 
 	virtual void GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const override;
 	virtual float GetHapticAmplitudeScale() const override;
+
+private:
+	int GetNextControllerId();
 	
 private:
 	/** The recipient of motion controller input events */
@@ -67,4 +85,5 @@ private:
 	
 	bool HidInitialized;
 	TArray<FJoyConController*> Controllers;
+	FJoyConGrip Grips[8];
 };

@@ -1,2 +1,0 @@
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Intermediate\Build\Win64\UE4Editor\Development\JoyConSample\Definitions.JoyConSample.h
-C:\Users\jpdante\Documents\Unreal Projects\JoyConSample\Source\JoyConSample\JoyConSample.h

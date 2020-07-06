@@ -60,6 +60,14 @@ FJoyConInput::FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >
 		HidInitialized = false;
 		UE_LOG(LogTemp, Fatal, TEXT("HIDAPI failed to initialize"));
 	}
+	Grips[0].GripIndex = 0;
+	Grips[1].GripIndex = 1;
+	Grips[2].GripIndex = 2;
+	Grips[3].GripIndex = 3;
+	Grips[4].GripIndex = 4;
+	Grips[5].GripIndex = 5;
+	Grips[6].GripIndex = 6;
+	Grips[7].GripIndex = 7;
 	UE_LOG(LogTemp, Log, TEXT("JoyConDriver is initialized"));
 }
 
@@ -121,24 +129,24 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 	hid_device_info* Device = Devices;
 	while (Device != nullptr) {
 		if (Device->product_id == 0x2006 || Device->product_id == 0x2007) {
+			FString SerialNumber(Device->serial_number);
+			FString BluetoothPath(Device->path);
+			if (Controllers.Num() > 0) {
+				bool AlreadyExists = false;
+				for (FJoyConController* Controller : Controllers) {
+					if (Controller->JoyConInformation.SerialNumber.Equals(SerialNumber) && Controller->JoyConInformation.BluetoothPath.Equals(BluetoothPath)) {
+						Data->Add(Controller->JoyConInformation);
+						AlreadyExists = true;
+						break;
+					}
+				}
+				if (AlreadyExists) continue;
+			}
 			bool IsLeft = false;
 			if (Device->product_id == 0x2006) {
 				IsLeft = true;
 			} else if (Device->product_id == 0x2007) {
 				IsLeft = false;
-			}
-			int ControllerIndex = -1;
-			bool IsConnected = false;
-			FString SerialNumber(Device->serial_number);
-			FString BluetoothPath(Device->path);
-			if(Controllers.Num() > 0) {
-				for (FJoyConController* Controller : Controllers) {
-					if(Controller->JoyConInformation.SerialNumber.Equals(SerialNumber) && Controller->JoyConInformation.BluetoothPath.Equals(BluetoothPath)) {
-						IsConnected = true;
-						ControllerIndex = Controllers.IndexOfByKey(Controller);
-						break;
-					}
-				}
 			}
 			const FJoyConInformation JoyConInformation(
 				Device->product_id, 
@@ -149,11 +157,11 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 				FString(Device->path),
 				FString(Device->product_string),
 				FString(Device->serial_number),
-				ControllerIndex,
+				GetNextControllerId(),
 				Device->usage,
 				Device->usage_page,
 				IsLeft,
-				IsConnected
+				false
 			);
 			Data->Add(JoyConInformation);
 		}
@@ -163,7 +171,25 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 	return Data;
 }
 
-bool FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) {
+TArray<FJoyConInformation>* FJoyConInput::GetAttachedJoyCons() {
+	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
+	if (!HidInitialized) return Data;
+	for (FJoyConController* Controller : Controllers) {
+		if(Controller->JoyConInformation.IsAttached) Data->Add(Controller->JoyConInformation);
+	}
+	return Data;
+}
+
+TArray<FJoyConInformation>* FJoyConInput::GetConnectedJoyCons() {
+	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
+	if (!HidInitialized) return Data;
+	for (FJoyConController* Controller : Controllers) {
+		Data->Add(Controller->JoyConInformation);
+	}
+	return Data;
+}
+
+bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
 	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
@@ -171,24 +197,47 @@ bool FJoyConInput::AttachJoyCon(const FJoyConInformation JoyConInformation, int&
 	hid_set_nonblocking(Handle, 1);
 	FJoyConController* Controller = new FJoyConController(JoyConInformation, Handle, true, true, 0.05f, JoyConInformation.IsLeft);
 	Controllers.Add(Controller);
-	ControllerIndex = Controllers.IndexOfByKey(Controller);
-	Controller->JoyConInformation.ProbableControllerIndex = ControllerIndex;
-	uint8 Leds = 0x0;
-	Leds |= static_cast<uint8>(0x1 << 0);
-	Controller->Attach(Leds);
+	Controller->JoyConInformation.IsConnected = true;
+	Controller->JoyConInformation.ControllerId = Controllers.IndexOfByKey(Controller);
+	ControllerIndex = Controller->JoyConInformation.ControllerId;
 	return true;
 }
 
-bool FJoyConInput::DetachJoyCon(const int ControllerIndex) {
+bool FJoyConInput::AttachJoyCon(const int ControllerIndex, const int GripIndex) {
+	if (GripIndex < 0 || GripIndex > 7) return false;
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex]->JoyConInformation.IsAttached) return false;
+	uint8 Leds = 0x0;
+	Leds |= static_cast<uint8>(0x1 << GripIndex);
+	Grips[GripIndex].Controllers.Add(Controllers[ControllerIndex]);
+	Controllers[ControllerIndex]->Attach(Leds);
+	Controllers[ControllerIndex]->JoyConInformation.IsAttached = true;
+	return true;
+}
+
+bool FJoyConInput::DisconnectJoyCon(const int ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
 	if (Controllers[ControllerIndex] == nullptr) {
 		Controllers.RemoveAt(ControllerIndex);
 		return false;
 	}
-	Controllers[ControllerIndex]->Detach();
+	if (Controllers[ControllerIndex]->JoyConInformation.IsAttached) return false;
 	Controllers.RemoveAt(ControllerIndex);
 	return true;
+}
+
+bool FJoyConInput::DetachJoyCon(const int ControllerIndex) {
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	for (int i = 0; i < 8; i++) {
+		if (Grips[i].ContainsController(Controllers[ControllerIndex]->JoyConInformation)) {
+			Grips[i].Controllers.Remove(Controllers[ControllerIndex]);
+			Controllers[ControllerIndex]->Detach();
+			Controllers[ControllerIndex]->JoyConInformation.IsAttached = false;
+			return true;
+		}
+	}
+	return false;
 }
 
 bool FJoyConInput::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) {
@@ -227,6 +276,34 @@ bool FJoyConInput::GetJoyConVector(const int ControllerIndex, FRotator& Out) {
 	return true;
 }
 
+bool FJoyConInput::ReCenterJoyCon(const int ControllerIndex) {
+	if (!HidInitialized) return false;
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex] == nullptr) {
+		Controllers.RemoveAt(ControllerIndex);
+		return false;
+	}
+	Controllers[ControllerIndex]->ReCenter();
+	return true;
+}
+
+bool FJoyConInput::SetJoyConFilterCoefficient(const int ControllerIndex, const float Coefficient) {
+	if (!HidInitialized) return false;
+	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+	if (Controllers[ControllerIndex] == nullptr) {
+		Controllers.RemoveAt(ControllerIndex);
+		return false;
+	}
+	Controllers[ControllerIndex]->SetFilterCoefficient(Coefficient);
+	return true;
+}
+
+bool FJoyConInput::SetJoyConGripMode(const int GripIndex, const EGripMode GripMode) {
+	if (GripIndex < 0 || GripIndex > 7) return false;
+	Grips[GripIndex].Mode = GripMode;
+	return true;
+}
+
 void FJoyConInput::Tick(float DeltaTime) {
 
 }
@@ -247,18 +324,18 @@ void FJoyConInput::SendControllerEvents() {
 			if (bButtonPressed != ButtonState.bIsPressed) {
 				ButtonState.bIsPressed = bButtonPressed;
 				if (ButtonState.bIsPressed) {
-					MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
+					//MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
 					
 					// Set the timer for the first repeat
 					ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
 				} else {
-					MessageHandler->OnControllerButtonReleased(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
+					//MessageHandler->OnControllerButtonReleased(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
 				}
 			}
 
 			// Apply key repeat, if its time for that
 			if (ButtonState.bIsPressed && ButtonState.NextRepeatTime <= CurrentTime) {
-				MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, true);
+				//MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, true);
 
 				// Set the timer for the next repeat
 				ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
@@ -304,4 +381,16 @@ void FJoyConInput::GetHapticFrequencyRange(float& MinFrequency, float& MaxFreque
 
 float FJoyConInput::GetHapticAmplitudeScale() const {
 	return 1.f;
+}
+
+int FJoyConInput::GetNextControllerId() {
+	int NextId = 0;
+	for (int i = 0; i < Controllers.Num(); i++) {
+		for (FJoyConController* Controller : Controllers) {
+			if (NextId == Controller->JoyConInformation.ControllerId) {
+				NextId++;
+			}
+		}
+	}
+	return NextId;
 }

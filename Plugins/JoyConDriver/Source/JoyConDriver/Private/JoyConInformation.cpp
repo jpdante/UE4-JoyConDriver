@@ -3,10 +3,8 @@
 
 #include "JoyConInformation.h"
 
-#include "hidapi.h"
-
 FJoyConInformation::FJoyConInformation() : ProductId(0), VendorId(0), InterfaceNumber(0), ReleaseNumber(0),
-ProbableControllerIndex(0),
+ControllerId(0),
 Usage(0),
 UsagePage(0),
 IsLeft(false),
@@ -21,7 +19,7 @@ FJoyConInformation::FJoyConInformation(
 	const FString TempBluetoothPath,
 	const FString TempProductString,
 	const FString TempSerialNumber,
-	const int TempProbableControllerIndex,
+	const int TempControllerId,
 	const int TempUsage,
 	const int TempUsagePage,
 	const bool TempIsLeft,
@@ -34,9 +32,10 @@ FJoyConInformation::FJoyConInformation(
 	BluetoothPath = TempBluetoothPath;
 	ProductString = TempProductString;
 	SerialNumber = TempSerialNumber;
-	ProbableControllerIndex = TempProbableControllerIndex;
+	ControllerId = TempControllerId;
 	Usage = TempUsage;
 	UsagePage = TempUsagePage;
 	IsLeft = TempIsLeft;
 	IsConnected = TempIsConnected;
+	IsAttached = false;
 }

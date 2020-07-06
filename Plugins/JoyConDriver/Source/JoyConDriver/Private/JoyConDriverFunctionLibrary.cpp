@@ -16,12 +16,39 @@ FJoyConDriverModule* GetJoyConControllerAPI() {
 	return nullptr;
 }
 
-void UJoyConDriverFunctionLibrary::AttachJoyCon(const FJoyConInformation JoyConInformation, bool& Success, int& ControllerIndex) {
+void UJoyConDriverFunctionLibrary::ConnectJoyCon(const FJoyConInformation JoyConInformation, bool& Success, int& ControllerIndex) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 	} else {
-		Success = JoyConInputApi->AttachJoyCon(JoyConInformation, ControllerIndex);
+		Success = JoyConInputApi->ConnectJoyCon(JoyConInformation, ControllerIndex);
+	}
+}
+
+void UJoyConDriverFunctionLibrary::AttachJoyCon(const int ControllerIndex, const int GripIndex, bool& Success) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+	} else {
+		Success = JoyConInputApi->AttachJoyCon(ControllerIndex, GripIndex);
+	}
+}
+
+void UJoyConDriverFunctionLibrary::DisconnectJoyCon(const int ControllerIndex, bool& Success) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+	} else {
+		Success = JoyConInputApi->DisconnectJoyCon(ControllerIndex);
+	}
+}
+
+void UJoyConDriverFunctionLibrary::DetachJoyCon(const int ControllerIndex, bool& Success) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+	} else {
+		Success = JoyConInputApi->DetachJoyCon(ControllerIndex);
 	}
 }
 
@@ -39,12 +66,31 @@ void UJoyConDriverFunctionLibrary::SearchForJoyCons(TArray<FJoyConInformation>& 
 	}
 }
 
-void UJoyConDriverFunctionLibrary::DetachJoyCon(const int ControllerIndex, bool& Success) {
+void UJoyConDriverFunctionLibrary::GetAttachedJoyCons(TArray<FJoyConInformation>& JoyCons) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
-		Success = false;
+		JoyCons = TArray<FJoyConInformation>();
 	} else {
-		Success = JoyConInputApi->DetachJoyCon(ControllerIndex);
+		TArray<FJoyConInformation>* Data = JoyConInputApi->GetAttachedJoyCons();
+		if (Data == nullptr) {
+			JoyCons = TArray<FJoyConInformation>();
+		}
+		const TArray<FJoyConInformation> ArrayFrom = *Data;
+		JoyCons = ArrayFrom;
+	}
+}
+
+void UJoyConDriverFunctionLibrary::GetConnectedJoyCons(TArray<FJoyConInformation>& JoyCons) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		JoyCons = TArray<FJoyConInformation>();
+	} else {
+		TArray<FJoyConInformation>* Data = JoyConInputApi->GetConnectedJoyCons();
+		if (Data == nullptr) {
+			JoyCons = TArray<FJoyConInformation>();
+		}
+		const TArray<FJoyConInformation> ArrayFrom = *Data;
+		JoyCons = ArrayFrom;
 	}
 }
 
@@ -75,5 +121,32 @@ void UJoyConDriverFunctionLibrary::GetJoyConVector(const int ControllerIndex, bo
 		Vector = FRotator::ZeroRotator;
 	} else {
 		Success = JoyConInputApi->GetJoyConVector(ControllerIndex, Vector);
+	}
+}
+
+void UJoyConDriverFunctionLibrary::ReCenterJoyCon(const int ControllerIndex, bool& Success) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+	} else {
+		Success = JoyConInputApi->ReCenterJoyCon(ControllerIndex);
+	}
+}
+
+void UJoyConDriverFunctionLibrary::SetJoyConFilterCoefficient(const int ControllerIndex, const float Coefficient, bool& Success) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+	} else {
+		Success = JoyConInputApi->SetJoyConFilterCoefficient(ControllerIndex, Coefficient);
+	}
+}
+
+void UJoyConDriverFunctionLibrary::SetJoyConGripMode(const int GripIndex, const EGripMode GripMode, bool& Success) {
+	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
+	if (JoyConInputApi == nullptr) {
+		Success = false;
+	} else {
+		Success = JoyConInputApi->SetJoyConGripMode(GripIndex, static_cast<uint8>(GripMode));
 	}
 }
