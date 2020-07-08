@@ -22,7 +22,7 @@ enum EJoyConControllerButton : int {
 	Home,
 	Capture,
 
-	Analog_Click,
+	Left_ThumbStick,
 
 	Sr,
 	Sl,
@@ -39,10 +39,16 @@ enum EJoyConControllerButton : int {
 	A,
 	B,
 	
-	Analog2_Click,
+	Right_ThumbStick,
 
 	R,
-	Zr
+	Zr,
+
+	/** Extra thumb stick keys */
+	Left_ThumbStick_X,
+	Left_ThumbStick_Y,
+    Right_ThumbStick_X,
+    Right_ThumbStick_Y
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -60,7 +66,7 @@ struct FJoyConKey {
 	static const FKey JoyCon_Home;
 	static const FKey JoyCon_Capture;
 
-	static const FKey JoyCon_Analog_Click;
+	static const FKey JoyCon_Left_ThumbStick;
 
 	static const FKey JoyCon_Sr;
 	static const FKey JoyCon_Sl;
@@ -74,10 +80,16 @@ struct FJoyConKey {
 	static const FKey JoyCon_A;
 	static const FKey JoyCon_B;
 
-	static const FKey JoyCon_Analog2_Click;
+	static const FKey JoyCon_Right_ThumbStick;
 
 	static const FKey JoyCon_R;
 	static const FKey JoyCon_Zr;
+
+	/** Extra thumb stick keys */
+	static const FKey JoyCon_Left_ThumbStick_X;
+	static const FKey JoyCon_Left_ThumbStick_Y;
+	static const FKey JoyCon_Right_ThumbStick_X;
+	static const FKey JoyCon_Right_ThumbStick_Y;
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -97,7 +109,7 @@ struct FJoyConKeyNames {
 	static const FName JoyCon_Home;
 	static const FName JoyCon_Capture;
 
-	static const FName JoyCon_Analog_Click;
+	static const FName JoyCon_Left_ThumbStick;
 
 	static const FName JoyCon_Sr;
 	static const FName JoyCon_Sl;
@@ -111,10 +123,16 @@ struct FJoyConKeyNames {
 	static const FName JoyCon_A;
 	static const FName JoyCon_B;
 
-	static const FName JoyCon_Analog2_Click;
+	static const FName JoyCon_Right_ThumbStick;
 
 	static const FName JoyCon_R;
 	static const FName JoyCon_Zr;
+
+	/** Extra thumb stick keys */
+	static const FName JoyCon_Left_ThumbStick_X;
+	static const FName JoyCon_Left_ThumbStick_Y;
+	static const FName JoyCon_Right_ThumbStick_X;
+	static const FName JoyCon_Right_ThumbStick_Y;
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -137,18 +155,35 @@ struct FJoyConButtonState {
 };
 
 //-------------------------------------------------------------------------------------------------
+// FJoyConButtonState -  Analog stick state
+//-------------------------------------------------------------------------------------------------
+
+struct FJoyConAnalogState {
+	float X;
+	float Y;
+
+	/** Default constructor that just sets sensible defaults */
+	FJoyConAnalogState() : X(0.0), Y(0.0) {}
+};
+
+//-------------------------------------------------------------------------------------------------
 // FJoyConControllerState
 //-------------------------------------------------------------------------------------------------
 
 struct FJoyConControllerState {
 	/** Button states */
 	FJoyConButtonState Buttons[static_cast<int32>(EJoyConControllerButton::TotalButtonCount)];
+	/** Analog stick state */
+	FJoyConAnalogState Stick;
 
 	FJoyConControllerState() {
 		for (FJoyConButtonState& Button : Buttons) {
 			Button.bIsPressed = false;
 			Button.NextRepeatTime = 0.0;
 		}
+
+		Stick.X = 0.0;
+		Stick.Y = 0.0;
 
 		Buttons[static_cast<int32>(EJoyConControllerButton::DPad_Up)].Key = FJoyConKeyNames::JoyCon_DPad_Up;
 		Buttons[static_cast<int32>(EJoyConControllerButton::DPad_Down)].Key = FJoyConKeyNames::JoyCon_DPad_Down;
@@ -160,7 +195,7 @@ struct FJoyConControllerState {
 		Buttons[static_cast<int32>(EJoyConControllerButton::Home)].Key = FJoyConKeyNames::JoyCon_Home;
 		Buttons[static_cast<int32>(EJoyConControllerButton::Capture)].Key = FJoyConKeyNames::JoyCon_Capture;
 
-		Buttons[static_cast<int32>(EJoyConControllerButton::Analog_Click)].Key = FJoyConKeyNames::JoyCon_Analog_Click;
+		Buttons[static_cast<int32>(EJoyConControllerButton::Left_ThumbStick)].Key = FJoyConKeyNames::JoyCon_Left_ThumbStick;
 
 		Buttons[static_cast<int32>(EJoyConControllerButton::Sr)].Key = FJoyConKeyNames::JoyCon_Sr;
 		Buttons[static_cast<int32>(EJoyConControllerButton::Sl)].Key = FJoyConKeyNames::JoyCon_Sl;

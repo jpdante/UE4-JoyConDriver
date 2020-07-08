@@ -74,6 +74,9 @@ public:
 
 private:
 	int GetNextControllerId();
+	static FName GetRightJoyConKeyName(int Index, FName OriginalKeyName);
+	void SendButtonEvents(bool bButtonPressed, float CurrentTime, int GripIndex, FName KeyName, FJoyConButtonState *ButtonState) const;
+	void SendAnalogEvents(bool bIsLeft, int GripIndex, FVector2D StickVector, FJoyConAnalogState* AnalogState) const;
 	
 private:
 	/** The recipient of motion controller input events */

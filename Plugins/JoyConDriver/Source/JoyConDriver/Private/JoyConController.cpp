@@ -364,7 +364,7 @@ int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
 	Buttons[EJoyConControllerButton::Home] = (ReportBuf[4] & 0x10) != 0;
 	//Buttons[EButton::JoyCon_Capture].Update((ReportBuf[4] & 0x02) != 0);
 	
-    Buttons[EJoyConControllerButton::Analog_Click] = (ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0;
+    Buttons[EJoyConControllerButton::Left_ThumbStick] = (ReportBuf[4] & (bIsLeft ? 0x08 : 0x04)) != 0;
 	
 	Buttons[EJoyConControllerButton::Sr] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0;
 	Buttons[EJoyConControllerButton::Sl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0;

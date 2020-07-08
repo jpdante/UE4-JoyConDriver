@@ -22,7 +22,9 @@ const FKey FJoyConKey::JoyCon_Plus("JoyCon_Plus");
 const FKey FJoyConKey::JoyCon_Home("JoyCon_Home");
 const FKey FJoyConKey::JoyCon_Capture("JoyCon_Capture");
 
-const FKey FJoyConKey::JoyCon_Analog_Click("JoyCon_Analog_Click");
+const FKey FJoyConKey::JoyCon_Left_ThumbStick("JoyCon_Left_ThumbStick");
+const FKey FJoyConKey::JoyCon_Left_ThumbStick_X("JoyCon_Left_ThumbStick_X");
+const FKey FJoyConKey::JoyCon_Left_ThumbStick_Y("JoyCon_Left_ThumbStick_Y");
 
 const FKey FJoyConKey::JoyCon_Sr("JoyCon_Sr");
 const FKey FJoyConKey::JoyCon_Sl("JoyCon_Sl");
@@ -36,7 +38,9 @@ const FKey FJoyConKey::JoyCon_Y("JoyCon_Y");
 const FKey FJoyConKey::JoyCon_A("JoyCon_A");
 const FKey FJoyConKey::JoyCon_B("JoyCon_B");
 
-const FKey FJoyConKey::JoyCon_Analog2_Click("JoyCon_Analog2_Click");
+const FKey FJoyConKey::JoyCon_Right_ThumbStick("JoyCon_Right_ThumbStick");
+const FKey FJoyConKey::JoyCon_Right_ThumbStick_X("JoyCon_Right_ThumbStick_X");
+const FKey FJoyConKey::JoyCon_Right_ThumbStick_Y("JoyCon_Right_ThumbStick_Y");
 
 const FKey FJoyConKey::JoyCon_Zr("JoyCon_Zr");
 const FKey FJoyConKey::JoyCon_R("JoyCon_R");
@@ -52,7 +56,9 @@ const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Plus("JoyCon_Plus");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Home("JoyCon_Home");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Capture("JoyCon_Capture");
 
-const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Analog_Click("JoyCon_Analog_Click");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Left_ThumbStick("JoyCon_Left_ThumbStick");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Left_ThumbStick_X("JoyCon_Left_ThumbStick_X");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Left_ThumbStick_Y("JoyCon_Left_ThumbStick_Y");
 
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Sr("JoyCon_Sr");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Sl("JoyCon_Sl");
@@ -66,7 +72,9 @@ const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Y("JoyCon_Y");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_A("JoyCon_A");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_B("JoyCon_B");
 
-const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Analog2_Click("JoyCon_Analog2_Click");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Right_ThumbStick("JoyCon_Right_ThumbStick");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Right_ThumbStick_X("JoyCon_Right_ThumbStick_X");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Right_ThumbStick_Y("JoyCon_Right_ThumbStick_Y");
 
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Zr("JoyCon_Zr");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_R("JoyCon_R");
@@ -108,7 +116,7 @@ void FJoyConInput::PreInit() {
 
 	// Register the FKeys
 	EKeys::AddMenuCategoryDisplayInfo("JoyCon", LOCTEXT("JoyConSubCategory", "JoyCon"), TEXT("GraphEditor.PadEvent_16x"));
-	
+
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Up, LOCTEXT("JoyCon_DPad_Up", "JoyCon D-pad Up"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Left, LOCTEXT("JoyCon_DPad_Left", "JoyCon D-pad Left"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_DPad_Right, LOCTEXT("JoyCon_DPad_Right", "JoyCon D-pad Right"), FKeyDetails::GamepadKey, "JoyCon"));
@@ -119,7 +127,9 @@ void FJoyConInput::PreInit() {
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Home, LOCTEXT("JoyCon_Home", "JoyCon Home"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Capture, LOCTEXT("JoyCon_Capture", "JoyCon Capture"), FKeyDetails::GamepadKey, "JoyCon"));
 
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Analog_Click, LOCTEXT("JoyCon_Analog_Click", "JoyCon Analog Click"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick, LOCTEXT("JoyCon_Left_ThumbStick", "JoyCon Left Thumbstick Click"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick_X, LOCTEXT("JoyCon_Left_ThumbStick_X", "JoyCon Left Thumbstick X"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick_Y, LOCTEXT("JoyCon_Left_ThumbStick_Y", "JoyCon Left Thumbstick Y"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
 
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sr, LOCTEXT("JoyCon_Sr", "JoyCon Sr"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sl, LOCTEXT("JoyCon_Sl", "JoyCon Sl"), FKeyDetails::GamepadKey, "JoyCon"));
@@ -133,11 +143,13 @@ void FJoyConInput::PreInit() {
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_A, LOCTEXT("JoyCon_A", "JoyCon A"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_B, LOCTEXT("JoyCon_B", "JoyCon B"), FKeyDetails::GamepadKey, "JoyCon"));
 
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Analog2_Click, LOCTEXT("JoyCon_Analog2_Click", "JoyCon Analog2 Click"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick, LOCTEXT("JoyCon_Right_ThumbStick", "JoyCon Right Thumbstick Click"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick_X, LOCTEXT("JoyCon_Right_ThumbStick_X", "JoyCon Right Thumbstick X"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick_Y, LOCTEXT("JoyCon_Right_ThumbStick_Y", "JoyCon Right Thumbstick Y"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
 
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Zr, LOCTEXT("JoyCon_Zr", "JoyCon ZR"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_R, LOCTEXT("JoyCon_R", "JoyCon R"), FKeyDetails::GamepadKey, "JoyCon"));
-	
+
 	UE_LOG(LogTemp, Log, TEXT("JoyConInput pre-init called"));
 }
 
@@ -181,9 +193,9 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 				IsLeft = false;
 			}
 			const FJoyConInformation JoyConInformation(
-				Device->product_id, 
-				Device->vendor_id, 
-				Device->interface_number, 
+				Device->product_id,
+				Device->vendor_id,
+				Device->interface_number,
 				Device->release_number,
 				FString(Device->manufacturer_string),
 				FString(Device->path),
@@ -207,7 +219,7 @@ TArray<FJoyConInformation>* FJoyConInput::GetAttachedJoyCons() {
 	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
 	if (!HidInitialized) return Data;
 	for (FJoyConController* Controller : Controllers) {
-		if(Controller->JoyConInformation.IsAttached) Data->Add(Controller->JoyConInformation);
+		if (Controller->JoyConInformation.IsAttached) Data->Add(Controller->JoyConInformation);
 	}
 	return Data;
 }
@@ -342,8 +354,8 @@ void FJoyConInput::Tick(float DeltaTime) {
 
 void FJoyConInput::SendControllerEvents() {
 	const double CurrentTime = FPlatformTime::Seconds();
-	
-	for(FJoyConController* Controller : Controllers) {
+
+	for (FJoyConController* Controller : Controllers) {
 		Controller->Update();
 	}
 
@@ -352,29 +364,37 @@ void FJoyConInput::SendControllerEvents() {
 			for (int32 ButtonIndex = 0; ButtonIndex < static_cast<int32>(EJoyConControllerButton::TotalButtonCount); ++ButtonIndex) {
 				FJoyConButtonState& ButtonState = Controller->ControllerState.Buttons[ButtonIndex];
 				check(!ButtonState.Key.IsNone()); // is button's name initialized?
-
+				
 				// Determine if the button is pressed down
 				const bool bButtonPressed = Controller->Buttons[ButtonIndex];
 
-				// Update button state
-				if (bButtonPressed != ButtonState.bIsPressed) {
-					ButtonState.bIsPressed = bButtonPressed;
-					if (ButtonState.bIsPressed) {
-						MessageHandler->OnControllerButtonPressed(ButtonState.Key, Grips[i].GripIndex, false);
-
-						// Set the timer for the first repeat
-						ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+				if (Grips[i].Mode == EGripMode::Auto) {
+					if(Grips[i].Controllers.Num() > 1) {
+						SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
+						if (Controller->JoyConInformation.IsLeft) {
+							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+						} else {
+							const FName KeyName = GetRightJoyConKeyName(ButtonIndex, ButtonState.Key);
+							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, KeyName, &ButtonState);
+						}
 					} else {
-						MessageHandler->OnControllerButtonReleased(ButtonState.Key, Grips[i].GripIndex, false);
+						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
 					}
-				}
-
-				// Apply key repeat, if its time for that
-				if (ButtonState.bIsPressed && ButtonState.NextRepeatTime <= CurrentTime) {
-					MessageHandler->OnControllerButtonPressed(ButtonState.Key, Grips[i].GripIndex, true);
-
-					// Set the timer for the next repeat
-					ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+				} else if (Grips[i].Mode == EGripMode::Landscape) {
+					// TODO: Something to do?
+					SendAnalogEvents(true, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
+					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+				} else if (Grips[i].Mode == EGripMode::Portrait) {
+					SendAnalogEvents(true, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
+					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+				} else if (Grips[i].Mode == EGripMode::GamePad) {
+					SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
+					if(Controller->JoyConInformation.IsLeft) {
+						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+					} else {
+						const FName KeyName = GetRightJoyConKeyName(ButtonIndex, ButtonState.Key);
+						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, KeyName, &ButtonState);
+					}
 				}
 			}
 		}
@@ -389,11 +409,9 @@ bool FJoyConInput::Exec(UWorld* InWorld, const TCHAR* Cmd, FOutputDevice& Ar) {
 	return false;
 }
 
-void FJoyConInput::SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value) {
-}
+void FJoyConInput::SetChannelValue(int32 ControllerId, FForceFeedbackChannelType ChannelType, float Value) {}
 
-void FJoyConInput::SetChannelValues(int32 ControllerId, const FForceFeedbackValues& Values) {
-}
+void FJoyConInput::SetChannelValues(int32 ControllerId, const FForceFeedbackValues& Values) {}
 
 FName FJoyConInput::GetMotionControllerDeviceTypeName() const {
 	const static FName DefaultName(TEXT("JoyConInputDevice"));
@@ -408,8 +426,7 @@ ETrackingStatus FJoyConInput::GetControllerTrackingStatus(const int32 Controller
 	return ETrackingStatus::NotTracked;
 }
 
-void FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {
-}
+void FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {}
 
 void FJoyConInput::GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const {
 	MinFrequency = 0.f;
@@ -430,4 +447,63 @@ int FJoyConInput::GetNextControllerId() {
 		}
 	}
 	return NextId;
+}
+
+FName FJoyConInput::GetRightJoyConKeyName(const int Index, const FName OriginalKeyName) {
+	switch (Index) {
+		
+	case EJoyConControllerButton::DPad_Up:
+		return FJoyConKeyNames::JoyCon_X;
+	case EJoyConControllerButton::DPad_Down:
+		return FJoyConKeyNames::JoyCon_B;
+	case EJoyConControllerButton::DPad_Left:
+		return FJoyConKeyNames::JoyCon_Y;
+	case EJoyConControllerButton::DPad_Right:
+		return FJoyConKeyNames::JoyCon_A;
+		
+	case EJoyConControllerButton::Left_ThumbStick:
+		return FJoyConKeyNames::JoyCon_Right_ThumbStick;
+		
+	case EJoyConControllerButton::L:
+		return FJoyConKeyNames::JoyCon_R;
+	case EJoyConControllerButton::Zl:
+		return FJoyConKeyNames::JoyCon_Zr;
+		
+	default:
+		return OriginalKeyName;
+	}
+}
+
+void FJoyConInput::SendButtonEvents(const bool bButtonPressed, const float CurrentTime, const int GripIndex, const FName KeyName, FJoyConButtonState *ButtonState) const {
+	// Update button state
+	if (bButtonPressed != ButtonState->bIsPressed) {
+		ButtonState->bIsPressed = bButtonPressed;
+		if (ButtonState->bIsPressed) {
+			MessageHandler->OnControllerButtonPressed(KeyName, GripIndex, false);
+
+			// Set the timer for the first repeat
+			ButtonState->NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+		} else {
+			MessageHandler->OnControllerButtonReleased(KeyName, GripIndex, false);
+		}
+	}
+
+	// Apply key repeat, if its time for that
+	if (ButtonState->bIsPressed && ButtonState->NextRepeatTime <= CurrentTime) {
+		MessageHandler->OnControllerButtonPressed(KeyName, GripIndex, true);
+
+		// Set the timer for the next repeat
+		ButtonState->NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+	}
+}
+
+void FJoyConInput::SendAnalogEvents(const bool bIsLeft, const int GripIndex, const FVector2D StickVector, FJoyConAnalogState* AnalogState) const {
+	if (StickVector.X != AnalogState->X) {
+		AnalogState->X = StickVector.X;
+		MessageHandler->OnControllerAnalog(bIsLeft ? FJoyConKeyNames::JoyCon_Left_ThumbStick_X : FJoyConKeyNames::JoyCon_Right_ThumbStick_X, GripIndex, AnalogState->X);
+	}
+	if (StickVector.Y != AnalogState->Y) {
+		AnalogState->Y = StickVector.Y;
+		MessageHandler->OnControllerAnalog(bIsLeft ? FJoyConKeyNames::JoyCon_Left_ThumbStick_Y : FJoyConKeyNames::JoyCon_Right_ThumbStick_Y, GripIndex, AnalogState->Y);
+	}
 }
