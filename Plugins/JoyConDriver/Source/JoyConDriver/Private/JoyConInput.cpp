@@ -27,11 +27,21 @@ const FKey FJoyConKey::JoyCon_Analog_Click("JoyCon_Analog_Click");
 const FKey FJoyConKey::JoyCon_Sr("JoyCon_Sr");
 const FKey FJoyConKey::JoyCon_Sl("JoyCon_Sl");
 
-const FKey FJoyConKey::JoyCon_Shoulder_1("JoyCon_Shoulder_1");
-const FKey FJoyConKey::JoyCon_Shoulder_2("JoyCon_Shoulder_2");
+const FKey FJoyConKey::JoyCon_L("JoyCon_L");
+const FKey FJoyConKey::JoyCon_Zl("JoyCon_Zl");
+
+// Setup Extra Keys
+const FKey FJoyConKey::JoyCon_X("JoyCon_X");
+const FKey FJoyConKey::JoyCon_Y("JoyCon_Y");
+const FKey FJoyConKey::JoyCon_A("JoyCon_A");
+const FKey FJoyConKey::JoyCon_B("JoyCon_B");
+
+const FKey FJoyConKey::JoyCon_Analog2_Click("JoyCon_Analog2_Click");
+
+const FKey FJoyConKey::JoyCon_Zr("JoyCon_Zr");
+const FKey FJoyConKey::JoyCon_R("JoyCon_R");
 
 // Setup Keys Names
-
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Up("JoyCon_DPad_Up");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Left("JoyCon_DPad_Left");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_DPad_Right("JoyCon_DPad_Right");
@@ -47,8 +57,19 @@ const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Analog_Click("JoyCon_Analog_
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Sr("JoyCon_Sr");
 const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Sl("JoyCon_Sl");
 
-const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Shoulder_1("JoyCon_Shoulder_1");
-const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Shoulder_2("JoyCon_Shoulder_2");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_L("JoyCon_L");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Zl("JoyCon_Zl");
+
+// Setup Extra Keys Names
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_X("JoyCon_X");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Y("JoyCon_Y");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_A("JoyCon_A");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_B("JoyCon_B");
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Analog2_Click("JoyCon_Analog2_Click");
+
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_Zr("JoyCon_Zr");
+const FJoyConKeyNames::Type FJoyConKeyNames::JoyCon_R("JoyCon_R");
 
 float FJoyConInput::InitialButtonRepeatDelay = 0.2f;
 float FJoyConInput::ButtonRepeatDelay = 0.1f;
@@ -103,8 +124,19 @@ void FJoyConInput::PreInit() {
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sr, LOCTEXT("JoyCon_Sr", "JoyCon Sr"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sl, LOCTEXT("JoyCon_Sl", "JoyCon Sl"), FKeyDetails::GamepadKey, "JoyCon"));
 
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Shoulder_1, LOCTEXT("JoyCon_Shoulder_1", "JoyCon S1"), FKeyDetails::GamepadKey, "JoyCon"));
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Shoulder_2, LOCTEXT("JoyCon_Shoulder_2", "JoyCon S2"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_L, LOCTEXT("JoyCon_L", "JoyCon L"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Zl, LOCTEXT("JoyCon_Zl", "JoyCon ZL"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	// Extra Keys
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_X, LOCTEXT("JoyCon_X", "JoyCon X"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Y, LOCTEXT("JoyCon_Y", "JoyCon Y"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_A, LOCTEXT("JoyCon_A", "JoyCon A"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_B, LOCTEXT("JoyCon_B", "JoyCon B"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Analog2_Click, LOCTEXT("JoyCon_Analog2_Click", "JoyCon Analog2 Click"), FKeyDetails::GamepadKey, "JoyCon"));
+
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Zr, LOCTEXT("JoyCon_Zr", "JoyCon ZR"), FKeyDetails::GamepadKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_R, LOCTEXT("JoyCon_R", "JoyCon R"), FKeyDetails::GamepadKey, "JoyCon"));
 	
 	UE_LOG(LogTemp, Log, TEXT("JoyConInput pre-init called"));
 }
@@ -313,32 +345,37 @@ void FJoyConInput::SendControllerEvents() {
 	
 	for(FJoyConController* Controller : Controllers) {
 		Controller->Update();
-		for (int32 ButtonIndex = 0; ButtonIndex < static_cast<int32>(EJoyConControllerButton::TotalButtonCount); ++ButtonIndex) {
-			FJoyConButtonState& ButtonState = Controller->ControllerState.Buttons[ButtonIndex];
-			check(!ButtonState.Key.IsNone()); // is button's name initialized?
+	}
 
-			// Determine if the button is pressed down
-			const bool bButtonPressed = Controller->Buttons[ButtonIndex];
+	for (int i = 0; i < 8; i++) {
+		for (FJoyConController* Controller : Grips[i].Controllers) {
+			for (int32 ButtonIndex = 0; ButtonIndex < static_cast<int32>(EJoyConControllerButton::TotalButtonCount); ++ButtonIndex) {
+				FJoyConButtonState& ButtonState = Controller->ControllerState.Buttons[ButtonIndex];
+				check(!ButtonState.Key.IsNone()); // is button's name initialized?
 
-			// Update button state
-			if (bButtonPressed != ButtonState.bIsPressed) {
-				ButtonState.bIsPressed = bButtonPressed;
-				if (ButtonState.bIsPressed) {
-					//MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
-					
-					// Set the timer for the first repeat
-					ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
-				} else {
-					//MessageHandler->OnControllerButtonReleased(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, false);
+				// Determine if the button is pressed down
+				const bool bButtonPressed = Controller->Buttons[ButtonIndex];
+
+				// Update button state
+				if (bButtonPressed != ButtonState.bIsPressed) {
+					ButtonState.bIsPressed = bButtonPressed;
+					if (ButtonState.bIsPressed) {
+						MessageHandler->OnControllerButtonPressed(ButtonState.Key, Grips[i].GripIndex, false);
+
+						// Set the timer for the first repeat
+						ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+					} else {
+						MessageHandler->OnControllerButtonReleased(ButtonState.Key, Grips[i].GripIndex, false);
+					}
 				}
-			}
 
-			// Apply key repeat, if its time for that
-			if (ButtonState.bIsPressed && ButtonState.NextRepeatTime <= CurrentTime) {
-				//MessageHandler->OnControllerButtonPressed(ButtonState.Key, Controller->JoyConInformation.ProbableControllerIndex, true);
+				// Apply key repeat, if its time for that
+				if (ButtonState.bIsPressed && ButtonState.NextRepeatTime <= CurrentTime) {
+					MessageHandler->OnControllerButtonPressed(ButtonState.Key, Grips[i].GripIndex, true);
 
-				// Set the timer for the next repeat
-				ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+					// Set the timer for the next repeat
+					ButtonState.NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
+				}
 			}
 		}
 	}

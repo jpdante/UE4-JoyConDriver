@@ -369,8 +369,8 @@ int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
 	Buttons[EJoyConControllerButton::Sr] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x10) != 0;
 	Buttons[EJoyConControllerButton::Sl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x20) != 0;
 
-	Buttons[EJoyConControllerButton::Shoulder_1] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0;
-	Buttons[EJoyConControllerButton::Shoulder_2] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0;
+	Buttons[EJoyConControllerButton::L] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0;
+	Buttons[EJoyConControllerButton::Zl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0;
 
 	/*for (int i = 0; i < sizeof(Buttons); ++i) {
 		ButtonsUp[i] = (Down[i] & !Buttons[i]);

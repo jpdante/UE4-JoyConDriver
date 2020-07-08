@@ -27,11 +27,22 @@ enum EJoyConControllerButton : int {
 	Sr,
 	Sl,
 
-	Shoulder_1,
-	Shoulder_2,
+	L,
+	Zl,
 
 	/** Total number of controller buttons */
-	TotalButtonCount
+	TotalButtonCount,
+
+	/** Extra buttons for game pad mode */
+	X,
+	Y,
+	A,
+	B,
+	
+	Analog2_Click,
+
+	R,
+	Zr
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -54,8 +65,19 @@ struct FJoyConKey {
 	static const FKey JoyCon_Sr;
 	static const FKey JoyCon_Sl;
 
-	static const FKey JoyCon_Shoulder_1;
-	static const FKey JoyCon_Shoulder_2;
+	static const FKey JoyCon_L;
+	static const FKey JoyCon_Zl;
+
+	/** Extra buttons for game pad mode */
+	static const FKey JoyCon_X;
+	static const FKey JoyCon_Y;
+	static const FKey JoyCon_A;
+	static const FKey JoyCon_B;
+
+	static const FKey JoyCon_Analog2_Click;
+
+	static const FKey JoyCon_R;
+	static const FKey JoyCon_Zr;
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -80,8 +102,19 @@ struct FJoyConKeyNames {
 	static const FName JoyCon_Sr;
 	static const FName JoyCon_Sl;
 
-	static const FName JoyCon_Shoulder_1;
-	static const FName JoyCon_Shoulder_2;
+	static const FName JoyCon_L;
+	static const FName JoyCon_Zl;
+
+	/** Extra buttons for game pad mode */
+	static const FName JoyCon_X;
+	static const FName JoyCon_Y;
+	static const FName JoyCon_A;
+	static const FName JoyCon_B;
+
+	static const FName JoyCon_Analog2_Click;
+
+	static const FName JoyCon_R;
+	static const FName JoyCon_Zr;
 };
 
 //-------------------------------------------------------------------------------------------------
@@ -132,7 +165,7 @@ struct FJoyConControllerState {
 		Buttons[static_cast<int32>(EJoyConControllerButton::Sr)].Key = FJoyConKeyNames::JoyCon_Sr;
 		Buttons[static_cast<int32>(EJoyConControllerButton::Sl)].Key = FJoyConKeyNames::JoyCon_Sl;
 
-		Buttons[static_cast<int32>(EJoyConControllerButton::Shoulder_1)].Key = FJoyConKeyNames::JoyCon_Shoulder_1;
-		Buttons[static_cast<int32>(EJoyConControllerButton::Shoulder_2)].Key = FJoyConKeyNames::JoyCon_Shoulder_2;
+		Buttons[static_cast<int32>(EJoyConControllerButton::L)].Key = FJoyConKeyNames::JoyCon_L;
+		Buttons[static_cast<int32>(EJoyConControllerButton::Zl)].Key = FJoyConKeyNames::JoyCon_Zl;
 	}
 };
