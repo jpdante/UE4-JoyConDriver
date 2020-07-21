@@ -41,7 +41,7 @@ public:
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
 	virtual TArray<FJoyConInformation>* GetAttachedJoyCons() const = 0;
 	virtual TArray<FJoyConInformation>* GetConnectedJoyCons() const = 0;
-	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex) const = 0;
+	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerIndex) const = 0;
 	virtual bool AttachJoyCon(int ControllerIndex, int GripIndex) const = 0;
 	virtual bool DisconnectJoyCon(int ControllerIndex) const = 0;
 	virtual bool DetachJoyCon(int ControllerIndex) const = 0;

@@ -32,7 +32,7 @@ public:
 
 	TArray<FJoyConInformation>* GetAttachedJoyCons();
 
-	bool ConnectJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex);
+	bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerIndex);
 
 	bool AttachJoyCon(int ControllerIndex, int GripIndex);
 

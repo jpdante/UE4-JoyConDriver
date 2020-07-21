@@ -26,7 +26,7 @@ public:
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const override;
 	virtual TArray<FJoyConInformation>* GetAttachedJoyCons() const override;
 	virtual TArray<FJoyConInformation>* GetConnectedJoyCons() const override;
-	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, int& ControllerIndex) const override;
+	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerIndex) const override;
 	virtual bool AttachJoyCon(int ControllerIndex, int GripIndex) const override;
 	virtual bool DisconnectJoyCon(int ControllerIndex) const override;
 	virtual bool DetachJoyCon(int ControllerIndex) const override;

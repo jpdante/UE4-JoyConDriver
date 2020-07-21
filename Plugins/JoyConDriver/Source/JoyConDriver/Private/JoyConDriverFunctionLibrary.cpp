@@ -16,12 +16,12 @@ FJoyConDriverModule* GetJoyConControllerAPI() {
 	return nullptr;
 }
 
-void UJoyConDriverFunctionLibrary::ConnectJoyCon(const FJoyConInformation JoyConInformation, bool& Success, int& ControllerIndex) {
+void UJoyConDriverFunctionLibrary::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, bool& Success, int& ControllerIndex, const float Alpha) {
 	const FJoyConDriverModule* JoyConInputApi = GetJoyConControllerAPI();
 	if (JoyConInputApi == nullptr) {
 		Success = false;
 	} else {
-		Success = JoyConInputApi->ConnectJoyCon(JoyConInformation, ControllerIndex);
+		Success = JoyConInputApi->ConnectJoyCon(JoyConInformation, UseImu, UseLocalize, Alpha, ControllerIndex);
 	}
 }
 

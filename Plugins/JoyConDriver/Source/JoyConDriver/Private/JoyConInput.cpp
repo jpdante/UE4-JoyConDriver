@@ -233,13 +233,13 @@ TArray<FJoyConInformation>* FJoyConInput::GetConnectedJoyCons() {
 	return Data;
 }
 
-bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, int& ControllerIndex) {
+bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
 	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
 	hid_device* Handle = hid_open_path(Path);
 	hid_set_nonblocking(Handle, 1);
-	FJoyConController* Controller = new FJoyConController(JoyConInformation, Handle, true, true, 0.05f, JoyConInformation.IsLeft);
+	FJoyConController* Controller = new FJoyConController(JoyConInformation, Handle, UseImu, UseLocalize, Alpha, JoyConInformation.IsLeft);
 	Controllers.Add(Controller);
 	Controller->JoyConInformation.IsConnected = true;
 	Controller->JoyConInformation.ControllerId = Controllers.IndexOfByKey(Controller);
