@@ -128,8 +128,8 @@ void FJoyConInput::PreInit() {
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Capture, LOCTEXT("JoyCon_Capture", "JoyCon Capture"), FKeyDetails::GamepadKey, "JoyCon"));
 
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick, LOCTEXT("JoyCon_Left_ThumbStick", "JoyCon Left Thumbstick Click"), FKeyDetails::GamepadKey, "JoyCon"));
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick_X, LOCTEXT("JoyCon_Left_ThumbStick_X", "JoyCon Left Thumbstick X"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick_Y, LOCTEXT("JoyCon_Left_ThumbStick_Y", "JoyCon Left Thumbstick Y"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick_X, LOCTEXT("JoyCon_Left_ThumbStick_X", "JoyCon Left Thumbstick X"), FKeyDetails::GamepadKey | FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Left_ThumbStick_Y, LOCTEXT("JoyCon_Left_ThumbStick_Y", "JoyCon Left Thumbstick Y"), FKeyDetails::GamepadKey | FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey, "JoyCon"));
 
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sr, LOCTEXT("JoyCon_Sr", "JoyCon Sr"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Sl, LOCTEXT("JoyCon_Sl", "JoyCon Sl"), FKeyDetails::GamepadKey, "JoyCon"));
@@ -144,8 +144,8 @@ void FJoyConInput::PreInit() {
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_B, LOCTEXT("JoyCon_B", "JoyCon B"), FKeyDetails::GamepadKey, "JoyCon"));
 
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick, LOCTEXT("JoyCon_Right_ThumbStick", "JoyCon Right Thumbstick Click"), FKeyDetails::GamepadKey, "JoyCon"));
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick_X, LOCTEXT("JoyCon_Right_ThumbStick_X", "JoyCon Right Thumbstick X"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
-	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick_Y, LOCTEXT("JoyCon_Right_ThumbStick_Y", "JoyCon Right Thumbstick Y"), FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick_X, LOCTEXT("JoyCon_Right_ThumbStick_X", "JoyCon Right Thumbstick X"), FKeyDetails::GamepadKey | FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey, "JoyCon"));
+	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Right_ThumbStick_Y, LOCTEXT("JoyCon_Right_ThumbStick_Y", "JoyCon Right Thumbstick Y"), FKeyDetails::GamepadKey | FKeyDetails::FloatAxis | FKeyDetails::NotBlueprintBindableKey, "JoyCon"));
 
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_Zr, LOCTEXT("JoyCon_Zr", "JoyCon ZR"), FKeyDetails::GamepadKey, "JoyCon"));
 	EKeys::AddKey(FKeyDetails(FJoyConKey::JoyCon_R, LOCTEXT("JoyCon_R", "JoyCon R"), FKeyDetails::GamepadKey, "JoyCon"));
