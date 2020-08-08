@@ -175,16 +175,14 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 		if (Device->product_id == 0x2006 || Device->product_id == 0x2007) {
 			FString SerialNumber(Device->serial_number);
 			FString BluetoothPath(Device->path);
+			bool IsConnected = false;
 			if (Controllers.Num() > 0) {
-				bool AlreadyExists = false;
 				for (FJoyConController* Controller : Controllers) {
 					if (Controller->JoyConInformation.SerialNumber.Equals(SerialNumber) && Controller->JoyConInformation.BluetoothPath.Equals(BluetoothPath)) {
-						Data->Add(Controller->JoyConInformation);
-						AlreadyExists = true;
+						IsConnected = true;
 						break;
 					}
 				}
-				if (AlreadyExists) continue;
 			}
 			bool IsLeft = false;
 			if (Device->product_id == 0x2006) {
@@ -205,7 +203,7 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 				Device->usage,
 				Device->usage_page,
 				IsLeft,
-				false
+				IsConnected
 			);
 			Data->Add(JoyConInformation);
 		}
@@ -233,6 +231,18 @@ TArray<FJoyConInformation>* FJoyConInput::GetConnectedJoyCons() {
 	return Data;
 }
 
+bool FJoyConInput::ResumeJoyConConnection() {
+	if (!HidInitialized) return false;
+	bool Success = false;
+	for (FJoyConController* Controller : Controllers) {
+		if (Controller->JoyConInformation.IsAttached) {
+			Success = Controller->StartListenThread();
+			if (Success == false) return Success;
+		}
+	}
+	return Success;
+}
+
 bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerIndex) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
@@ -255,6 +265,7 @@ bool FJoyConInput::AttachJoyCon(const int ControllerIndex, const int GripIndex) 
 	Leds |= static_cast<uint8>(0x1 << GripIndex);
 	Grips[GripIndex].Controllers.Add(Controllers[ControllerIndex]);
 	Controllers[ControllerIndex]->Attach(Leds);
+	Controllers[ControllerIndex]->StartListenThread();
 	Controllers[ControllerIndex]->JoyConInformation.IsAttached = true;
 	return true;
 }
@@ -364,12 +375,12 @@ void FJoyConInput::SendControllerEvents() {
 			for (int32 ButtonIndex = 0; ButtonIndex < static_cast<int32>(EJoyConControllerButton::TotalButtonCount); ++ButtonIndex) {
 				FJoyConButtonState& ButtonState = Controller->ControllerState.Buttons[ButtonIndex];
 				check(!ButtonState.Key.IsNone()); // is button's name initialized?
-				
+
 				// Determine if the button is pressed down
 				const bool bButtonPressed = Controller->Buttons[ButtonIndex];
 
 				if (Grips[i].Mode == EGripMode::Auto) {
-					if(Grips[i].Controllers.Num() > 1) {
+					if (Grips[i].Controllers.Num() > 1) {
 						SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
 						if (Controller->JoyConInformation.IsLeft) {
 							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
@@ -381,7 +392,6 @@ void FJoyConInput::SendControllerEvents() {
 						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
 					}
 				} else if (Grips[i].Mode == EGripMode::Landscape) {
-					// TODO: Something to do?
 					SendAnalogEvents(true, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
 					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
 				} else if (Grips[i].Mode == EGripMode::Portrait) {
@@ -389,7 +399,7 @@ void FJoyConInput::SendControllerEvents() {
 					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
 				} else if (Grips[i].Mode == EGripMode::GamePad) {
 					SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
-					if(Controller->JoyConInformation.IsLeft) {
+					if (Controller->JoyConInformation.IsLeft) {
 						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
 					} else {
 						const FName KeyName = GetRightJoyConKeyName(ButtonIndex, ButtonState.Key);
@@ -451,7 +461,7 @@ int FJoyConInput::GetNextControllerId() {
 
 FName FJoyConInput::GetRightJoyConKeyName(const int Index, const FName OriginalKeyName) {
 	switch (Index) {
-		
+
 	case EJoyConControllerButton::DPad_Up:
 		return FJoyConKeyNames::JoyCon_X;
 	case EJoyConControllerButton::DPad_Down:
@@ -460,21 +470,21 @@ FName FJoyConInput::GetRightJoyConKeyName(const int Index, const FName OriginalK
 		return FJoyConKeyNames::JoyCon_Y;
 	case EJoyConControllerButton::DPad_Right:
 		return FJoyConKeyNames::JoyCon_A;
-		
+
 	case EJoyConControllerButton::Left_ThumbStick:
 		return FJoyConKeyNames::JoyCon_Right_ThumbStick;
-		
+
 	case EJoyConControllerButton::L:
 		return FJoyConKeyNames::JoyCon_R;
 	case EJoyConControllerButton::Zl:
 		return FJoyConKeyNames::JoyCon_Zr;
-		
+
 	default:
 		return OriginalKeyName;
 	}
 }
 
-void FJoyConInput::SendButtonEvents(const bool bButtonPressed, const float CurrentTime, const int GripIndex, const FName KeyName, FJoyConButtonState *ButtonState) const {
+void FJoyConInput::SendButtonEvents(const bool bButtonPressed, const float CurrentTime, const int GripIndex, const FName KeyName, FJoyConButtonState* ButtonState) const {
 	// Update button state
 	if (bButtonPressed != ButtonState->bIsPressed) {
 		ButtonState->bIsPressed = bButtonPressed;

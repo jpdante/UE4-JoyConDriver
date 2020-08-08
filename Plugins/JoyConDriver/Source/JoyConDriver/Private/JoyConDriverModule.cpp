@@ -24,6 +24,10 @@ TArray<FJoyConInformation>* FJoyConDriverModule::GetConnectedJoyCons() const {
 	return JoyConInputDevice.Pin()->GetConnectedJoyCons();
 }
 
+bool FJoyConDriverModule::ResumeJoyConConnection() const {
+	return JoyConInputDevice.Pin()->ResumeJoyConConnection();
+}
+
 bool FJoyConDriverModule::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerIndex) const {
 	return JoyConInputDevice.Pin()->ConnectJoyCon(JoyConInformation, UseImu, UseLocalize, Alpha, ControllerIndex);
 }

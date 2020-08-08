@@ -6,6 +6,16 @@
 #include "JoyConDriverModule.h"
 #include "Features/IModularFeatures.h"
 
+void UJoyConDriverFunctionLibrary::ResumeJoyConConnection(bool& Success) {
+	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
+	Success = false;
+	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
+		if (JoyConInputApi == nullptr) continue;
+		Success = JoyConInputApi->Get().ResumeJoyConConnection();
+		break;
+	}
+}
+
 void UJoyConDriverFunctionLibrary::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, bool& Success, int& ControllerIndex, const float Alpha) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;

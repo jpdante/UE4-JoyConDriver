@@ -32,7 +32,7 @@ public:
 	static inline bool IsAvailable() {
 		return FModuleManager::Get().IsModuleLoaded("JoyConDriver");
 	}
-
+	
 	/**
 	 * Gets the number of Touch controllers that are active, so that games that require them can check to make sure they're present
 	 *
@@ -41,6 +41,7 @@ public:
 	virtual TArray<FJoyConInformation>* SearchForJoyCons() const = 0;
 	virtual TArray<FJoyConInformation>* GetAttachedJoyCons() const = 0;
 	virtual TArray<FJoyConInformation>* GetConnectedJoyCons() const = 0;
+	virtual bool ResumeJoyConConnection() const = 0;
 	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerIndex) const = 0;
 	virtual bool AttachJoyCon(int ControllerIndex, int GripIndex) const = 0;
 	virtual bool DisconnectJoyCon(int ControllerIndex) const = 0;

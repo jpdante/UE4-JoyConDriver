@@ -38,6 +38,7 @@ FJoyConController::~FJoyConController() {
 }
 
 void FJoyConController::Attach(const uint8 Leds) {
+	if (State > EJoyConState::No_JoyCons) return;
 	State = EJoyConState::Attached;
 	uint8 a[] = { 0x0 };
 	// Input report mode
@@ -60,10 +61,6 @@ void FJoyConController::Attach(const uint8 Leds) {
 	}
 	SendCommand(0x3, new uint8[1]{ 0x30 }, 1);
 	SendCommand(0x48, new uint8[1]{ 0x1 }, 1);
-	bStopPolling = false;
-	if (!Thread && FPlatformProcess::SupportsMultithreading()) {
-		Thread = FRunnableThread::Create(this, TEXT("FJoyConInput"), 0, EThreadPriority::TPri_Normal);
-	}
 }
 
 void FJoyConController::Update() {
@@ -83,7 +80,7 @@ void FJoyConController::Update() {
 			}
 		}
 		if (TsDequeue == ReportBuf[1]) {
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString("Duplicate timestamp dequeued."));
+			UE_LOG(LogTemp, Display, TEXT("Duplicate timestamp dequeued."));
 		}
 		TsDequeue = ReportBuf[1];
 		TsPrevious = Rep.GetTime();
@@ -123,24 +120,8 @@ void FJoyConController::Detach() {
 		SendCommand(0x48, new uint8[1]{ 0x0 }, 1);
 		SendCommand(0x3, new uint8[1]{ 0x3f }, 1);
 	}
-	/*if (State > EJoyConState::Dropped) {
-		if (HidHandle != nullptr) hid_close(HidHandle);
-	}*/
 	State = EJoyConState::Not_Attached;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, FString("JoyCon detached!"));
 }
-
-/*bool FJoyConController::GetButtonDown(const EButton Button) {
-	return ButtonsDown[Button];
-}
-
-bool FJoyConController::GetButton(const EButton Button) {
-	return Buttons[Button];
-}
-
-bool FJoyConController::GetButtonUp(const EButton Button) {
-	return ButtonsUp[Button];
-}*/
 
 FVector2D FJoyConController::GetStick() {
 	return FVector2D(Stick[0], Stick[1]);
@@ -226,17 +207,34 @@ void FJoyConController::SetFilterCoefficient(const float Coefficient) {
 	FilterWeight = Coefficient;
 }
 
+bool FJoyConController::StartListenThread() {
+	if (FPlatformProcess::SupportsMultithreading() && HidHandle != nullptr) {
+		if(Thread != nullptr) {
+			bStopPolling = true;
+			Thread->Kill(true);
+			delete Thread;
+			Thread = nullptr;
+		}
+		bStopPolling = false;
+		Thread = FRunnableThread::Create(this, TEXT("FJoyConInput"), 0, EThreadPriority::TPri_Normal);
+		return true;
+	} else {
+		UE_LOG(LogTemp, Fatal, TEXT("Failed to start thread, the platform does not support multithreading or HidHandle null pointer exception."));
+		return false;
+	}
+}
+
 void FJoyConController::DumpCalibrationData() {
 	auto Buf = ReadSpi(0x80, (bIsLeft ? static_cast<uint8>(0x12) : static_cast<uint8>(0x1d)), 9);
 	auto Found = false;
 	for (auto i = 0; i < 9; ++i) {
 		if (Buf[i] == 0xff) continue;
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString("Using user stick calibration data."));
+		UE_LOG(LogTemp, Display, TEXT("Using user stick calibration data."));
 		Found = true;
 		break;
 	}
 	if (!Found) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Purple, FString("Using factory stick calibration data."));
+		UE_LOG(LogTemp, Display, TEXT("Using factory stick calibration data."));
 		Buf = ReadSpi(0x60, (bIsLeft ? static_cast<uint8>(0x3d) : static_cast<uint8>(0x46)), 9);
 	}
 	StickCalibration[bIsLeft ? 0 : 2] = static_cast<uint16>((Buf[1] << 8) & 0xF00 | Buf[0]); // X Axis Max above center
@@ -276,7 +274,7 @@ int FJoyConController::ReceiveRaw() {
 	Reports.Enqueue(Report);
 	Mutex.Unlock();
 	if (TsEnqueue == RawBuf[1]) {
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, FString("Duplicate timestamp enqueued."));
+		UE_LOG(LogTemp, Display, TEXT("Duplicate timestamp enqueued."));
 	}
 	TsEnqueue = RawBuf[1];
 	return Ret;
@@ -350,9 +348,6 @@ int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
 	StickPreCalibration[0] = static_cast<uint16>(StickRaw[0] | ((StickRaw[1] & 0xf) << 8));
 	StickPreCalibration[1] = static_cast<uint16>((StickRaw[1] >> 4) | (StickRaw[2] << 4));
 	CenterSticks(StickPreCalibration);
-	/*for (int i = 0; i < sizeof(Buttons); ++i) {
-		Down[i] = Buttons[i];
-	}*/
 
 	Buttons[EJoyConControllerButton::DPad_Up] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x02 : 0x02)) != 0;
 	Buttons[EJoyConControllerButton::DPad_Left] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & (bIsLeft ? 0x08 : 0x01)) != 0;
@@ -372,22 +367,15 @@ int32 FJoyConController::ProcessButtonsAndStick(uint8 ReportBuf[]) {
 	Buttons[EJoyConControllerButton::L] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x40) != 0;
 	Buttons[EJoyConControllerButton::Zl] = (ReportBuf[3 + (bIsLeft ? 2 : 0)] & 0x80) != 0;
 
-	/*for (int i = 0; i < sizeof(Buttons); ++i) {
-		ButtonsUp[i] = (Down[i] & !Buttons[i]);
-		ButtonsDown[i] = (!Down[i] & Buttons[i]);
-	}*/
 	return 0;
 }
 
 void FJoyConController::CenterSticks(uint16 Values[]) {
 	for (uint32 i = 0; i < 2; ++i) {
 		const float Diff = Values[i] - StickCalibration[2 + i];
-		if (FGenericPlatformMath::Abs(Diff) < DeadZone) Values[i] = 0;
-		else if (Diff > 0) {
-			Stick[i] = Diff / StickCalibration[i];
-		} else {
-			Stick[i] = Diff / StickCalibration[4 + i];
-		}
+		if (FGenericPlatformMath::Abs(Diff) < DeadZone) Stick[i] = 0;
+		else if (Diff > 0) Stick[i] = Diff / StickCalibration[i];
+		else Stick[i] = Diff / StickCalibration[4 + i];
 	}
 }
 

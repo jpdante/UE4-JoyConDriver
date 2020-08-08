@@ -16,6 +16,9 @@ class JOYCONDRIVER_API UJoyConDriverFunctionLibrary : public UBlueprintFunctionL
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Resume Connection"))
+		static void ResumeJoyConConnection(bool& Success);
+	
 	UFUNCTION(BlueprintCallable, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Connect"))
 		static void ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, bool& Success, int& ControllerIndex, float Alpha = 0.05f);
 	

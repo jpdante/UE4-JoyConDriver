@@ -20,30 +20,6 @@ enum EJoyConState {
 	Imu_Data_OK,
 };
 
-/*class FJoyConButtonState {
-public:
-	FGamepadKeyNames::Type KeyName;
-	bool Pressed;
-	bool Updated;
-	bool Repeat;
-
-	explicit FJoyConButtonState(const FName TempKeyName) {
-		KeyName = TempKeyName;
-		Pressed = false;
-		Updated = false;
-		Repeat = false;
-	}
-
-	void Update(const bool Result) {
-		Updated = true;
-		Pressed = Result;
-	}
-
-	void Reset() {
-		Updated = false;
-	}
-};*/
-
 struct FReport {
 	uint8* ReportData;
 	FDateTime Time;
@@ -79,9 +55,6 @@ public:
 	void Pool();
 	void Detach();
 
-	/*bool GetButtonDown(EButton Button);
-	bool GetButton(EButton Button);
-	bool GetButtonUp(EButton Button);*/
 	FVector2D GetStick();
 	FVector GetGyroscope() const;
 	FVector GetAccelerometer() const;
@@ -89,6 +62,8 @@ public:
 	void ReCenter();
 
 	void SetFilterCoefficient(float Coefficient);
+
+	bool StartListenThread();
 
 private:
 	void DumpCalibrationData();
@@ -119,14 +94,9 @@ private:
 	const uint32 ReportLen = 49;
 	const uint8 DefaultBuf[8] = { 0x0, 0x1, 0x40, 0x40, 0x0, 0x1, 0x40, 0x40 };
 
-	// Buttons
-	/*bool ButtonsDown[13];
-	bool ButtonsUp[13];
-	bool Buttons[13];
-	bool Down[13];*/
-
 	// Analog Stick Variables
 	float Stick[2] = { 0, 0 };
+	float StickMax[2] = { 0, 0 };
 	uint8 StickRaw[3] = { 0, 0, 0 };
 	uint16 StickCalibration[6] = { 0, 0, 0, 0, 0, 0 };
 	uint16 DeadZone;
