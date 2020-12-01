@@ -27,15 +27,15 @@ public:
 	virtual TArray<FJoyConInformation>* GetAttachedJoyCons() const override;
 	virtual TArray<FJoyConInformation>* GetConnectedJoyCons() const override;
 	virtual bool ResumeJoyConConnection() const override;
-	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerIndex) const override;
-	virtual bool AttachJoyCon(int ControllerIndex, int GripIndex) const override;
-	virtual bool DisconnectJoyCon(int ControllerIndex) const override;
-	virtual bool DetachJoyCon(int ControllerIndex) const override;
-	virtual bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out) const override;
-	virtual bool GetJoyConGyroscope(int ControllerIndex, FVector& Out) const override;
-	virtual bool GetJoyConVector(int ControllerIndex, FRotator& Out) const override;
-	virtual bool ReCenterJoyCon(int ControllerIndex) const override;
-	virtual bool SetJoyConFilterCoefficient(int ControllerIndex, float Coefficient) const override;
+	virtual bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerId) const override;
+	virtual bool AttachJoyCon(int ControllerId, int GripIndex) const override;
+	virtual bool DisconnectJoyCon(int ControllerId) const override;
+	virtual bool DetachJoyCon(int ControllerId) const override;
+	virtual bool GetJoyConAccelerometer(int ControllerId, FVector& Out) const override;
+	virtual bool GetJoyConGyroscope(int ControllerId, FVector& Out) const override;
+	virtual bool GetJoyConVector(int ControllerId, FRotator& Out) const override;
+	virtual bool ReCenterJoyCon(int ControllerId) const override;
+	virtual bool SetJoyConFilterCoefficient(int ControllerId, float Coefficient) const override;
 	virtual bool SetJoyConGripMode(int GripIndex, uint8 GripMode) const override;
 };
 

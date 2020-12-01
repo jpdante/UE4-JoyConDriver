@@ -28,40 +28,40 @@ bool FJoyConDriverModule::ResumeJoyConConnection() const {
 	return JoyConInputDevice.Pin()->ResumeJoyConConnection();
 }
 
-bool FJoyConDriverModule::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerIndex) const {
-	return JoyConInputDevice.Pin()->ConnectJoyCon(JoyConInformation, UseImu, UseLocalize, Alpha, ControllerIndex);
+bool FJoyConDriverModule::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerId) const {
+	return JoyConInputDevice.Pin()->ConnectJoyCon(JoyConInformation, UseImu, UseLocalize, Alpha, ControllerId);
 }
 
-bool FJoyConDriverModule::AttachJoyCon(const int ControllerIndex, const int GripIndex) const {
-	return JoyConInputDevice.Pin()->AttachJoyCon(ControllerIndex, GripIndex);
+bool FJoyConDriverModule::AttachJoyCon(const int ControllerId, const int GripIndex) const {
+	return JoyConInputDevice.Pin()->AttachJoyCon(ControllerId, GripIndex);
 }
 
-bool FJoyConDriverModule::DisconnectJoyCon(const int ControllerIndex) const {
-	return JoyConInputDevice.Pin()->DisconnectJoyCon(ControllerIndex);
+bool FJoyConDriverModule::DisconnectJoyCon(const int ControllerId) const {
+	return JoyConInputDevice.Pin()->DisconnectJoyCon(ControllerId);
 }
 
-bool FJoyConDriverModule::DetachJoyCon(const int ControllerIndex) const {
-	return JoyConInputDevice.Pin()->DetachJoyCon(ControllerIndex);
+bool FJoyConDriverModule::DetachJoyCon(const int ControllerId) const {
+	return JoyConInputDevice.Pin()->DetachJoyCon(ControllerId);
 }
 
-bool FJoyConDriverModule::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) const {
-	return JoyConInputDevice.Pin()->GetJoyConAccelerometer(ControllerIndex, Out);
+bool FJoyConDriverModule::GetJoyConAccelerometer(const int ControllerId, FVector& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConAccelerometer(ControllerId, Out);
 }
 
-bool FJoyConDriverModule::GetJoyConGyroscope(const int ControllerIndex, FVector& Out) const {
-	return JoyConInputDevice.Pin()->GetJoyConGyroscope(ControllerIndex, Out);
+bool FJoyConDriverModule::GetJoyConGyroscope(const int ControllerId, FVector& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConGyroscope(ControllerId, Out);
 }
 
-bool FJoyConDriverModule::GetJoyConVector(const int ControllerIndex, FRotator& Out) const {
-	return JoyConInputDevice.Pin()->GetJoyConVector(ControllerIndex, Out);
+bool FJoyConDriverModule::GetJoyConVector(const int ControllerId, FRotator& Out) const {
+	return JoyConInputDevice.Pin()->GetJoyConVector(ControllerId, Out);
 }
 
-bool FJoyConDriverModule::ReCenterJoyCon(const int ControllerIndex) const {
-	return JoyConInputDevice.Pin()->ReCenterJoyCon(ControllerIndex);
+bool FJoyConDriverModule::ReCenterJoyCon(const int ControllerId) const {
+	return JoyConInputDevice.Pin()->ReCenterJoyCon(ControllerId);
 }
 
-bool FJoyConDriverModule::SetJoyConFilterCoefficient(const int ControllerIndex, const float Coefficient) const {
-	return JoyConInputDevice.Pin()->SetJoyConFilterCoefficient(ControllerIndex, Coefficient);
+bool FJoyConDriverModule::SetJoyConFilterCoefficient(const int ControllerId, const float Coefficient) const {
+	return JoyConInputDevice.Pin()->SetJoyConFilterCoefficient(ControllerId, Coefficient);
 }
 
 bool FJoyConDriverModule::SetJoyConGripMode(const int GripIndex, const uint8 GripMode) const {

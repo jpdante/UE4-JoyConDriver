@@ -3,12 +3,12 @@
 
 #include "JoyConController.h"
 #include "Engine/Engine.h"
-#include "Windows/AllowWindowsPlatformTypes.h"
-#include <map>
+//#include "Windows/AllowWindowsPlatformTypes.h"
+//#include <map>
 
 #include "JoyConState.h"
 #include "HAL/RunnableThread.h"
-#include "Windows/HideWindowsPlatformTypes.h"
+//#include "Windows/HideWindowsPlatformTypes.h"
 
 FJoyConController::FJoyConController(const FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
 	GlobalCount(0),
@@ -40,27 +40,40 @@ FJoyConController::~FJoyConController() {
 void FJoyConController::Attach(const uint8 Leds) {
 	if (State > EJoyConState::No_JoyCons) return;
 	State = EJoyConState::Attached;
-	uint8 a[] = { 0x0 };
-	// Input report mode
-	SendCommand(0x3, new uint8[1]{ 0x3f }, 1);
-	a[0] = 0x1;
+	// Subcommand 0x03: Set input report mode
+    // 0x3f - Simple HID mode. Pushes updates with every button press
+	uint8 a[] = { 0x3f };
+	SendSubCommand(0x3, a, 1);
+	
 	DumpCalibrationData();
-	// Connect
+	
+	// Subcommand 0x01: Bluetooth manual pairing
+	// Send host MAC and acquire Joy-Con MAC
 	a[0] = 0x01;
-	SendCommand(0x1, a, 1);
+	SendSubCommand(0x1, a, 1);
+	
+	// Acquire the XORed LTK hash
 	a[0] = 0x02;
-	SendCommand(0x1, a, 1);
+	SendSubCommand(0x1, a, 1);
+	
+	// Saves pairing info in Joy-Con
 	a[0] = 0x03;
-	SendCommand(0x1, a, 1);
+	SendSubCommand(0x1, a, 1);
+
+	// Subcommand 0x30: Set player lights
 	a[0] = Leds;
-	SendCommand(0x30, a, 1);
-	if (bImuEnabled) {
-		SendCommand(0x40, new uint8[1]{ 0x1 }, 1);
-	} else {
-		SendCommand(0x40, new uint8[1]{ 0x0 }, 1);
-	}
-	SendCommand(0x3, new uint8[1]{ 0x30 }, 1);
-	SendCommand(0x48, new uint8[1]{ 0x1 }, 1);
+	SendSubCommand(0x30, a, 1);
+	
+	// Subcommand 0x40: Enable IMU (6-Axis sensor)
+	a[0] = bImuEnabled ? 0x1 : 0x0;
+	SendSubCommand(0x40, a, 1);
+	
+	// Subcommand 0x03: Set input report mode
+    // 0x30 - Standard full mode. Pushes current state @60Hz
+	SendSubCommand(0x3, new uint8[1]{ 0x30 }, 1);
+	
+	// Subcommand 0x48: Enable vibration
+	SendSubCommand(0x48, new uint8[1]{ 0x1 }, 1);
 }
 
 void FJoyConController::Update() {
@@ -115,10 +128,22 @@ void FJoyConController::Pool() {
 void FJoyConController::Detach() {
 	bStopPolling = true;
 	if (State > EJoyConState::No_JoyCons) {
-		SendCommand(0x30, new uint8[1]{ 0x0 }, 1);
-		SendCommand(0x40, new uint8[1]{ 0x0 }, 1);
-		SendCommand(0x48, new uint8[1]{ 0x0 }, 1);
-		SendCommand(0x3, new uint8[1]{ 0x3f }, 1);
+		// Subcommand 0x30: Set player lights
+		uint8 a[] = { 0x0 };
+		SendSubCommand(0x30, a, 1);
+
+		// Subcommand 0x40: Enable IMU (6-Axis sensor)
+		a[0] = 0x0;
+		SendSubCommand(0x40, a, 1);
+
+		// Subcommand 0x48: Enable vibration
+		a[0] = 0x0;
+		SendSubCommand(0x48, a, 1);
+
+		// Subcommand 0x03: Set input report mode
+        // 0x3f - Simple HID mode. Pushes updates with every button press
+		a[0] = 0x3f;
+		SendSubCommand(0x3, a, 1);
 	}
 	State = EJoyConState::Not_Attached;
 }
@@ -379,7 +404,7 @@ void FJoyConController::CenterSticks(uint16 Values[]) {
 	}
 }
 
-uint8* FJoyConController::SendCommand(const uint8 Sc, uint8 TempBuf[], const uint8 Len) {
+uint8* FJoyConController::SendSubCommand(const uint8 Sc, uint8 TempBuf[], const uint8 Len) {
 	const auto Buf = new uint8[ReportLen];
 	const auto Response = new uint8[ReportLen];
 	ArrayCopy(DefaultBuf, 0, Buf, 2, 8);
@@ -400,7 +425,7 @@ uint8* FJoyConController::ReadSpi(const uint8 Address1, const uint8 Address2, co
 	auto Buf = new uint8[Len + 20];
 
 	for (auto i = 0; i < 100; ++i) {
-		Buf = SendCommand(0x10, TBuf, 5);
+		Buf = SendSubCommand(0x10, TBuf, 5);
 		if (Buf[15] == Address2 && Buf[16] == Address1) {
 			break;
 		}
@@ -410,11 +435,13 @@ uint8* FJoyConController::ReadSpi(const uint8 Address1, const uint8 Address2, co
 }
 
 void FJoyConController::ArrayCopy(uint8* SourceArray, const int SourceIndex, uint8* DestinationArray, const int DestinationIndex, const int Length) {
-	std::copy(SourceArray + SourceIndex, SourceArray + SourceIndex + Length, DestinationArray + DestinationIndex);
+	memcpy(DestinationArray + DestinationIndex, SourceArray + SourceIndex, Length);
+	//std::copy(SourceArray + SourceIndex, SourceArray + SourceIndex + Length, DestinationArray + DestinationIndex);
 }
 
 void FJoyConController::ArrayCopy(const uint8* SourceArray, const int SourceIndex, uint8* DestinationArray, const int DestinationIndex, const int Length) {
-	std::copy(SourceArray + SourceIndex, SourceArray + SourceIndex + Length, DestinationArray + DestinationIndex);
+	memcpy(DestinationArray + DestinationIndex, SourceArray + SourceIndex, Length);
+	//std::copy(SourceArray + SourceIndex, SourceArray + SourceIndex + Length, DestinationArray + DestinationIndex);
 }
 
 bool FJoyConController::Init() {

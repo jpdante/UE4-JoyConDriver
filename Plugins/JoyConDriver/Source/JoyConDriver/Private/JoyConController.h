@@ -38,9 +38,11 @@ struct FReport {
 	}
 
 	void CopyBuffer(uint8* DestinationArray) const {
-		for (auto i = 0; i < 49; ++i) {
+		// Replace for with memcpy and report length(49)
+		memcpy(DestinationArray, ReportData, 49);
+		/*for (auto i = 0; i < 49; ++i) {
 			DestinationArray[i] = ReportData[i];
-		}
+		}*/
 	}
 };
 
@@ -73,7 +75,7 @@ private:
 	int32 ProcessButtonsAndStick(uint8 ReportBuf[]);
 	void CenterSticks(uint16 Values[]);
 
-	uint8* SendCommand(uint8 Sc, uint8 TempBuf[], uint8 Len);
+	uint8* SendSubCommand(uint8 Sc, uint8 TempBuf[], uint8 Len);
 	uint8* ReadSpi(uint8 Address1, uint8 Address2, uint32_t Len);
 
 	static void ArrayCopy(uint8* SourceArray, int SourceIndex, uint8* DestinationArray, int DestinationIndex, int Length);

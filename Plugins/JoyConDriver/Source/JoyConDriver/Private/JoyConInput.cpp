@@ -171,6 +171,7 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 		}
 	}
 	hid_device_info* Device = Devices;
+	int ControllerId = 0;
 	while (Device != nullptr) {
 		if (Device->product_id == 0x2006 || Device->product_id == 0x2007) {
 			FString SerialNumber(Device->serial_number);
@@ -199,13 +200,14 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 				FString(Device->path),
 				FString(Device->product_string),
 				FString(Device->serial_number),
-				GetNextControllerId(),
+				ControllerId,
 				Device->usage,
 				Device->usage_page,
 				IsLeft,
 				IsConnected
 			);
 			Data->Add(JoyConInformation);
+			ControllerId++;
 		}
 		Device = Device->next;
 	}
@@ -243,7 +245,7 @@ bool FJoyConInput::ResumeJoyConConnection() {
 	return Success;
 }
 
-bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerIndex) {
+bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerId) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
 	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
@@ -252,104 +254,92 @@ bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, con
 	FJoyConController* Controller = new FJoyConController(JoyConInformation, Handle, UseImu, UseLocalize, Alpha, JoyConInformation.IsLeft);
 	Controllers.Add(Controller);
 	Controller->JoyConInformation.IsConnected = true;
-	Controller->JoyConInformation.ControllerId = Controllers.IndexOfByKey(Controller);
-	ControllerIndex = Controller->JoyConInformation.ControllerId;
+	Controller->JoyConInformation.ControllerId = GetNextControllerId();
+	ControllersMap.Add(Controller->JoyConInformation.ControllerId, Controller);
+	ControllerId = Controller->JoyConInformation.ControllerId;
 	return true;
 }
 
-bool FJoyConInput::AttachJoyCon(const int ControllerIndex, const int GripIndex) {
+bool FJoyConInput::AttachJoyCon(const int ControllerId, const int GripIndex) {
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
 	if (GripIndex < 0 || GripIndex > 7) return false;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex]->JoyConInformation.IsAttached) return false;
+	if (Controller->JoyConInformation.IsAttached) return false;
 	uint8 Leds = 0x0;
 	Leds |= static_cast<uint8>(0x1 << GripIndex);
-	Grips[GripIndex].Controllers.Add(Controllers[ControllerIndex]);
-	Controllers[ControllerIndex]->Attach(Leds);
-	Controllers[ControllerIndex]->StartListenThread();
-	Controllers[ControllerIndex]->JoyConInformation.IsAttached = true;
+	Grips[GripIndex].Controllers.Add(Controller);
+	Controller->Attach(Leds);
+	Controller->StartListenThread();
+	Controller->JoyConInformation.IsAttached = true;
 	return true;
 }
 
-bool FJoyConInput::DisconnectJoyCon(const int ControllerIndex) {
+bool FJoyConInput::DisconnectJoyCon(const int ControllerId) {
 	if (!HidInitialized) return false;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex] == nullptr) {
-		Controllers.RemoveAt(ControllerIndex);
-		return false;
-	}
-	if (Controllers[ControllerIndex]->JoyConInformation.IsAttached) return false;
-	Controllers.RemoveAt(ControllerIndex);
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	if (Controller->JoyConInformation.IsAttached) return false;
+	Controllers.RemoveAt(Controllers.IndexOfByKey(Controller));
+	ControllersMap.Remove(ControllerId);
+	Controller->Stop();
+	delete Controller;
 	return true;
 }
 
-bool FJoyConInput::DetachJoyCon(const int ControllerIndex) {
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
+bool FJoyConInput::DetachJoyCon(const int ControllerId) {
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
 	for (int i = 0; i < 8; i++) {
-		if (Grips[i].ContainsController(Controllers[ControllerIndex]->JoyConInformation)) {
-			Grips[i].Controllers.Remove(Controllers[ControllerIndex]);
-			Controllers[ControllerIndex]->Detach();
-			Controllers[ControllerIndex]->JoyConInformation.IsAttached = false;
+		if (Grips[i].ContainsController(Controller->JoyConInformation)) {
+			Grips[i].Controllers.Remove(Controller);
+			Controller->Detach();
+			Controller->JoyConInformation.IsAttached = false;
 			return true;
 		}
 	}
 	return false;
 }
 
-bool FJoyConInput::GetJoyConAccelerometer(const int ControllerIndex, FVector& Out) {
+bool FJoyConInput::GetJoyConAccelerometer(const int ControllerId, FVector& Out) {
 	if (!HidInitialized) return false;
 	Out = FVector::ZeroVector;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex] == nullptr) {
-		Controllers.RemoveAt(ControllerIndex);
-		return false;
-	}
-	Out = Controllers[ControllerIndex]->GetAccelerometer();
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	Out = Controller->GetAccelerometer();
 	return true;
 }
 
-bool FJoyConInput::GetJoyConGyroscope(const int ControllerIndex, FVector& Out) {
+bool FJoyConInput::GetJoyConGyroscope(const int ControllerId, FVector& Out) {
 	if (!HidInitialized) return false;
 	Out = FVector::ZeroVector;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex] == nullptr) {
-		Controllers.RemoveAt(ControllerIndex);
-		return false;
-	}
-	Out = Controllers[ControllerIndex]->GetGyroscope();
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	Out = Controller->GetGyroscope();
 	return true;
 }
 
-bool FJoyConInput::GetJoyConVector(const int ControllerIndex, FRotator& Out) {
+bool FJoyConInput::GetJoyConVector(const int ControllerId, FRotator& Out) {
 	if (!HidInitialized) return false;
 	Out = FRotator::ZeroRotator;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex] == nullptr) {
-		Controllers.RemoveAt(ControllerIndex);
-		return false;
-	}
-	Out = Controllers[ControllerIndex]->GetVector();
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	Out = Controller->GetVector();
 	return true;
 }
 
-bool FJoyConInput::ReCenterJoyCon(const int ControllerIndex) {
+bool FJoyConInput::ReCenterJoyCon(const int ControllerId) {
 	if (!HidInitialized) return false;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex] == nullptr) {
-		Controllers.RemoveAt(ControllerIndex);
-		return false;
-	}
-	Controllers[ControllerIndex]->ReCenter();
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	Controller->ReCenter();
 	return true;
 }
 
-bool FJoyConInput::SetJoyConFilterCoefficient(const int ControllerIndex, const float Coefficient) {
+bool FJoyConInput::SetJoyConFilterCoefficient(const int ControllerId, const float Coefficient) {
 	if (!HidInitialized) return false;
-	if (ControllerIndex + 1 > Controllers.Num() || ControllerIndex < 0) return false;
-	if (Controllers[ControllerIndex] == nullptr) {
-		Controllers.RemoveAt(ControllerIndex);
-		return false;
-	}
-	Controllers[ControllerIndex]->SetFilterCoefficient(Coefficient);
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	Controller->SetFilterCoefficient(Coefficient);
 	return true;
 }
 
@@ -447,14 +437,12 @@ float FJoyConInput::GetHapticAmplitudeScale() const {
 	return 1.f;
 }
 
-int FJoyConInput::GetNextControllerId() {
+int FJoyConInput::GetNextControllerId() const {
+	TArray<int> Keys;
 	int NextId = 0;
-	for (int i = 0; i < Controllers.Num(); i++) {
-		for (FJoyConController* Controller : Controllers) {
-			if (NextId == Controller->JoyConInformation.ControllerId) {
-				NextId++;
-			}
-		}
+	ControllersMap.GetKeys(Keys);
+	for (int Key : Keys) {
+		if (Key == NextId) NextId++;
 	}
 	return NextId;
 }

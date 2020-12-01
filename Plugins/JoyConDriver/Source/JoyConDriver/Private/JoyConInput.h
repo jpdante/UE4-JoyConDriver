@@ -34,23 +34,23 @@ public:
 
 	bool ResumeJoyConConnection();
 
-	bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerIndex);
+	bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerId);
 
-	bool AttachJoyCon(int ControllerIndex, int GripIndex);
+	bool AttachJoyCon(int ControllerId, int GripIndex);
 
-	bool DisconnectJoyCon(int ControllerIndex);
+	bool DisconnectJoyCon(int ControllerId);
 
-	bool DetachJoyCon(int ControllerIndex);
+	bool DetachJoyCon(int ControllerId);
 
-	bool GetJoyConAccelerometer(int ControllerIndex, FVector& Out);
+	bool GetJoyConAccelerometer(int ControllerId, FVector& Out);
 
-	bool GetJoyConGyroscope(int ControllerIndex, FVector& Out);
+	bool GetJoyConGyroscope(int ControllerId, FVector& Out);
 
-	bool GetJoyConVector(int ControllerIndex, FRotator& Out);
+	bool GetJoyConVector(int ControllerId, FRotator& Out);
 
-	bool ReCenterJoyCon(int ControllerIndex);
+	bool ReCenterJoyCon(int ControllerId);
 	
-	bool SetJoyConFilterCoefficient(int ControllerIndex, float Coefficient);
+	bool SetJoyConFilterCoefficient(int ControllerId, float Coefficient);
 
 	bool SetJoyConGripMode(int GripIndex, EGripMode GripMode);
 
@@ -75,7 +75,7 @@ public:
 	virtual float GetHapticAmplitudeScale() const override;
 
 private:
-	int GetNextControllerId();
+	int GetNextControllerId() const;
 	static FName GetRightJoyConKeyName(int Index, FName OriginalKeyName);
 	void SendButtonEvents(bool bButtonPressed, float CurrentTime, int GripIndex, FName KeyName, FJoyConButtonState *ButtonState) const;
 	void SendAnalogEvents(bool bIsLeft, int GripIndex, FVector2D StickVector, FJoyConAnalogState* AnalogState) const;
@@ -90,5 +90,6 @@ private:
 	
 	bool HidInitialized;
 	TArray<FJoyConController*> Controllers;
+    TMap<int, FJoyConController*> ControllersMap;
 	FJoyConGrip Grips[8];
 };

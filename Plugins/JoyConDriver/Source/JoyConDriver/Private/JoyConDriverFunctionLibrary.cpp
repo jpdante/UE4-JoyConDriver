@@ -16,42 +16,42 @@ void UJoyConDriverFunctionLibrary::ResumeJoyConConnection(bool& Success) {
 	}
 }
 
-void UJoyConDriverFunctionLibrary::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, bool& Success, int& ControllerIndex, const float Alpha) {
+void UJoyConDriverFunctionLibrary::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, bool& Success, int& ControllerId, const float Alpha) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().ConnectJoyCon(JoyConInformation, UseImu, UseLocalize, Alpha, ControllerIndex);
+		Success = JoyConInputApi->Get().ConnectJoyCon(JoyConInformation, UseImu, UseLocalize, Alpha, ControllerId);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::AttachJoyCon(const int ControllerIndex, const int GripIndex, bool& Success) {
+void UJoyConDriverFunctionLibrary::AttachJoyCon(const int ControllerId, const int GripIndex, bool& Success) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().AttachJoyCon(ControllerIndex, GripIndex);
+		Success = JoyConInputApi->Get().AttachJoyCon(ControllerId, GripIndex);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::DisconnectJoyCon(const int ControllerIndex, bool& Success) {
+void UJoyConDriverFunctionLibrary::DisconnectJoyCon(const int ControllerId, bool& Success) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().DisconnectJoyCon(ControllerIndex);
+		Success = JoyConInputApi->Get().DisconnectJoyCon(ControllerId);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::DetachJoyCon(const int ControllerIndex, bool& Success) {
+void UJoyConDriverFunctionLibrary::DetachJoyCon(const int ControllerId, bool& Success) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().DetachJoyCon(ControllerIndex);
+		Success = JoyConInputApi->Get().DetachJoyCon(ControllerId);
 		break;
 	}
 }
@@ -103,55 +103,55 @@ void UJoyConDriverFunctionLibrary::GetConnectedJoyCons(TArray<FJoyConInformation
 	}
 }
 
-void UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(const int ControllerIndex, bool& Success, FVector& Accelerometer) {
+void UJoyConDriverFunctionLibrary::GetJoyConAccelerometer(const int ControllerId, bool& Success, FVector& Accelerometer) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	Accelerometer = FVector::ZeroVector;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().GetJoyConAccelerometer(ControllerIndex, Accelerometer);
+		Success = JoyConInputApi->Get().GetJoyConAccelerometer(ControllerId, Accelerometer);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::GetJoyConGyroscope(const int ControllerIndex, bool& Success, FVector& Gyroscope) {
+void UJoyConDriverFunctionLibrary::GetJoyConGyroscope(const int ControllerId, bool& Success, FVector& Gyroscope) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	Gyroscope = FVector::ZeroVector;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().GetJoyConGyroscope(ControllerIndex, Gyroscope);
+		Success = JoyConInputApi->Get().GetJoyConGyroscope(ControllerId, Gyroscope);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::GetJoyConVector(const int ControllerIndex, bool& Success, FRotator& Vector) {
+void UJoyConDriverFunctionLibrary::GetJoyConVector(const int ControllerId, bool& Success, FRotator& Vector) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	Vector = FRotator::ZeroRotator;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().GetJoyConVector(ControllerIndex, Vector);
+		Success = JoyConInputApi->Get().GetJoyConVector(ControllerId, Vector);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::ReCenterJoyCon(const int ControllerIndex, bool& Success) {
+void UJoyConDriverFunctionLibrary::ReCenterJoyCon(const int ControllerId, bool& Success) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().ReCenterJoyCon(ControllerIndex);
+		Success = JoyConInputApi->Get().ReCenterJoyCon(ControllerId);
 		break;
 	}
 }
 
-void UJoyConDriverFunctionLibrary::SetJoyConFilterCoefficient(const int ControllerIndex, const float Coefficient, bool& Success) {
+void UJoyConDriverFunctionLibrary::SetJoyConFilterCoefficient(const int ControllerId, const float Coefficient, bool& Success) {
 	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
 	Success = false;
 	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
-		Success = JoyConInputApi->Get().SetJoyConFilterCoefficient(ControllerIndex, Coefficient);
+		Success = JoyConInputApi->Get().SetJoyConFilterCoefficient(ControllerId, Coefficient);
 		break;
 	}
 }
