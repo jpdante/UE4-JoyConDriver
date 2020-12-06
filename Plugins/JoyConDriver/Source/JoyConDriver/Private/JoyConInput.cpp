@@ -349,6 +349,14 @@ bool FJoyConInput::SetJoyConGripMode(const int GripIndex, const EGripMode GripMo
 	return true;
 }
 
+bool FJoyConInput::SetJoyConRumble(const int ControllerId, const float LowFrequency, const float HighFrequency, const float Amplitude, const int Time) {
+	if (!HidInitialized) return false;
+	if (!ControllersMap.Contains(ControllerId)) return false;
+	FJoyConController* Controller = ControllersMap[ControllerId];
+	Controller->SetRumble(LowFrequency, HighFrequency, Amplitude, Time);
+	return true;
+}
+
 void FJoyConInput::Tick(float DeltaTime) {
 
 }
@@ -426,15 +434,22 @@ ETrackingStatus FJoyConInput::GetControllerTrackingStatus(const int32 Controller
 	return ETrackingStatus::NotTracked;
 }
 
-void FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {}
+void FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {
+	return;
+	if (ControllerId < 0 || ControllerId > 7) return;
+	for (FJoyConController* Controller : Grips[ControllerId].Controllers) {
+		if (Values.Frequency > 160) Controller->SetRumble(0, Values.Frequency, Values.Amplitude);
+		else Controller->SetRumble(Values.Frequency, 0, Values.Amplitude);
+	}
+}
 
 void FJoyConInput::GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const {
-	MinFrequency = 0.f;
-	MaxFrequency = 1.f;
+	MinFrequency = 0.0f;
+	MaxFrequency = 1.0f;
 }
 
 float FJoyConInput::GetHapticAmplitudeScale() const {
-	return 1.f;
+	return 1.0f;
 }
 
 int FJoyConInput::GetNextControllerId() const {

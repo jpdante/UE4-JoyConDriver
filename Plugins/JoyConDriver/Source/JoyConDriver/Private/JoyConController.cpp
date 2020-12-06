@@ -19,7 +19,8 @@ FJoyConController::FJoyConController(const FJoyConInformation TempJoyConInformat
 	FilterWeight(0),
 	Err(0),
 	Thread(nullptr),
-    Buttons{} {
+    Buttons{},
+    RumbleObj(160, 320, 0, 0) {
 	HidHandle = Device;
 	JoyConInformation = TempJoyConInformation;
 	bIsLeft = IsLeft;
@@ -98,18 +99,18 @@ void FJoyConController::Update() {
 		TsDequeue = ReportBuf[1];
 		TsPrevious = Rep.GetTime();
 		ProcessButtonsAndStick(ReportBuf);
-		/*if (!_rumbleObj.timedRumble) return;
-		if (_rumbleObj.time < 0) {
-			_rumbleObj.SetVals(160, 320, 0, 0);
+		if (!RumbleObj.TimedRumble) return;
+		if (RumbleObj.Time < 0) {
+			RumbleObj.SetValues(160, 320, 0, 0);
 		} else {
-			_rumbleObj.time -= Time.deltaTime;
-		}*/
+			RumbleObj.Time -= FApp::GetDeltaTime();
+		}
 	}
 }
 
 void FJoyConController::Pool() {
 	while (!bStopPolling && State > EJoyConState::No_JoyCons) {
-		//SendRumble(_rumbleObj.GetData());
+		SendRumbleData();
 		int32 a = ReceiveRaw();
 		a = ReceiveRaw();
 		if (a > 0) {
@@ -228,6 +229,13 @@ void FJoyConController::ReCenter() {
 	FirstImuPacket = true;
 }
 
+void FJoyConController::SetRumble(const float LowFrequency, const float HighFrequency, const float Amplitude, const int Time) {
+	if (State <= Attached) return;
+	if (RumbleObj.TimedRumble == false || RumbleObj.Time < 0) {
+		RumbleObj.SetValues(LowFrequency, HighFrequency, Amplitude, Time);
+	}
+}
+
 void FJoyConController::SetFilterCoefficient(const float Coefficient) {
 	FilterWeight = Coefficient;
 }
@@ -284,6 +292,18 @@ void FJoyConController::DumpCalibrationData() {
 	GyrNeutral[1] = static_cast<uint16>(Buf[5] | ((Buf[6] << 8) & 0xff00));
 	GyrNeutral[2] = static_cast<uint16>(Buf[7] | ((Buf[8] << 8) & 0xff00));
 }
+
+void FJoyConController::SendRumbleData() {
+	RumbleObj.CalculateRumbleData();
+	const auto Buf = new uint8[ReportLen];
+	Buf[0] = 0x10;
+	Buf[1] = GlobalCount;
+	if (GlobalCount == 0xf) GlobalCount = 0;
+	else ++GlobalCount;
+	ArrayCopy(RumbleObj.RumbleData, 0, Buf, 2, 8);
+	hid_write(HidHandle, Buf, ReportLen);
+}
+
 
 int FJoyConController::ReceiveRaw() {
 	if (HidHandle == nullptr) return -2;

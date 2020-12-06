@@ -54,6 +54,8 @@ public:
 
 	bool SetJoyConGripMode(int GripIndex, EGripMode GripMode);
 
+	bool SetJoyConRumble(int ControllerId, float LowFrequency, float HighFrequency, float Amplitude, int Time);
+
 	// IInputDevice overrides
 	virtual void Tick(float DeltaTime) override;
 	virtual void SendControllerEvents() override;

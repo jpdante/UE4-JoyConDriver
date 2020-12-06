@@ -37,6 +37,7 @@ public:
 	virtual bool ReCenterJoyCon(int ControllerId) const override;
 	virtual bool SetJoyConFilterCoefficient(int ControllerId, float Coefficient) const override;
 	virtual bool SetJoyConGripMode(int GripIndex, uint8 GripMode) const override;
+	virtual bool SetJoyConRumble(int ControllerId, float LowFrequency, float HighFrequency, float Amplitude, int Time) const override;
 };
 
 #undef LOCTEXT_NAMESPACE

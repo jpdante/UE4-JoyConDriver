@@ -46,6 +46,91 @@ struct FReport {
 	}
 };
 
+struct FRumble {
+	float HighFrequency;
+	float LowFrequency;
+	float Amplitude;
+	float Time;
+	bool TimedRumble;
+	uint8 RumbleData[8];
+
+	FRumble(): HighFrequency(0), LowFrequency(0), Amplitude(0), Time(0), TimedRumble(false), RumbleData{} {
+	}
+
+	FRumble(const float HighFrequencyTemp, const float LowFrequencyTemp, const float AmplitudeTemp, const int TimeTemp): RumbleData{} {
+		HighFrequency = HighFrequencyTemp;
+		LowFrequency = LowFrequencyTemp;
+		Amplitude = AmplitudeTemp;
+		TimedRumble = false;
+		Time = 0;
+		if (Time != 0) {
+			Time = TimeTemp / 1000.0f;
+			TimedRumble = true;
+		}
+	}
+
+	void SetValues(const float HighFrequencyTemp, const float LowFrequencyTemp, const float AmplitudeTemp, const int TimeTemp) {
+		HighFrequency = HighFrequencyTemp;
+		LowFrequency = LowFrequencyTemp;
+		Amplitude = AmplitudeTemp;
+		TimedRumble = false;
+		Time = 0;
+		if (Time != 0) {
+			Time = TimeTemp / 1000.0f;
+			TimedRumble = true;
+		}
+	}
+	
+	static float Clamp(const float X, const float Min, const float Max) {
+		if (X < Min) return Min;
+		if (X > Max) return Max;
+		return X;
+	}
+
+	void CalculateRumbleData() {
+		//uint8 *RumbleData = static_cast<uint8*>(calloc(8, sizeof(uint8)));
+		if (Amplitude == 0.0f) {
+			RumbleData[0] = 0x0;
+			RumbleData[1] = 0x1;
+			RumbleData[2] = 0x40;
+			RumbleData[3] = 0x40;
+		} else {
+			LowFrequency = Clamp(LowFrequency, 40.875885f, 626.286133f);
+			Amplitude = Clamp(Amplitude, 0.0f, 1.0f);
+			HighFrequency = Clamp(HighFrequency, 81.75177f, 1252.572266f);
+			const uint16 HighFrequencyLocal = static_cast<uint16>((FMath::RoundToInt(32.0f * FMath::LogX(HighFrequency * 0.1f, 2)) - 0x60) * 4);
+			const uint8 LowFrequencyLocal = static_cast<uint8>(FMath::RoundToInt(32.0f * FMath::LogX(LowFrequency * 0.1f, 2)) - 0x40);
+			uint8 HighFrequencyAmplitude;
+			if (Amplitude == 0) HighFrequencyAmplitude = 0;
+			else if (Amplitude < 0.117) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(Amplitude * 1000, 2) * 32) - 0x60) / (5 - FMath::Pow(Amplitude, 2)) - 1);
+			else if (Amplitude < 0.23) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(Amplitude * 1000, 2) * 32) - 0x60) - 0x5c);
+			else HighFrequencyAmplitude = static_cast<uint8>((((FMath::LogX(Amplitude * 1000, 2) * 32) - 0x60) * 2) - 0xf6);
+
+			uint16 LowFrequencyAmplitude = static_cast<uint16>(FMath::RoundToInt(HighFrequencyAmplitude) * .5);
+			const uint8 Parity = static_cast<uint8>(LowFrequencyAmplitude % 2);
+			if (Parity > 0) {
+				--LowFrequencyAmplitude;
+			}
+
+			LowFrequencyAmplitude = static_cast<uint16>(LowFrequencyAmplitude >> 1);
+			LowFrequencyAmplitude += 0x40;
+			if (Parity > 0) LowFrequencyAmplitude |= 0x8000;
+			RumbleData[0] = static_cast<uint8>(HighFrequencyLocal & 0xff);
+			RumbleData[1] = static_cast<uint8>((HighFrequencyLocal >> 8) & 0xff);
+			RumbleData[2] = LowFrequencyLocal;
+			RumbleData[3] = 0;
+			
+			RumbleData[1] += HighFrequencyLocal;
+			RumbleData[2] += static_cast<uint8>((LowFrequencyAmplitude >> 8) & 0xff);
+			RumbleData[3] += static_cast<uint8>(LowFrequencyAmplitude & 0xff);
+		}
+		for (int i = 0; i < 4; ++i) {
+			RumbleData[4 + i] = RumbleData[i];
+		}
+		//return RumbleData;
+	}
+};
+
 class FJoyConController : public FRunnable {
 
 public:
@@ -62,6 +147,7 @@ public:
 	FVector GetAccelerometer() const;
 	FRotator GetVector() const;
 	void ReCenter();
+	void SetRumble(float LowFrequency, float HighFrequency, float Amplitude, int Time = 0);
 
 	void SetFilterCoefficient(float Coefficient);
 
@@ -69,6 +155,7 @@ public:
 
 private:
 	void DumpCalibrationData();
+	void SendRumbleData();
 	int32 ReceiveRaw();
 	void ExtractImuValues(uint8 ReportBuf[], int32 N);
 	int32 ProcessImu(uint8 ReportBuf[]);
@@ -129,6 +216,7 @@ private:
 	FVector Wg;
 	FVector DTheta;
 	FVector IB2;
+	FRumble RumbleObj;
 
 	FRunnableThread* Thread;
 	FCriticalSection Mutex;

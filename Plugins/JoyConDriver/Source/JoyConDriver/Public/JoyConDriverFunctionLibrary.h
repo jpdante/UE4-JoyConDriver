@@ -57,4 +57,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Recenter IMU"))
 		static void SetJoyConGripMode(int GripIndex, EGripMode GripMode, bool& Success);
+
+	UFUNCTION(BlueprintCallable, Category = "JoyCon", meta = (Keywords = "Nintendo Switch Joy Con Cons JoyCon JoyCons Recenter IMU"))
+		static void SetJoyConRumble(int ControllerId, float LowFrequency, float HighFrequency, float Amplitude, int Time, bool& Success);
 };

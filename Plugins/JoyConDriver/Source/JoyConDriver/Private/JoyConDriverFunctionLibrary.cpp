@@ -165,3 +165,13 @@ void UJoyConDriverFunctionLibrary::SetJoyConGripMode(const int GripIndex, const 
 		break;
 	}
 }
+
+void UJoyConDriverFunctionLibrary::SetJoyConRumble(const int ControllerId, const float LowFrequency, const float HighFrequency, const float Amplitude, const int Time, bool& Success) {
+	TArray<FJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<FJoyConDriverModule>(FJoyConDriverModule::GetModularFeatureName());
+	Success = false;
+	for (FJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
+		if (JoyConInputApi == nullptr) continue;
+		Success = JoyConInputApi->Get().SetJoyConRumble(ControllerId, LowFrequency, HighFrequency, Amplitude, Time);
+		break;
+	}
+}

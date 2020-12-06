@@ -68,6 +68,10 @@ bool FJoyConDriverModule::SetJoyConGripMode(const int GripIndex, const uint8 Gri
 	return JoyConInputDevice.Pin()->SetJoyConGripMode(GripIndex, static_cast<EGripMode>(GripMode));
 }
 
+bool FJoyConDriverModule::SetJoyConRumble(const int ControllerId, const float LowFrequency, const float HighFrequency, const float Amplitude, const int Time) const {
+	return JoyConInputDevice.Pin()->SetJoyConRumble(ControllerId, LowFrequency, HighFrequency, Amplitude, Time);
+}
+
 TSharedPtr<class IInputDevice> FJoyConDriverModule::CreateInputDevice(const TSharedRef<FGenericApplicationMessageHandler>& InMessageHandler) {
 	TSharedPtr<FJoyConInput> InputDevice(new FJoyConInput(InMessageHandler));
 	JoyConInputDevice = InputDevice;

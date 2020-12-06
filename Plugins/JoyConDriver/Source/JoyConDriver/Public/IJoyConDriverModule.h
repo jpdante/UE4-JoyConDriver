@@ -52,4 +52,5 @@ public:
 	virtual bool ReCenterJoyCon(int ControllerId) const = 0;
 	virtual bool SetJoyConFilterCoefficient(int ControllerId, float Coefficient) const = 0;
 	virtual bool SetJoyConGripMode(int GripIndex, uint8 GripMode) const = 0;
+	virtual bool SetJoyConRumble(int ControllerId, float LowFrequency, float HighFrequency, float Amplitude, int Time) const = 0;
 };
