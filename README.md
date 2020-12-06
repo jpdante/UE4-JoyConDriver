@@ -22,6 +22,4 @@ The project is still in alpha, so I would say that it is not yet simple enough.
 * [Blueprint Structures](https://github.com/jpdante/UE4-JoyConDriver/wiki/Blueprint-Structures)
 
 ## Known issues
-* Rumble is not yet supported.
-* When connecting a Joy Con in the editor it will remain connected even after the simulation/play is over and will stop working when playing again, the only solution is to detach and disconnect all Joy Cons when starting the game and connect them again.
-* The accelerometer, gyroscope and IMU don't seem to be updating at 60 hz.
+* When connecting a Joy Con in the editor it will remain connected even after the simulation/play is over and will stop working when playing again, the only solution is to resume de connection with ResumeConnection node.
