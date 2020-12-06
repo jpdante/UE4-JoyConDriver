@@ -80,6 +80,7 @@ void FJoyConController::Attach(const uint8 Leds) {
 void FJoyConController::Update() {
 	if (bStopPolling || State <= EJoyConState::No_JoyCons) return;
 	const auto ReportBuf = new uint8[ReportLen];
+	ReportBuf[0] = 0x00;
 	while (!Reports.IsEmpty()) {
 		Mutex.Lock();
 		FReport Rep;
@@ -98,13 +99,13 @@ void FJoyConController::Update() {
 		}
 		TsDequeue = ReportBuf[1];
 		TsPrevious = Rep.GetTime();
-		ProcessButtonsAndStick(ReportBuf);
-		if (!RumbleObj.TimedRumble) return;
-		if (RumbleObj.Time < 0) {
-			RumbleObj.SetValues(160, 320, 0, 0);
-		} else {
-			RumbleObj.Time -= FApp::GetDeltaTime();
-		}
+	}
+	ProcessButtonsAndStick(ReportBuf);
+	if (!RumbleObj.TimedRumble) return;
+	if (RumbleObj.Time < 0) {
+		RumbleObj.SetValues(160, 320, 0, 0);
+	} else {
+		RumbleObj.Time -= FApp::GetDeltaTime();
 	}
 }
 

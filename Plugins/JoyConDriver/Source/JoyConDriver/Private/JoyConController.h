@@ -57,25 +57,25 @@ struct FRumble {
 	FRumble(): HighFrequency(0), LowFrequency(0), Amplitude(0), Time(0), TimedRumble(false), RumbleData{} {
 	}
 
-	FRumble(const float HighFrequencyTemp, const float LowFrequencyTemp, const float AmplitudeTemp, const int TimeTemp): RumbleData{} {
+	FRumble(const float LowFrequencyTemp, const float HighFrequencyTemp, const float AmplitudeTemp, const int TimeTemp): RumbleData{} {
 		HighFrequency = HighFrequencyTemp;
 		LowFrequency = LowFrequencyTemp;
 		Amplitude = AmplitudeTemp;
 		TimedRumble = false;
 		Time = 0;
-		if (Time != 0) {
+		if (TimeTemp != 0) {
 			Time = TimeTemp / 1000.0f;
 			TimedRumble = true;
 		}
 	}
 
-	void SetValues(const float HighFrequencyTemp, const float LowFrequencyTemp, const float AmplitudeTemp, const int TimeTemp) {
+	void SetValues(const float LowFrequencyTemp, const float HighFrequencyTemp, const float AmplitudeTemp, const int TimeTemp) {
 		HighFrequency = HighFrequencyTemp;
 		LowFrequency = LowFrequencyTemp;
 		Amplitude = AmplitudeTemp;
 		TimedRumble = false;
 		Time = 0;
-		if (Time != 0) {
+		if (TimeTemp != 0) {
 			Time = TimeTemp / 1000.0f;
 			TimedRumble = true;
 		}
@@ -98,13 +98,15 @@ struct FRumble {
 			LowFrequency = Clamp(LowFrequency, 40.875885f, 626.286133f);
 			Amplitude = Clamp(Amplitude, 0.0f, 1.0f);
 			HighFrequency = Clamp(HighFrequency, 81.75177f, 1252.572266f);
-			const uint16 HighFrequencyLocal = static_cast<uint16>((FMath::RoundToInt(32.0f * FMath::LogX(HighFrequency * 0.1f, 2)) - 0x60) * 4);
-			const uint8 LowFrequencyLocal = static_cast<uint8>(FMath::RoundToInt(32.0f * FMath::LogX(LowFrequency * 0.1f, 2)) - 0x40);
+			
+			const uint16 HighFrequencyLocal = static_cast<uint16>((FMath::RoundToInt(32.0f * FMath::LogX(2, HighFrequency * 0.1f)) - 0x60) * 4);
+			const uint8 LowFrequencyLocal = static_cast<uint8>(FMath::RoundToInt(32.0f * FMath::LogX(2, LowFrequency * 0.1f)) - 0x40);
+			
 			uint8 HighFrequencyAmplitude;
 			if (Amplitude == 0) HighFrequencyAmplitude = 0;
-			else if (Amplitude < 0.117) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(Amplitude * 1000, 2) * 32) - 0x60) / (5 - FMath::Pow(Amplitude, 2)) - 1);
-			else if (Amplitude < 0.23) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(Amplitude * 1000, 2) * 32) - 0x60) - 0x5c);
-			else HighFrequencyAmplitude = static_cast<uint8>((((FMath::LogX(Amplitude * 1000, 2) * 32) - 0x60) * 2) - 0xf6);
+			else if (Amplitude < 0.117) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(2, Amplitude * 1000) * 32) - 0x60) / (5 - FMath::Pow(Amplitude, 2)) - 1);
+			else if (Amplitude < 0.23) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(2, Amplitude * 1000) * 32) - 0x60) - 0x5c);
+			else HighFrequencyAmplitude = static_cast<uint8>((((FMath::LogX(2, Amplitude * 1000) * 32) - 0x60) * 2) - 0xf6);
 
 			uint16 LowFrequencyAmplitude = static_cast<uint16>(FMath::RoundToInt(HighFrequencyAmplitude) * .5);
 			const uint8 Parity = static_cast<uint8>(LowFrequencyAmplitude % 2);
