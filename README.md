@@ -25,7 +25,7 @@ The project is still in alpha, so I would say that it is not yet simple enough.
 ## Known issues
 * When connecting a Joy Con in the editor it will remain connected even after the simulation/play is over and will stop working when playing again, the only solution is to resume de connection with ResumeConnection node.
 
-## Copyright
+## Assets Copyright
 ### Nintendo Switch Inspired Controller (JoyCon Plus)
 Published on Jan 27, 2021 By Harry Felton (harryfelton)
 
