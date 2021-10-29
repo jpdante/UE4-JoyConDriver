@@ -20,6 +20,7 @@ The project is still in alpha, so I would say that it is not yet simple enough.
 * [Blueprint Events](https://github.com/jpdante/UE4-JoyConDriver/wiki/Blueprint-Events)
 * [Blueprint Functions](https://github.com/jpdante/UE4-JoyConDriver/wiki/Blueprint-Functions)
 * [Blueprint Structures](https://github.com/jpdante/UE4-JoyConDriver/wiki/Blueprint-Structures)
+* [CPP Functions](https://github.com/jpdante/UE4-JoyConDriver/wiki/CPP-Functions)
 
 ## Known issues
 * When connecting a Joy Con in the editor it will remain connected even after the simulation/play is over and will stop working when playing again, the only solution is to resume de connection with ResumeConnection node.
