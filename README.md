@@ -33,4 +33,4 @@ License: Commercial use is allowed, you must attribute the
 creator, you may remix this work and the remixed work should be
 made available under this license.
 
-[https://www.youmagine.com/designs/27960](https://www.youmagine.com/designs/27960])
+[https://www.youmagine.com/designs/27960](https://www.youmagine.com/designs/27960)
