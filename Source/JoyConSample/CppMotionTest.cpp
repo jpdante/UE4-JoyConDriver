@@ -8,7 +8,6 @@
 ACppMotionTest::ACppMotionTest() {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
@@ -17,6 +16,7 @@ void ACppMotionTest::BeginPlay() {
 	TArray<IJoyConDriverModule*> JoyConInputApis = IModularFeatures::Get().GetModularFeatureImplementations<IJoyConDriverModule>(IJoyConDriverModule::GetModularFeatureName());
 	for (IJoyConDriverModule* JoyConInputApi : JoyConInputApis) {
 		if (JoyConInputApi == nullptr) continue;
+		if (!JoyConInputApi->IsAvailable()) continue;
 		JoyConModule = JoyConInputApi;
 		break;
 	}
@@ -25,9 +25,8 @@ void ACppMotionTest::BeginPlay() {
 // Called every frame
 void ACppMotionTest::Tick(float DeltaTime) {
 	Super::Tick(DeltaTime);
-	if (JoyConModule == nullptr) return;
 	FRotator Rotation;
-	if(JoyConModule->GetJoyConVector(0, Rotation)) {
+	if(JoyConModule->Get().GetJoyConVector(0, Rotation)) {
 		SetActorRotation(Rotation);
 	}
 }

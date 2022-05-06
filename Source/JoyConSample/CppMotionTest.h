@@ -25,6 +25,6 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 public:
-	IJoyConDriverModule *JoyConModule;
+	IJoyConDriverModule* JoyConModule;
 
 };
