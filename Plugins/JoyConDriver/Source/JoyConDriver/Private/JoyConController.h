@@ -108,7 +108,7 @@ struct FRumble {
 			else if (Amplitude < 0.23) HighFrequencyAmplitude = static_cast<uint8>(((FMath::LogX(2, Amplitude * 1000) * 32) - 0x60) - 0x5c);
 			else HighFrequencyAmplitude = static_cast<uint8>((((FMath::LogX(2, Amplitude * 1000) * 32) - 0x60) * 2) - 0xf6);
 
-			uint16 LowFrequencyAmplitude = static_cast<uint16>(FMath::RoundToInt(HighFrequencyAmplitude) * .5);
+			uint16 LowFrequencyAmplitude = static_cast<uint16>(FMath::RoundToInt(static_cast<float>(HighFrequencyAmplitude)) * .5);
 			const uint8 Parity = static_cast<uint8>(LowFrequencyAmplitude % 2);
 			if (Parity > 0) {
 				--LowFrequencyAmplitude;
@@ -136,15 +136,15 @@ struct FRumble {
 class FJoyConController : public FRunnable {
 
 public:
-	FJoyConController(FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft);
-	~FJoyConController();
+	FJoyConController(const FJoyConInformation& TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft);
+	virtual ~FJoyConController() override;
 
 	void Attach(uint8 Leds);
 	void Update();
 	void Pool();
 	void Detach();
 
-	FVector2D GetStick();
+	FVector2D GetStick() const;
 	FVector GetGyroscope() const;
 	FVector GetAccelerometer() const;
 	FRotator GetVector() const;

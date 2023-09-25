@@ -10,7 +10,7 @@
 #include "HAL/RunnableThread.h"
 //#include "Windows/HideWindowsPlatformTypes.h"
 
-FJoyConController::FJoyConController(const FJoyConInformation TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
+FJoyConController::FJoyConController(const FJoyConInformation& TempJoyConInformation, hid_device* Device, const bool UseImu, const bool UseLocalize, float Alpha, const bool IsLeft) :
 	GlobalCount(0),
 	DeadZone(0),
 	Timestamp(0),
@@ -150,7 +150,8 @@ void FJoyConController::Detach() {
 	State = EJoyConState::Not_Attached;
 }
 
-FVector2D FJoyConController::GetStick() {
+FVector2D FJoyConController::GetStick() const
+{
 	return FVector2D(Stick[0], Stick[1]);
 }
 

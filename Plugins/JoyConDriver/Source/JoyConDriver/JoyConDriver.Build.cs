@@ -6,6 +6,7 @@ public class JoyConDriver : ModuleRules {
 	public JoyConDriver(ReadOnlyTargetRules Target) : base(Target) {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
+        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_2;
         bEnableUndefinedIdentifierWarnings = false;
 
         PublicIncludePaths.AddRange(new string[] {
