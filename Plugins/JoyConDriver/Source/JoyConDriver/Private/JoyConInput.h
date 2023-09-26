@@ -18,7 +18,7 @@ public:
 	FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >& InMessageHandler);
 
 	/** Clean everything up */
-	virtual ~FJoyConInput();
+	virtual ~FJoyConInput() override;
 
 	static void PreInit();
 
@@ -34,7 +34,7 @@ public:
 
 	bool ResumeJoyConConnection();
 
-	bool ConnectJoyCon(FJoyConInformation JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerId);
+	bool ConnectJoyCon(const FJoyConInformation& JoyConInformation, bool UseImu, bool UseLocalize, float Alpha, int& ControllerId);
 
 	bool AttachJoyCon(int ControllerId, int GripIndex);
 
@@ -79,8 +79,8 @@ public:
 private:
 	int GetNextControllerId() const;
 	static FName GetRightJoyConKeyName(int Index, FName OriginalKeyName);
-	void SendButtonEvents(bool bButtonPressed, float CurrentTime, int GripIndex, FName KeyName, FJoyConButtonState *ButtonState) const;
-	void SendAnalogEvents(bool bIsLeft, int GripIndex, FVector2D StickVector, FJoyConAnalogState* AnalogState) const;
+	void SendButtonEvents(bool bButtonPressed, float CurrentTime, FPlatformUserId GripUserId, FInputDeviceId DeviceId, FName KeyName, FJoyConButtonState *ButtonState) const;
+	void SendAnalogEvents(bool bIsLeft, FPlatformUserId GripUserId, FInputDeviceId DeviceId, FVector2D StickVector, FJoyConAnalogState* AnalogState) const;
 	
 private:
 	/** The recipient of motion controller input events */

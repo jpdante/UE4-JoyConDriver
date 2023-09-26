@@ -89,14 +89,14 @@ FJoyConInput::FJoyConInput(const TSharedRef< FGenericApplicationMessageHandler >
 		HidInitialized = false;
 		UE_LOG(LogTemp, Fatal, TEXT("HIDAPI failed to initialize"));
 	}
-	Grips[0].GripIndex = 0;
-	Grips[1].GripIndex = 1;
-	Grips[2].GripIndex = 2;
-	Grips[3].GripIndex = 3;
-	Grips[4].GripIndex = 4;
-	Grips[5].GripIndex = 5;
-	Grips[6].GripIndex = 6;
-	Grips[7].GripIndex = 7;
+	Grips[0].SetGripIndex(0);
+	Grips[1].SetGripIndex(1);
+	Grips[2].SetGripIndex(2);
+	Grips[3].SetGripIndex(3);
+	Grips[4].SetGripIndex(4);
+	Grips[5].SetGripIndex(5);
+	Grips[6].SetGripIndex(6);
+	Grips[7].SetGripIndex(7);
 	UE_LOG(LogTemp, Log, TEXT("JoyConDriver is initialized"));
 }
 
@@ -170,7 +170,7 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 			return Data;
 		}
 	}
-	hid_device_info* Device = Devices;
+	const hid_device_info* Device = Devices;
 	int ControllerId = 0;
 	while (Device != nullptr) {
 		if (Device->product_id == 0x2006 || Device->product_id == 0x2007) {
@@ -178,7 +178,7 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 			FString BluetoothPath(Device->path);
 			bool IsConnected = false;
 			if (Controllers.Num() > 0) {
-				for (FJoyConController* Controller : Controllers) {
+				for (const FJoyConController* Controller : Controllers) {
 					if (Controller->JoyConInformation.SerialNumber.Equals(SerialNumber) && Controller->JoyConInformation.BluetoothPath.Equals(BluetoothPath)) {
 						IsConnected = true;
 						break;
@@ -218,7 +218,7 @@ TArray<FJoyConInformation>* FJoyConInput::SearchJoyCons() {
 TArray<FJoyConInformation>* FJoyConInput::GetAttachedJoyCons() {
 	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
 	if (!HidInitialized) return Data;
-	for (FJoyConController* Controller : Controllers) {
+	for (const FJoyConController* Controller : Controllers) {
 		if (Controller->JoyConInformation.IsAttached) Data->Add(Controller->JoyConInformation);
 	}
 	return Data;
@@ -227,7 +227,7 @@ TArray<FJoyConInformation>* FJoyConInput::GetAttachedJoyCons() {
 TArray<FJoyConInformation>* FJoyConInput::GetConnectedJoyCons() {
 	TArray<FJoyConInformation>* Data = new TArray<FJoyConInformation>();
 	if (!HidInitialized) return Data;
-	for (FJoyConController* Controller : Controllers) {
+	for (const FJoyConController* Controller : Controllers) {
 		Data->Add(Controller->JoyConInformation);
 	}
 	return Data;
@@ -245,10 +245,10 @@ bool FJoyConInput::ResumeJoyConConnection() {
 	return Success;
 }
 
-bool FJoyConInput::ConnectJoyCon(const FJoyConInformation JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerId) {
+bool FJoyConInput::ConnectJoyCon(const FJoyConInformation& JoyConInformation, const bool UseImu, const bool UseLocalize, const float Alpha, int& ControllerId) {
 	if (!HidInitialized) return false;
 	if (JoyConInformation.IsConnected) return false;
-	char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
+	const char* Path = TCHAR_TO_ANSI(*JoyConInformation.BluetoothPath);
 	hid_device* Handle = hid_open_path(Path);
 	hid_set_nonblocking(Handle, 1);
 	FJoyConController* Controller = new FJoyConController(JoyConInformation, Handle, UseImu, UseLocalize, Alpha, JoyConInformation.IsLeft);
@@ -271,6 +271,9 @@ bool FJoyConInput::AttachJoyCon(const int ControllerId, const int GripIndex) {
 	Controller->Attach(Leds);
 	Controller->StartListenThread();
 	Controller->JoyConInformation.IsAttached = true;
+	IPlatformInputDeviceMapper& InputMapper = IPlatformInputDeviceMapper::Get();
+	Controller->DeviceId = InputMapper.AllocateNewInputDeviceId();
+	InputMapper.Internal_MapInputDeviceToUser(Controller->DeviceId, Grips[GripIndex].UserId, EInputDeviceConnectionState::Connected);
 	return true;
 }
 
@@ -288,12 +291,14 @@ bool FJoyConInput::DisconnectJoyCon(const int ControllerId) {
 
 bool FJoyConInput::DetachJoyCon(const int ControllerId) {
 	if (!ControllersMap.Contains(ControllerId)) return false;
+	IPlatformInputDeviceMapper& InputMapper = IPlatformInputDeviceMapper::Get();
 	FJoyConController* Controller = ControllersMap[ControllerId];
 	for (int i = 0; i < 8; i++) {
 		if (Grips[i].ContainsController(Controller->JoyConInformation)) {
 			Grips[i].Controllers.Remove(Controller);
 			Controller->Detach();
 			Controller->JoyConInformation.IsAttached = false;
+			InputMapper.Internal_SetInputDeviceConnectionState(Controller->DeviceId, EInputDeviceConnectionState::Disconnected);
 			return true;
 		}
 	}
@@ -304,7 +309,7 @@ bool FJoyConInput::GetJoyConAccelerometer(const int ControllerId, FVector& Out) 
 	if (!HidInitialized) return false;
 	Out = FVector::ZeroVector;
 	if (!ControllersMap.Contains(ControllerId)) return false;
-	FJoyConController* Controller = ControllersMap[ControllerId];
+	const FJoyConController* Controller = ControllersMap[ControllerId];
 	Out = Controller->GetAccelerometer();
 	return true;
 }
@@ -313,7 +318,7 @@ bool FJoyConInput::GetJoyConGyroscope(const int ControllerId, FVector& Out) {
 	if (!HidInitialized) return false;
 	Out = FVector::ZeroVector;
 	if (!ControllersMap.Contains(ControllerId)) return false;
-	FJoyConController* Controller = ControllersMap[ControllerId];
+	const FJoyConController* Controller = ControllersMap[ControllerId];
 	Out = Controller->GetGyroscope();
 	return true;
 }
@@ -322,7 +327,7 @@ bool FJoyConInput::GetJoyConVector(const int ControllerId, FRotator& Out) {
 	if (!HidInitialized) return false;
 	Out = FRotator::ZeroRotator;
 	if (!ControllersMap.Contains(ControllerId)) return false;
-	FJoyConController* Controller = ControllersMap[ControllerId];
+	const FJoyConController* Controller = ControllersMap[ControllerId];
 	Out = Controller->GetVector();
 	return true;
 }
@@ -379,29 +384,29 @@ void FJoyConInput::SendControllerEvents() {
 
 				if (Grips[i].Mode == EGripMode::Auto) {
 					if (Grips[i].Controllers.Num() > 1) {
-						SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
+						SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].UserId, Controller->DeviceId, Controller->GetStick(), &Controller->ControllerState.Stick);
 						if (Controller->JoyConInformation.IsLeft) {
-							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, ButtonState.Key, &ButtonState);
 						} else {
 							const FName KeyName = GetRightJoyConKeyName(ButtonIndex, ButtonState.Key);
-							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, KeyName, &ButtonState);
+							SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, KeyName, &ButtonState);
 						}
 					} else {
-						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, ButtonState.Key, &ButtonState);
 					}
 				} else if (Grips[i].Mode == EGripMode::Landscape) {
-					SendAnalogEvents(true, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
-					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+					SendAnalogEvents(true, Grips[i].UserId, Controller->DeviceId, Controller->GetStick(), &Controller->ControllerState.Stick);
+					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, ButtonState.Key, &ButtonState);
 				} else if (Grips[i].Mode == EGripMode::Portrait) {
-					SendAnalogEvents(true, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
-					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+					SendAnalogEvents(true, Grips[i].UserId, Controller->DeviceId, Controller->GetStick(), &Controller->ControllerState.Stick);
+					SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, ButtonState.Key, &ButtonState);
 				} else if (Grips[i].Mode == EGripMode::GamePad) {
-					SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].GripIndex, Controller->GetStick(), &Controller->ControllerState.Stick);
+					SendAnalogEvents(Controller->JoyConInformation.IsLeft, Grips[i].UserId, Controller->DeviceId, Controller->GetStick(), &Controller->ControllerState.Stick);
 					if (Controller->JoyConInformation.IsLeft) {
-						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, ButtonState.Key, &ButtonState);
+						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, ButtonState.Key, &ButtonState);
 					} else {
 						const FName KeyName = GetRightJoyConKeyName(ButtonIndex, ButtonState.Key);
-						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].GripIndex, KeyName, &ButtonState);
+						SendButtonEvents(bButtonPressed, CurrentTime, Grips[i].UserId, Controller->DeviceId, KeyName, &ButtonState);
 					}
 				}
 			}
@@ -436,11 +441,11 @@ ETrackingStatus FJoyConInput::GetControllerTrackingStatus(const int32 Controller
 
 void FJoyConInput::SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) {
 	return;
-	if (ControllerId < 0 || ControllerId > 7) return;
+	/*if (ControllerId < 0 || ControllerId > 7) return;
 	for (FJoyConController* Controller : Grips[ControllerId].Controllers) {
 		if (Values.Frequency > 160) Controller->SetRumble(0, Values.Frequency, Values.Amplitude);
 		else Controller->SetRumble(Values.Frequency, 0, Values.Amplitude);
-	}
+	}*/
 }
 
 void FJoyConInput::GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const {
@@ -456,7 +461,7 @@ int FJoyConInput::GetNextControllerId() const {
 	TArray<int> Keys;
 	int NextId = 0;
 	ControllersMap.GetKeys(Keys);
-	for (int Key : Keys) {
+	for (const int Key : Keys) {
 		if (Key == NextId) NextId++;
 	}
 	return NextId;
@@ -487,36 +492,38 @@ FName FJoyConInput::GetRightJoyConKeyName(const int Index, const FName OriginalK
 	}
 }
 
-void FJoyConInput::SendButtonEvents(const bool bButtonPressed, const float CurrentTime, const int GripIndex, const FName KeyName, FJoyConButtonState* ButtonState) const {
+void FJoyConInput::SendButtonEvents(const bool bButtonPressed, const float CurrentTime, const FPlatformUserId GripUserId, const FInputDeviceId DeviceId, const FName KeyName, FJoyConButtonState* ButtonState) const {
 	// Update button state
 	if (bButtonPressed != ButtonState->bIsPressed) {
 		ButtonState->bIsPressed = bButtonPressed;
 		if (ButtonState->bIsPressed) {
-			MessageHandler->OnControllerButtonPressed(KeyName, GripIndex, false);
+			MessageHandler->OnControllerButtonPressed(KeyName, GripUserId, DeviceId, false);
 
 			// Set the timer for the first repeat
 			ButtonState->NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
 		} else {
-			MessageHandler->OnControllerButtonReleased(KeyName, GripIndex, false);
+			MessageHandler->OnControllerButtonReleased(KeyName, GripUserId, DeviceId, false);
 		}
 	}
 
 	// Apply key repeat, if its time for that
 	if (ButtonState->bIsPressed && ButtonState->NextRepeatTime <= CurrentTime) {
-		MessageHandler->OnControllerButtonPressed(KeyName, GripIndex, true);
+		// Deprecated
+		// MessageHandler->OnControllerButtonPressed(KeyName, GripIndex, true);
+		MessageHandler->OnControllerButtonPressed(KeyName, GripUserId, DeviceId, true);
 
 		// Set the timer for the next repeat
 		ButtonState->NextRepeatTime = CurrentTime + FJoyConInput::ButtonRepeatDelay;
 	}
 }
 
-void FJoyConInput::SendAnalogEvents(const bool bIsLeft, const int GripIndex, const FVector2D StickVector, FJoyConAnalogState* AnalogState) const {
+void FJoyConInput::SendAnalogEvents(const bool bIsLeft, const FPlatformUserId GripUserId, const FInputDeviceId DeviceId, const FVector2D StickVector, FJoyConAnalogState* AnalogState) const {
 	if (StickVector.X != AnalogState->X) {
 		AnalogState->X = StickVector.X;
-		MessageHandler->OnControllerAnalog(bIsLeft ? FJoyConKeyNames::JoyCon_Left_ThumbStick_X : FJoyConKeyNames::JoyCon_Right_ThumbStick_X, GripIndex, AnalogState->X);
+		MessageHandler->OnControllerAnalog(bIsLeft ? FJoyConKeyNames::JoyCon_Left_ThumbStick_X : FJoyConKeyNames::JoyCon_Right_ThumbStick_X, GripUserId, DeviceId, AnalogState->X);
 	}
 	if (StickVector.Y != AnalogState->Y) {
 		AnalogState->Y = StickVector.Y;
-		MessageHandler->OnControllerAnalog(bIsLeft ? FJoyConKeyNames::JoyCon_Left_ThumbStick_Y : FJoyConKeyNames::JoyCon_Right_ThumbStick_Y, GripIndex, AnalogState->Y);
+		MessageHandler->OnControllerAnalog(bIsLeft ? FJoyConKeyNames::JoyCon_Left_ThumbStick_Y : FJoyConKeyNames::JoyCon_Right_ThumbStick_Y, GripUserId, DeviceId, AnalogState->Y);
 	}
 }

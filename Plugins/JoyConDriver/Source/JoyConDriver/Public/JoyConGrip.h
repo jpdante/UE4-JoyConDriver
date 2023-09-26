@@ -23,15 +23,25 @@ public:
 
 	bool ContainsController(FJoyConInformation JoyConInformation);
 
+	void SetGripIndex(const uint32 Index)
+	{
+		this->GripIndex = Index;
+		this->UserId = FPlatformMisc::GetPlatformUserForUserIndex(this->GripIndex);
+	}
+
+	FPlatformUserId UserId;
+
 	/*
 	 * Device Info
 	 */
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		int GripIndex;
+	int GripIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-		TEnumAsByte<EGripMode> Mode;
-	
-		TArray<FJoyConController*> Controllers;
+	TEnumAsByte<EGripMode> Mode;
+
+	TArray<FJoyConController*> Controllers;
+
+
 };

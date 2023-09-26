@@ -226,6 +226,7 @@ private:
 public:
 	FJoyConInformation JoyConInformation;
 	FJoyConControllerState ControllerState;
+	FInputDeviceId DeviceId;
 
 	// Buttons
 	bool Buttons[static_cast<int32>(EJoyConControllerButton::TotalButtonCount)];
