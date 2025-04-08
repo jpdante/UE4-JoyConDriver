@@ -1,18 +1,14 @@
-// Copyright 1998-2019 Epic Games, Inc. All Rights Reserved.
+// Copyright Epic Games, Inc. All Rights Reserved.
 
 using UnrealBuildTool;
 
-public class JoyConSample : ModuleRules {
-	public JoyConSample(ReadOnlyTargetRules Target) : base(Target) {
+public class JoyConSample : ModuleRules
+{
+	public JoyConSample(ReadOnlyTargetRules Target) : base(Target)
+	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] {
-            "Core",
-            "CoreUObject",
-            "Engine",
-            "InputCore",
-            "JoyConDriver"
-        });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "JoyConDriver" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {
             "InputDevice",

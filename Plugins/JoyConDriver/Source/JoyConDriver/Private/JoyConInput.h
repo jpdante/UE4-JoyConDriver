@@ -3,12 +3,12 @@
 #pragma once
 #include "JoyConDriverModule.h"
 
-#include "GenericPlatform/IInputInterface.h"
-#include "XRMotionControllerBase.h"
 #include "IHapticDevice.h"
 #include "JoyConController.h"
 #include "JoyConGrip.h"
 #include "JoyConInformation.h"
+#include "GenericPlatform/IInputInterface.h"
+#include "XRMotionControllerBase.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogJoyConDriver, Log, All);
 
@@ -66,11 +66,11 @@ public:
 
 	// IMotionController overrides
 	virtual FName GetMotionControllerDeviceTypeName() const override;
-	virtual bool GetControllerOrientationAndPosition(const int32 ControllerIndex, const EControllerHand DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const override;
-	virtual ETrackingStatus GetControllerTrackingStatus(const int32 ControllerIndex, const EControllerHand DeviceHand) const override;
+	virtual bool GetControllerOrientationAndPosition(const int32 ControllerIndex, const FName DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const;
+	virtual ETrackingStatus GetControllerTrackingStatus(const int32 ControllerIndex, const FName DeviceHand) const;
 
 	// IHapticDevice overrides
-	IHapticDevice* GetHapticDevice() override { return static_cast<IHapticDevice*>(this); }
+	virtual IHapticDevice* GetHapticDevice() override { return static_cast<IHapticDevice*>(this); }
 	virtual void SetHapticFeedbackValues(int32 ControllerId, int32 Hand, const FHapticFeedbackValues& Values) override;
 
 	virtual void GetHapticFrequencyRange(float& MinFrequency, float& MaxFrequency) const override;
@@ -81,7 +81,7 @@ private:
 	static FName GetRightJoyConKeyName(int Index, FName OriginalKeyName);
 	void SendButtonEvents(bool bButtonPressed, float CurrentTime, FPlatformUserId GripUserId, FInputDeviceId DeviceId, FName KeyName, FJoyConButtonState *ButtonState) const;
 	void SendAnalogEvents(bool bIsLeft, FPlatformUserId GripUserId, FInputDeviceId DeviceId, FVector2D StickVector, FJoyConAnalogState* AnalogState) const;
-	
+
 private:
 	/** The recipient of motion controller input events */
 	TSharedPtr< FGenericApplicationMessageHandler > MessageHandler;

@@ -6,9 +6,6 @@ public class JoyConDriver : ModuleRules {
 	public JoyConDriver(ReadOnlyTargetRules Target) : base(Target) {
         PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 
-        IncludeOrderVersion = EngineIncludeOrderVersion.Unreal5_2;
-        bEnableUndefinedIdentifierWarnings = false;
-
         PublicIncludePaths.AddRange(new string[] {
 
         });
@@ -27,7 +24,8 @@ public class JoyConDriver : ModuleRules {
             "ApplicationCore",
             "Engine",
             "InputCore",
-            "HeadMountedDisplay"
+            "HeadMountedDisplay",
+            "XRBase"
         });
 
         PrivateIncludePathModuleNames.AddRange(new string[] {

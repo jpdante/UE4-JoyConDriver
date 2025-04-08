@@ -431,11 +431,11 @@ FName FJoyConInput::GetMotionControllerDeviceTypeName() const {
 	return DefaultName;
 }
 
-bool FJoyConInput::GetControllerOrientationAndPosition(const int32 ControllerIndex, const EControllerHand DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const {
+bool FJoyConInput::GetControllerOrientationAndPosition(const int32 ControllerIndex, const FName DeviceHand, FRotator& OutOrientation, FVector& OutPosition, float WorldToMetersScale) const {
 	return false;
 }
 
-ETrackingStatus FJoyConInput::GetControllerTrackingStatus(const int32 ControllerIndex, const EControllerHand DeviceHand) const {
+ETrackingStatus FJoyConInput::GetControllerTrackingStatus(const int32 ControllerIndex, const FName DeviceHand) const {
 	return ETrackingStatus::NotTracked;
 }
 

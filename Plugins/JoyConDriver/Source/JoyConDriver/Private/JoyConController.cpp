@@ -19,8 +19,8 @@ FJoyConController::FJoyConController(const FJoyConInformation& TempJoyConInforma
 	FilterWeight(0),
 	Err(0),
 	Thread(nullptr),
-    Buttons{},
-    RumbleObj(160, 320, 0, 0) {
+	Buttons{},
+	RumbleObj(160, 320, 0, 0) {
 	HidHandle = Device;
 	JoyConInformation = TempJoyConInformation;
 	bIsLeft = IsLeft;

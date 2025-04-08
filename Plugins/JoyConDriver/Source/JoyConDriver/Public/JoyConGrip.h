@@ -6,7 +6,7 @@
 #include "JoyConController.h"
 #include "JoyConGrip.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class EGripMode : uint8 {
 	Auto         UMETA(DisplayName = "Auto"),
 	Portrait     UMETA(DisplayName = "Portrait"),
@@ -39,7 +39,7 @@ public:
 	int GripIndex;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TEnumAsByte<EGripMode> Mode;
+	EGripMode  Mode;
 
 	TArray<FJoyConController*> Controllers;
 
